@@ -53,6 +53,15 @@ class Products extends Model
     }
 
     /**
+     * @param int $category_id
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function parameterByCategoryId(int $category_id)
+    {
+        return $this->hasMany(ProductParameters::class, 'product_id', 'id')->where('category_id', $category_id);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function parameters()
@@ -71,14 +80,6 @@ class Products extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function videos()
-    {
-        return $this->hasMany(ProductVideos::class, 'product_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function documents()
     {
         return $this->hasMany(ProductDocuments::class, 'product_id', 'id');
@@ -87,6 +88,7 @@ class Products extends Model
 
     /**
      * @return void
+     * @throws \Exception
      */
     public function scopeRemove()
     {
@@ -107,7 +109,6 @@ class Products extends Model
 
         $this->documents()->delete();
         $this->parameters()->delete();
-        $this->videos()->delete();
         $this->delete();
     }
 

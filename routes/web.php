@@ -17,7 +17,10 @@ use App\Http\Controllers\FrontendController;
 Route::get('', [FrontendController::class, 'index'])->name('frontend.index');
 Route::get('catalog', [FrontendController::class, 'catalog'])->name('frontend.catalog');
 Route::get('product-listing/{slug}', [FrontendController::class, 'productListing'])->name('frontend.product_listing');
+Route::get('product/{slug}', [FrontendController::class, 'product'])->name('frontend.product');
 Route::get('certificates', [FrontendController::class, 'certificates'])->name('frontend.certificates');
 Route::get('contact', [FrontendController::class, 'contact'])->name('frontend.contact');
+Route::get('application', [FrontendController::class,'application'])->name('frontend.application');
+Route::post('send-application', [FrontendController::class,'sendApplication'])->name('frontend.send.application');
 
 

@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Catalog, Pages, Products, Seo};
+use App\Models\{
+    Catalog,
+    Pages,
+    Products,
+    ProductParametersCategory,
+    Seo
+};
 use Harimayco\Menu\Models\Menus;
 
 class FrontendController
@@ -119,6 +125,10 @@ class FrontendController
      */
     public function productListing(string $slug)
     {
+        $catalog = Catalog::where('slug', $slug)->first();
+
+        if (!$catalog) abort(404);
+
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
 
@@ -127,22 +137,58 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-
-        $catalog = Catalog::where('slug', $slug)->first();
-
-        if (!$catalog) abort(404);
-
         $title = $catalog->name;
         $meta_description = $catalog->meta_description;
         $meta_keywords = $catalog->meta_keywords;
         $meta_title = $catalog->meta_title;
         $seo_url_canonical = $catalog->seo_url_canonical;
 
-        return view('frontend.catalog_products', compact(
+        return view('frontend.product_listing', compact(
                 'catalog',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
+                'seo_url_canonical',
+                'menu')
+        )->with('title', $title);
+
+    }
+
+    /**
+     * @param string $slug
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function product(string $slug)
+    {
+        $product = Products::where('slug', $slug)->first();
+
+        if (!$product) abort(404);
+
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        $menu = [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
+
+        $title = $product->title;
+        $meta_description = $product->meta_description ?? '';
+        $meta_keywords = $product->meta_keywords ?? '';
+        $meta_title = $product->meta_title ?? '';
+        $seo_url_canonical = $product->seo_url_canonical ?? '';
+        $h1 = $product->h1 ?? $title;
+
+        $productParametersCategory = ProductParametersCategory::all();
+
+        return view('frontend.product', compact(
+                'product',
+                'productParametersCategory',
+                'slug',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'h1',
                 'seo_url_canonical',
                 'menu')
         )->with('title', $title);
@@ -218,6 +264,16 @@ class FrontendController
                 'title'
             )
         )->with('title', 'Обратная связь');
+
+    }
+
+    public function application()
+    {
+
+    }
+
+    public function sendApplication()
+    {
 
     }
 

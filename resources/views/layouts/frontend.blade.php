@@ -27,7 +27,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="prefetch" href="/images/hero-img.jpg">
+    <link rel="prefetch" href="{{ url('/images/hero-img.jpg') }}">
     <link rel="preload" href="/fonts/Inter-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -47,12 +47,12 @@
             <button type="button" class="header__menu-btn" data-menu-trigger="mobile-menu">
                 Главное меню
                 <svg aria-hidden="true">
-                    <use xlink:href="./images/sprite.svg#menu"/>
+                    <use xlink:href="{{ url('/images/sprite.svg#menu') }}"/>
                 </svg>
             </button>
             <a href="./" class="header__logo-short" aria-label="Перейти на главную страницу">
                 <svg aria-hidden="true">
-                    <use xlink:href="./images/sprite.svg#color-logo-short"/>
+                    <use xlink:href="{{ url('/images/sprite.svg#color-logo-short') }}"/>
                 </svg>
             </a>
             <nav class="header__nav">
@@ -61,7 +61,7 @@
                         <div class="header__nav-item">
                             О компании
                             <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#chevron-down"/>
+                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
                             </svg>
                         </div>
 
@@ -82,7 +82,7 @@
                         <a href="#" class="header__nav-item">
                             Услуги
                             <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#chevron-down"/>
+                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
                             </svg>
                         </a>
 
@@ -127,9 +127,9 @@
         </div>
     </div>
     <div class="header__bottom container">
-        <a href="./" class="header__logo" aria-label="Перейти на главную страницу">
+        <a href="{{ URL::route('frontend.index') }}" class="header__logo" aria-label="Перейти на главную страницу">
             <svg aria-hidden="true">
-                <use xlink:href="./images/sprite.svg#color-logo"/>
+                <use xlink:href="{{ url('/images/sprite.svg#color-logo') }}"/>
             </svg>
         </a>
         <div class="header__controls">
@@ -145,7 +145,7 @@
                 <input type="text" placeholder="Поиск по каталогу" class="js-header-input">
                 <button type="button" aria-label="Найти">
                     <svg aria-hidden="true">
-                        <use xlink:href="./images/sprite.svg#search"/>
+                        <use xlink:href="/images/sprite.svg#search"/>
                     </svg>
                 </button>
                 <div class="header__input-hints js-header-input-hints">
@@ -153,13 +153,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор AtmosFIR">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Анализатор AtmosFIR">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -170,13 +165,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор SOLUS">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="./images/preview@2x.jpg 2x" alt="Анализатор SOLUS">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -187,13 +177,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор AtmosIR">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="./images/preview@2x.jpg 2x" alt="Анализатор AtmosIR">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -204,13 +189,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="NDIR анализатор Р2000">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="NDIR анализатор Р2000">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -221,13 +201,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="NDIR анализатор Р5000">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="NDIR анализатор Р5000">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -238,13 +213,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор SIGAS S200">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Анализатор SIGAS S200">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -255,13 +225,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор SIGAS S200 ATEX">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Анализатор SIGAS S200 ATEX">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -272,13 +237,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Переносной анализатор SPGAS">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Переносной анализатор SPGAS">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -289,13 +249,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="NDIR анализатор Р5000">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="NDIR анализатор Р5000">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль промышленных выбросов</span>
@@ -306,13 +261,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор SIGAS S200">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Анализатор SIGAS S200">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -323,13 +273,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Анализатор SIGAS S200 ATEX">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Анализатор SIGAS S200 ATEX">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -340,13 +285,8 @@
                         <li class="header__input-hint">
                             <a href="#">
                                 <picture>
-                                    <source
-                                        srcset="./images/preview.webp, ./images/preview@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/preview.jpg"
-                                        srcset="./images/preview@2x.jpg 2x"
-                                        alt="Переносной анализатор SPGAS">
+                                    <source srcset="/images/preview.webp, /images/preview@2x.webp 2x" type="image/webp">
+                                    <img src="{{ url('/images/preview.jpg') }}" srcset="/images/preview@2x.jpg 2x" alt="Переносной анализатор SPGAS">
                                 </picture>
                                 <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">Контроль концентрации газов в технологических процессах</span>
@@ -357,7 +297,7 @@
                     </ul>
                 </div>
             </div>
-            <a href="./make-a-request.html" class="btn btn-primary-outline header__controls-btn">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить заявку</a>
         </div>
     </div>
     <div class="header__mobile-menu" data-menu-name="mobile-menu">
@@ -366,7 +306,7 @@
             <button type="button" class="header__mobile-menu-close-btn js-close-menu">
                 Close
                 <svg aria-hidden="true">
-                    <use xlink:href="./images/sprite.svg#close"/>
+                    <use xlink:href="{{ url('/images/sprite.svg#close') }}"/>
                 </svg>
             </button>
         </div>
@@ -394,35 +334,34 @@
                         <label for="mobile-submenu-services">
                             Услуги
                             <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#chevron-down"/>
+                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
                             </svg>
                         </label>
                         <div class="header__mobile-submenu-body">
-                            <ul class="header__mobile-submenu-list">
-                                <li><a href="#" class="js-mobile-menu-link">Разработка и производство газоаналитических
-                                        систем</a></li>
-                                <li><a href="#" class="js-mobile-menu-link">Проектирование газоаналитических систем</a>
-                                </li>
-                                <li><a href="#" class="js-mobile-menu-link">Ремонт газоаналитического оборудования</a>
-                                </li>
-                                <li><a href="#" class="js-mobile-menu-link">Аудит газоаналитических систем</a></li>
-                                <li><a href="#" class="js-mobile-menu-link">Модернизация систем подготовки пробы</a>
-                                </li>
-                                <li><a href="#" class="js-mobile-menu-link">Подготовка к поверке средств измерений</a>
-                                </li>
-                            </ul>
+
+                            @if(isset($menu['services']) and $menu['services'])
+
+                                <ul class="header__mobile-submenu-list">
+                                    @foreach($menu['services'] as $item)
+                                        <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
+                                    @endforeach
+                                </ul>
+
+                            @endif
+
                         </div>
                     </li>
-                    <li><a href="./contacts.html" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
+                    <li><a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
                 </ul>
             </nav>
-            <a href="./make-a-request.html" class="btn btn-primary header__mobile-menu-request">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить заявку</a>
         </div>
     </div>
     <div class="header__product-menu" data-menu-name="product-menu">
         <div class="header__product-menu-wrap">
             <div class="container">
                 <ul class="header__product-menu-item">
+
                     <li>
                         <a href="./product-listing.html" class="header__product-menu-link">
                             <picture class="header__product-menu-img">
@@ -440,6 +379,7 @@
                             </svg>
                         </a>
                     </li>
+
                     <li>
                         <a href="./product-listing.html" class="header__product-menu-link">
                             <picture class="header__product-menu-img">
@@ -566,7 +506,7 @@
     <div class="footer__top">
         <div class="container">
             <div class="footer__top-wrapper">
-                <a href="./" class="footer__logo" aria-label="Перейти на главную страницу">
+                <a href="{{ URL::route('frontend.index') }}" class="footer__logo" aria-label="Перейти на главную страницу">
                     <svg aria-hidden="true">
                         <use xlink:href="./images/sprite.svg#logo"/>
                     </svg>
@@ -603,7 +543,7 @@
                     </div>
                 </div>
             </div>
-            <a href="./make-a-request.html" class="btn btn-secondary footer__btn">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-secondary footer__btn">Оформить заявку</a>
         </div>
     </div>
     <div class="footer__bottom">
