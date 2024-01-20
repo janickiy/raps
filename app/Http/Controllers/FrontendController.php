@@ -9,7 +9,12 @@ use App\Models\{
     ProductParametersCategory,
     Seo
 };
+use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
+use App\Helpers\SettingsHelper;
+use App\Mail\Notification;
+use File;
+use Mail;
 
 class FrontendController
 {
@@ -36,7 +41,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::inRandomOrder()->limit(4)->get();
+        $catalogs = Catalog::orderBy('name')->get();
 
         return view('frontend.index', compact(
                 'catalogs',
@@ -72,11 +77,14 @@ class FrontendController
         ];
 
 
+        $catalogs = Catalog::orderBy('name')->get();
+
         return view('frontend.contact', compact(
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
                 'menu',
+                'catalogs',
                 'h1',
                 'seo_url_canonical',
                 'title'
@@ -143,8 +151,11 @@ class FrontendController
         $meta_title = $catalog->meta_title;
         $seo_url_canonical = $catalog->seo_url_canonical;
 
+        $catalogs = Catalog::orderBy('name')->get();
+
         return view('frontend.product_listing', compact(
                 'catalog',
+                'catalogs',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -172,6 +183,8 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
+        $catalogs = Catalog::orderBy('name')->get();
+
         $title = $product->title;
         $meta_description = $product->meta_description ?? '';
         $meta_keywords = $product->meta_keywords ?? '';
@@ -185,6 +198,7 @@ class FrontendController
                 'product',
                 'productParametersCategory',
                 'slug',
+                'catalogs',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -220,8 +234,11 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
+        $catalogs = Catalog::orderBy('name')->get();
+
         return view('frontend.index', compact(
                 'page',
+                'catalogs',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -236,10 +253,9 @@ class FrontendController
      */
     public function certificates()
     {
-        $seo = Seo::where('type', 'frontend.certificates')->first();
+        $seo = Seo::where('type', 'frontend.application')->first();
 
-
-        $title = $seo->h1 ?? 'Сертификаты';
+        $title = $seo->title ?? 'Заявка на расчет проекта';
         $meta_description = $seo->description ?? '';
         $meta_keywords = $seo->keyword ?? '';
         $meta_title = $seo->title ?? '';
@@ -254,11 +270,14 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        return view('frontend.certificates', compact(
+        $catalogs = Catalog::orderBy('name')->get();
+
+        return view('frontend.application', compact(
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
                 'menu',
+                'catalogs',
                 'h1',
                 'seo_url_canonical',
                 'title'
@@ -269,12 +288,62 @@ class FrontendController
 
     public function application()
     {
+        $seo = Seo::where('type', 'frontend.application')->first();
 
+        $title = $seo->title ?? 'Заявка на расчет проекта';
+        $meta_description = $seo->description ?? '';
+        $meta_keywords = $seo->keyword ?? '';
+        $meta_title = $seo->title ?? '';
+        $seo_url_canonical = $seo->url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
+
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        $menu = [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
+
+        $catalogs = Catalog::orderBy('name')->get();
+
+        return view('frontend.application', compact(
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'menu',
+                'catalogs',
+                'h1',
+                'seo_url_canonical',
+                'title'
+            )
+        )->with('title', 'Оформление заявки');
     }
 
-    public function sendApplication()
+    public function sendApplication(SendApplicationRequest $request)
     {
+        $path = public_path('uploads');
+        $attachment = $request->file('attachment');
 
+        $name = time() . '.' . $attachment->getClientOriginalExtension();;
+
+        // create folder
+        if (!File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+        }
+
+        $attachment->move($path, $name);
+        $filename = $path . '/' . $name;
+
+        try {
+
+            Mail::to(explode(",", SettingsHelper::getSetting('EMAIL_NOTIFY')))->send(new Notification($filename));
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
     }
 
 

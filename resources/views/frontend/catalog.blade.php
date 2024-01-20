@@ -29,29 +29,29 @@
         </div>
         <div class="catalog__cards">
 
-            @foreach($catalogs as $catalog)
+            @foreach($catalogs as $row)
 
             <article class="card">
                 <picture class="card__img ">
-                    <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }}"
-                        alt="{{ $catalog->image_alt }}"
-                        title="{{ $catalog->image_title ?? $catalog->name }}"
+                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
+                        alt="{{ $row->image_alt }}"
+                        title="{{ $row->image_title ?? $row->name }}"
                         loading="lazy">
                 </picture>
                 <div class="card__info">
                     <div>
 
                         <div>
-                            <h3>{{ $catalog->name }}</h3>
-                            <span class="card__count">{{ $catalog->getProductCount() }}</span>
+                            <h3>{{ $row->name }}</h3>
+                            <span class="card__count">{{ $row->getProductCount() }}</span>
                         </div>
-                        <p class="card__desc">{{ $catalog->description }}</p>
+                        <p class="card__desc">{{ $row->description }}</p>
                     </div>
 
-                    <a href="{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}" class="btn btn-primary card__btn">
+                    <a href="{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}" class="btn btn-primary card__btn">
                         К товарам
                         <svg aria-hidden="true">
-                            <use xlink:href="./images/sprite.svg#arrow-right"/>
+                            <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
                         </svg>
                     </a>
 
