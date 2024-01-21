@@ -326,7 +326,49 @@
     </div>
 </footer>
 
-<main>@yield('js')</main>
+
+<div aria-label="Опросный лист для заказа" role="dialog" aria-modal="true" data-name="requestModal" class="js-modal request-modal">
+    <div class="js-modal-content request-modal__content">
+        <div class="request-modal__header">
+            <button type="button" class="js-close-modal-btn request-modal__close-btn">
+                <svg aria-hidden="true">
+                    <use xlink:href="{{ url('/images/sprite.svg#close') }}"/>
+                </svg>
+            </button>
+        </div>
+        <div class="request-modal__body">
+            <div class="request-modal__title">
+                <h3><span>Опросный лист для заказа</span> «Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор»</h3>
+            </div>
+            <a href="{{ url('/images/certificate-img.jpg') }}" class="btn request-modal__download-btn" download>
+                <span class="request-modal__download-icon">
+                    <svg aria-hidden="true">
+                        <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                    </svg>
+                </span>
+                <span class="request-modal__download-title">Скачать опросный лист</span>
+            </a>
+            <p class="request-modal__text">После заполнения опросного листа, вам необходимо загрузить его и отправить нам. Мы изучим его и свяжемся с вами в ближайшее время с ответом.</p>
+            <div class="request-modal__form">
+
+                <form action="#" method="post" id="requestForm" class="request-form">
+                    <div class="request-form__input-file">
+                        <input id="requestFile" type="file" name="file">
+                        <label for="requestFile">
+                            <span class="request-form__label-title js-request-label-title">Загрузить опросный лист</span>
+                            <span class="request-form__label-desc">Перетащите документ сюда, либо выберите вручную</span>
+                        </label>
+                    </div>
+                    <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a>  любым удобным способом.</p>
+                    <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@yield('js')
 
 </body>
 </html>
