@@ -17,6 +17,11 @@ class CatalogController extends Controller
      */
     public function index()
     {
+       // var_dump(Storage::disk('public')->path('path/to/file.jpg'));
+
+       // exit;
+
+
         return view('cp.catalog.index')->with('title', 'Категории');
     }
 
@@ -51,18 +56,21 @@ class CatalogController extends Controller
             $filename = time();
             $originName = $filename . '.' . $extension;
 
-            if ($request->file('image')->storeAs('public/catalog', $originName)) {
-                $img = Image::make(Storage::path('/public/catalog/') . $originName);
+            if ($request->file('image')->move('uploads/catalog', $originName)) {
+
+                $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(Storage::path('/public/catalog/') . '2x_' . $filename . '.' . $extension);
+                $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
 
-                $small_img = Image::make(Storage::path('/public/catalog/') . $originName);
+                $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+
                 $small_img->resize(null, 350, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $small_img->save(Storage::path('/public/catalog/') . $originName);
+                $small_img->save(Storage::disk('public')->path('catalog/' . $originName));
+
             }
         }
 
@@ -135,19 +143,20 @@ class CatalogController extends Controller
                 $filename = time();
                 $originName = $filename . '.' . $extension;
 
-                if ($request->file('image')->storeAs('public/catalog', $originName)) {
-                    $img = Image::make(Storage::path('/public/catalog/') . $originName);
+                if ($request->file('image')->move('uploads/catalog', $originName)) {
+                    $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
                     $img->resize(null, 700, function ($constraint) {
                         $constraint->aspectRatio();
                     });
-                    $img->save(Storage::path('/public/catalog/') . '2x_' . $filename . '.' . $extension);
+                    $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
 
-                    $small_img = Image::make(Storage::path('/public/catalog/') . $originName);
+                    $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+
                     $small_img->resize(null, 350, function ($constraint) {
                         $constraint->aspectRatio();
                     });
 
-                    if ($small_img->save(Storage::path('/public/catalog/') . $originName)) $row->image = $originName;
+                    if ($small_img->save(Storage::disk('public')->path('catalog/' . $originName))) $row->image = $originName;
                 }
             }
         }

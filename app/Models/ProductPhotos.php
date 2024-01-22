@@ -32,7 +32,7 @@ class ProductPhotos extends Model
      */
     public function getThumbnailUrl()
     {
-        return Storage::disk('public')->url('app/public/images/' . $this->thumbnail);
+        return Storage::disk('public')->url('images/' . $this->thumbnail);
     }
 
     /**
@@ -40,6 +40,6 @@ class ProductPhotos extends Model
      */
     public function getOriginUrl()
     {
-        return Storage::disk('public')->url('app/public/images/' . $this->origin);
+        return Storage::disk('public')->url('images/' . $this->origin);
     }
 }

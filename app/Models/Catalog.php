@@ -58,7 +58,7 @@ class Catalog extends Model
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return Storage::disk('public')->url('app/public/catalog/' . $image);
+        return Storage::disk('public')->url('catalog/' . $image);
     }
 
     /**

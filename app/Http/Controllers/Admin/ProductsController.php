@@ -47,9 +47,6 @@ class ProductsController extends Controller
             'catalog_id' => 'integer|required|exists:catalog,id'
         ];
 
-
-        //'integer|nullable|exists:military_formation,id',
-
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) return back()->withErrors($validator)->withInput();
@@ -60,12 +57,12 @@ class ProductsController extends Controller
             $fileNameToStore = 'origin_' . $filename;
             $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-            if ($request->file('image')->storeAs('public/products', $fileNameToStore)) {
-                $img = Image::make(Storage::path('/public/products/') . $fileNameToStore);
+            if ($request->file('image')->move('uploads/products', $fileNameToStore)) {
+                $img = Image::make(Storage::disk('public')->path('products/' . $fileNameToStore));
                 $img->resize(null, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(Storage::path('/public/products/') . $thumbnailFileNameToStore);
+                $img->save(Storage::disk('public')->path('products/' . $thumbnailFileNameToStore) );
             }
         }
 
@@ -146,13 +143,13 @@ class ProductsController extends Controller
             $fileNameToStore = 'origin_' . $filename;
             $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-            if ($request->file('image')->storeAs('public/products', $fileNameToStore)) {
-                $img = Image::make(Storage::path('/public/products/') . $fileNameToStore);
+            if ($request->file('image')->move('uploads/products', $fileNameToStore)) {
+                $img = Image::make(Storage::disk('public')->path('products/' . $fileNameToStore ));
                 $img->resize(null, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
-                if ($img->save(Storage::path('/public/products/') . $thumbnailFileNameToStore)) {
+                if ($img->save(Storage::disk('public')->path('products/'  . $thumbnailFileNameToStore) )) {
                     $row->thumbnail = $thumbnailFileNameToStore;
                     $row->origin = $fileNameToStore;
                 }

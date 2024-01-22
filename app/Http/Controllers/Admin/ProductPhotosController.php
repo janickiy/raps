@@ -55,13 +55,13 @@ class ProductPhotosController extends Controller
         $fileNameToStore = 'origin_' . $filename;
         $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-        if ($request->file('image')->storeAs('public/images', $fileNameToStore)) {
-            $thumbnail = Image::make(Storage::path('/public/images/') . $fileNameToStore);
+        if ($request->file('image')->store('images', $fileNameToStore)) {
+            $thumbnail = Image::make(Storage::disk('public')->path('/public/images/' . $fileNameToStore));
             $thumbnail->resize(300, 300, function ($constraint) {
                 $constraint->aspectRatio();
             });
 
-            if ($thumbnail->save(Storage::path('/public/images/') . $thumbnailFileNameToStore)) {
+            if ($thumbnail->save(Storage::disk('public')->path('/public/images/') . $thumbnailFileNameToStore)) {
                 ProductPhotos::create(array_merge(array_merge($request->all()), [
                         'thumbnail' => $thumbnailFileNameToStore,
                         'origin' => $fileNameToStore
@@ -122,13 +122,13 @@ class ProductPhotosController extends Controller
             $fileNameToStore = 'origin_' . $filename;
             $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-            if ($request->file('image')->storeAs('public/images', $fileNameToStore)) {
-                $img = Image::make(Storage::path('/public/images/') . $fileNameToStore);
+            if ($request->file('image')->store('public/images', $fileNameToStore)) {
+                $img = Image::make(Storage::disk('public')->path('/public/images/' . $fileNameToStore));
                 $img->resize(300, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
-                if ($img->save(Storage::path('/public/images/') . $thumbnailFileNameToStore)) {
+                if ($img->save(Storage::disk('public')->path('/public/images/' . $thumbnailFileNameToStore) )) {
                     $row->thumbnail = $thumbnailFileNameToStore;
                     $row->origin = $fileNameToStore;
                 }

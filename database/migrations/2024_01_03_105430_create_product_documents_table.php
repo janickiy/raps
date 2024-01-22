@@ -15,6 +15,9 @@ class CreateProductDocumentsTable extends Migration
     {
         Schema::create('product_documents', function (Blueprint $table) {
             $table->id();
+            $table->string('path');
+            $table->string('description');
+            $table->integer('product_id')->index('product_id');
             $table->timestamps();
         });
     }
