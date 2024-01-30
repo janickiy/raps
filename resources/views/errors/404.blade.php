@@ -13,25 +13,24 @@
 
 @section('content')
 
-    <section class="not-found">
-        <div class="container container--xl">
-            <div class="not-found__content">
-                <div class="breadcrumbs">
-                    <div class="breadcrumbs__list">
-                        <div class="breadcrumbs__item">
-                            <span class="breadcrumbs__current">Ошибка 404</span>
-                        </div>
-                    </div>
+    <section class="error">
+        <div class="error__wrapper container">
+            <div class="error__info">
+                <div class="error__title">
+                    <h1>404</h1>
                 </div>
-
-                <div class="not-found__main">
-                    <img class="not-found__img" src="{{ url('img/arrows-right.svg') }}" width="334" height="167" alt="">
-                    <div class="title1 title1--big title1--lh-120 not-found__title">Страница не найдена</div>
-                    <div class="text not-found__text">Похоже, такой страницы не существует. Вы можете воспользоваться меню сверху, либо
-                        перейти на главную страницу сайта</div>
-                    <a class="not-found__btn" href="{{ url('/') }}">Вернуться на главную</a>
-                </div>
+                <p class="section-desc error__desc">Мы не можем найти запрашиваемую&nbsp;страницу.<br>Пожалуйста, проверьте URL страницы или вернитесь на Главную.</p>
+                <a href="{{ URL::route('frontend.index') }}" class="btn btn-primary error__btn">
+                    Перейти на Главную страницу
+                    <svg aria-hidden="true">
+                        <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
+                    </svg>
+                </a>
             </div>
+            <picture class="error__img">
+                <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps">
+            </picture>
         </div>
     </section>
 

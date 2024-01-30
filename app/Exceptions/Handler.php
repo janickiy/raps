@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Models\Catalog;
+use Harimayco\Menu\Models\Menus;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -50,6 +52,24 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($this->isHttpException($exception)) {
+            if ($exception->getStatusCode() == 404) {
+                $menu_services = Menus::where('name', 'services')->with('items')->first();
+                $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+                $menu = [
+                    'about' => $menu_about->items->toArray(),
+                    'services' => $menu_services->items->toArray(),
+                ];
+
+                $catalogs = Catalog::orderBy('name')->get();
+
+                return response()->view('errors.404', [
+                    'menu' => $menu,
+                    'catalogs' => $catalogs
+                ], 404);
+            }
+        }
         return parent::render($request, $exception);
     }
 }
