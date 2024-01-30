@@ -32,6 +32,7 @@ class FrontendController
         $meta_keywords = $page->meta_keywords ?? '';
         $meta_title = $page->meta_title ?? '';
         $seo_url_canonical = $page->seo_url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
 
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -50,6 +51,7 @@ class FrontendController
                 'meta_keywords',
                 'meta_title',
                 'seo_url_canonical',
+                'h1',
                 'menu')
         )->with('title', $title);
     }
@@ -150,6 +152,7 @@ class FrontendController
         $meta_keywords = $catalog->meta_keywords;
         $meta_title = $catalog->meta_title;
         $seo_url_canonical = $catalog->seo_url_canonical;
+        $h1 = $seo->h1 ?? $title;
 
         $catalogs = Catalog::orderBy('name')->get();
 
@@ -160,6 +163,7 @@ class FrontendController
                 'meta_keywords',
                 'meta_title',
                 'seo_url_canonical',
+                'h1',
                 'menu')
         )->with('title', $title);
 
@@ -198,6 +202,42 @@ class FrontendController
                 'product',
                 'productParametersCategory',
                 'slug',
+                'catalogs',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'h1',
+                'seo_url_canonical',
+                'menu')
+        )->with('title', $title);
+
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function about()
+    {
+        $seo = Seo::where('type', 'frontend.about')->first();
+
+        $title = $seo->h1 ?? 'О компании';
+        $meta_description = $seo->description ?? '';
+        $meta_keywords = $seo->keyword ?? '';
+        $meta_title = $seo->title ?? '';
+        $seo_url_canonical = $seo->url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
+
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        $menu = [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
+
+        $catalogs = Catalog::orderBy('name')->get();
+
+        return view('frontend.about', compact(
                 'catalogs',
                 'meta_description',
                 'meta_keywords',

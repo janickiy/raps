@@ -15,227 +15,144 @@
 
 @section('content')
 
+    <ul class="container breadcrumbs">
+        <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
+        <li><span>{{ $h1 }}</span></li>
+    </ul>
 
-    <section class="banner banner--company banner--white">
-        <div class="container">
-            <div class="banner__content">
-                <div class="breadcrumbs banner__breadcrumbs">
-                    <div class="breadcrumbs__list">
-                        <div class="breadcrumbs__item">
-                            <span class="breadcrumbs__current">Промышленные аналитические системы</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="title1 title1--big banner__title">
-                    <h1>{!! $h1 !!}</h1>
-                </div>
-                <div class="banner__features">
-                    <div class="banner__features-list">
-                        <div class="banner__feature banner__feature--col-4">
-                            <p class="text banner__feature-text">Эксклюзивные представители компании <b>SIGAS
-                                    Measurement
-                                    Engineering Corp</b></p>
-                        </div>
-                        <div class="banner__feature banner__feature--col-4">
-                            <p class="text banner__feature-text">Предоставление комплексных аналитических решений
-                                <b>“под ключ”</b>
-                            </p>
-                        </div>
-                        <div class="banner__feature banner__feature--col-4">
-                            <p class="text banner__feature-text"><b>Собственное</b> производство аналитических
-                                систем</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="banner__img">
-                    <picture>
-                        <source srcset="{{ url('img/company-img.webp') }}" type="image/webp">
-                        <source srcset="{{ url('img/company-img.png') }}" type="image/png">
-                        <img src="{{ url('img/company-img.png') }}" width="1408" height="482" alt="{{ $title }}" title="{{ $title }}">
-                    </picture>
-                </div>
+    <section class="about-hero container">
+        <div class="about-hero__info">
+            <div class="main-title about-hero__title">
+                <h1>Мы рады представить вам нашу компанию!</h1>
             </div>
+            <p class="section-desc about-hero__desc">Наши основные ценности и цель — предоставлять передовые, надежные и инновационные решения в области газоанализа. Мы стремимся помочь нашим клиентам эффективно контролировать и оптимизировать процессы, снижая риски и обеспечивая безопасность в различных отраслях.</p>
+        </div>
+        <picture class="about-hero__img">
+            <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+            <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+        </picture>
+        <ul class="about-hero__list">
+            <li class="about-hero__item">
+                <svg aria-hidden="true">
+                    <use xlink:href="{{ url('/images/sprite.svg#about-1') }}"/>
+                </svg>
+                <h2>Первый производитель в Узбекистане</h2>
+                <p>Мы гордимся тем, что мы первые производители аналитического оборудования в стране, предлагая инновационные решения.</p>
+            </li>
+            <li class="about-hero__item">
+                <svg aria-hidden="true">
+                    <use xlink:href="{{ url('/images/sprite.svg#about-2') }}"/>
+                </svg>
+                <h2>Эксклюзивные представители SIGAS</h2>
+                <p>Мы являемся эксклюзивными представителями SIGAS Measurement Engineering Corp в Узбекистане, обеспечивая доступ к их передовым технологиям.</p>
+            </li>
+            <li class="about-hero__item">
+                <svg aria-hidden="true">
+                    <use xlink:href="{{ url('/images/sprite.svg#about-3') }}"/>
+                </svg>
+                <h2>Комплексные аналитические решения «под ключ»</h2>
+                <p>Мы гордимся тем, что мы первые производители аналитического оборудования в стране, предлагая инновационные решения.</p>
+            </li>
+            <li class="about-hero__item">
+                <svg aria-hidden="true">
+                    <use xlink:href="{{ url('/images/sprite.svg#about-4') }}"/>
+                </svg>
+                <h2>Собственное производство аналитических систем</h2>
+                <p>Наше собственное производство под брендом RAPS гарантирует высокое качество и индивидуальный подход к каждому клиенту.</p>
+            </li>
+        </ul>
+    </section>
+    <section class="about-info container">
+        <div class="about-info__content">
+            <div class="section-title">
+                <h2>{{ $h1 }}</h2>
+            </div>
+            <div class="about-info__text">
+                <p class="section-desc">Мы — компания, занимающаяся продажей газоаналитического оборудования в Узбекистане. На нашем сайте представлена продукция от трех производителей: SIGAS, Protea, МЕТРАН, а также оборудование, которое мы производим сами под брендом RAPS.</p>
+                <p class="section-desc">Мы гордимся тем, что являемся первым производителем газоаналитического оборудования в Узбекистане. Кроме того, мы являемся эксклюзивными представителями компании SIGAS Measurement Engineering Corp и предоставляем комплексные аналитические решения «под ключ».</p>
+            </div>
+            <div class="about-info__images">
+                <picture class="about-info__img _two-columns">
+                    <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                    <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+                </picture>
+                <picture class="about-info__img">
+                    <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                    <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+                </picture>
+                <picture class="about-info__img">
+                    <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                    <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+                </picture>
+            </div>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
+        </div>
+        <div class="about-info__images">
+            <picture class="about-info__img _two-columns">
+                <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x"type="image/webp">
+                <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+            </picture>
+            <picture class="about-info__img">
+                <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+            </picture>
+            <picture class="about-info__img">
+                <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+                <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+            </picture>
         </div>
     </section>
-
-    <section class="team">
-        <div class="container">
-            <div class="team__content">
-                <div class="breadcrumbs team__breadcrumbs">
-                    <div class="breadcrumbs__list">
-                        <div class="breadcrumbs__item">
-                            <span class="breadcrumbs__current">Команда</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="team__main">
-                    <div class="team__img">
-                        <img src="{{ url('img/circles.svg') }}" width="263" height="138" alt="">
-                    </div>
-                    <div class="title1 team__title">
-                        <h2>Команда наших специалистов имеет <b>большой опыт внедрения и эксплуатации</b>
-                            промышленного
-                            измерительного
-                            оборудования, а инженеры ООО “РИАС” предлагают наиболее полные решения поставленных
-                            задач и обеспечивают
-                            поставку аналитических систем как для сложнейших, так и для стандартных применений,
-                            отвечающих лучшим
-                            мировым образцам</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="direct">
-        <div class="container">
-            <div class="direct__content">
-                <div class="breadcrumbs">
-                    <div class="breadcrumbs__list">
-                        <div class="breadcrumbs__item">
-                            <span class="breadcrumbs__current">Направление</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="title1 direct__title">
-                    <h2>Одним из направлений нашей компании является <b>поставка оборудования “под ключ”</b> в сфере
-                        поточного
-                        промышленного газового анализа, включая хроматографию и задачи контроля промышленных
-                        выбросов</h2>
-                </div>
-                <div class="text direct__quote">Для решения данных задач мы используем высокотехнологичное
-                    оборудование и
-                    имеем штат сотрудников с большим опытом работы
-                    в данной области
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="services">
-        <div class="container container--xl">
-            <div class="services__content">
-                <div class="breadcrumbs breadcrumbs--white services__breadcrumbs">
-                    <div class="breadcrumbs__list">
-                        <div class="breadcrumbs__item">
-                            <span class="breadcrumbs__current">Наши услуги</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="services__main">
-                    <div class="title1 title1--white services__title">
-                        <h2>комплексный и системный подход к поставке оборудования для
-                            реализации проектов и задач, стоящих <b>перед нашими заказчиками</b></h2>
-                    </div>
-
-                    <div class="services__list-box">
-                        <div class="services__list">
-                            <div class="services__item">
-                                <div class="services__item-content">
-                                    <p class="text services__item-text">Проектирование и разработка систем газового
-                                        и жидкостного
-                                        анализа
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__item-content">
-                                    <p class="text services__item-text">Пусконаладочные работы</p>
-                                </div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__item-content">
-                                    <p class="text services__item-text">Ремонт и техническое обслуживание
-                                        газоанализаторов и
-                                        газоаналитических систем</p>
-                                </div>
-                            </div>
-                            <div class="services__item">
-                                <div class="services__item-content">
-                                    <p class="text services__item-text">Аудит аналитических систем</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="partners">
-        <div class="container container--xl">
-            <div class="partners__content">
-                <div class="partners__info">
-                    <div class="breadcrumbs">
-                        <div class="breadcrumbs__list">
-                            <div class="breadcrumbs__item">
-                                <span class="breadcrumbs__current">Наши партнеры</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title1 partners__title">
-                        <h2>Мы являемся <b>дистрибьюторами и эксклюзивными
-                                представителями</b> на территории РФ следующих заводов-производителей поточных
-                            газовых анализаторов
-                        </h2>
-                    </div>
-                </div>
-                <div class="partners__list">
-                    <div class="partners__item">
-                        <picture>
-                            <source srcset="{{ url('img/partners/artgaz.webp') }}" type="image/webp">
-                            <source srcset="{{ url('img/partners/artgaz.png') }}" type="image/png">
-                            <img class="partners__item-img" src="{{ url('img/partners/artgaz.png') }}" width="200"
-                                 height="70" alt="">
-                        </picture>
-                    </div>
-                    <div class="partners__item">
-                        <picture>
-                            <source srcset="{{ url('img/partners/metran.webp') }}" type="image/webp">
-                            <source srcset="{{ url('img/partners/metran.png') }}" type="image/png">
-                            <img class="partners__item-img" src="{{ url('img/partners/metran.png') }}" width="200"
-                                 height="34" alt="">
-                        </picture>
-                    </div>
-                    <div class="partners__item">
-                        <picture>
-                            <source srcset="{{ url('img/partners/sigas.webp') }}" type="image/webp">
-                            <source srcset="{{ url('img/partners/sigas.png') }}" type="image/png">
-                            <img class="partners__item-img" src="{{ url('img/partners/sigas.png') }}" width="200"
-                                 height="48" alt="">
-                        </picture>
-                    </div>
-                    <div class="partners__item">
-                        <picture>
-                            <source srcset="{{ url('img/partners/protea.webp') }}" type="image/webp">
-                            <source srcset="{{ url('img/partners/protea.png') }}" type="image/png">
-                            <img class="partners__item-img" src="{{ url('img/partners/protea.png') }}" width="200"
-                                 height="64" alt="">
-                        </picture>
-                    </div>
-                </div>
+        <div class="container">
+            <div class="section-title _center">
+                <h2>Наши партнеры</h2>
             </div>
-        </div>
-    </section>
-
-    <section class="callback">
-        <div class="container container--xl">
-            <div class="callback__content">
-                <div class="callback__main">
-                    <div class="breadcrumbs">
-                        <div class="breadcrumbs__list">
-                            <div class="breadcrumbs__item">
-                                <span class="breadcrumbs__current">Заявка на расчет проекта</span>
+            <div class="partners__brands">
+                <div class="swiper partners__slider">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="partners__brand">
+                                <picture>
+                                    <source srcset="{{ url('/images/brands/sigas.webp') }}, {{ url('/images/brands/sigas@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/sigas.png') }}" srcset="{{ url('/images/brands/sigas@2x.png') }} 2x" alt="Sigas" loading="lazy">
+                                </picture>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="partners__brand _metran">
+                                <picture>
+                                    <source srcset="{{ url('/images/brands/metran.webp') }}, {{ url('/images/brands/metran@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/metran.png') }}" srcset="{{ url('/images/brands/metran@2x.png') }} 2x" alt="Метран" loading="lazy">
+                                </picture>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="partners__brand _protea">
+                                <picture>
+                                    <source srcset="{{ url('/images/brands/protea.webp') }}, {{ url('/images/brands/protea@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/protea.png') }}" srcset="{{ url('/images/brands/protea@2x.png') }} 2x" alt="Protea" loading="lazy">
+                                </picture>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="partners__brand">
+                                <picture>
+                                    <source srcset="{{ url('/images/brands/raps.webp') }}, {{ url('/images/brands/raps@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/raps.png') }}" srcset="{{ url('/images/brands/raps@2x.png') }} 2x" alt="Protea" loading="lazy">
+                                </picture>
                             </div>
                         </div>
                     </div>
-                    <div class="callback__info">
-                        <div class="title1 callback__title">
-                            <h2>Нужна помощь с подбором? Оформите заявку</h2>
-                        </div>
-                        <a class="btn btn--black callback__btn" href="{{ URL::route('frontend.application') }}">Оформить заявку на расчет
-                            проекта</a>
-                    </div>
+                </div>
+                <div class="swiper-button-prev">
+                    <svg aria-hidden="true">
+                        <use xlink:href="{{ url('/images/sprite.svg#arrow-left') }}"/>
+                    </svg>
+                </div>
+                <div class="swiper-button-next">
+                    <svg aria-hidden="true">
+                        <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
+                    </svg>
                 </div>
             </div>
         </div>

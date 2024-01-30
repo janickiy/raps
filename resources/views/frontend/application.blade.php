@@ -22,7 +22,7 @@
 
     <section class="request container">
         <div class="main-title">
-            <h1>{{ $title }}</h1>
+            <h1>{{ $h1 }}</h1>
         </div>
         <div class="request__content">
             <div class="request__content-item">

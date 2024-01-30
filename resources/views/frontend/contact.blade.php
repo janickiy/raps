@@ -20,7 +20,7 @@
 
     <section class="contacts container">
         <div class="main-title">
-            <h1>{{ $title }}</h1>
+            <h1>{{ $h1 }}</h1>
         </div>
         <dl class="contacts__list">
             <div class="contacts__item">

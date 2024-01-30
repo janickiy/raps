@@ -16,16 +16,16 @@
 @section('content')
 
 
-    <section class="hero container">
+    <section class="hero container section-desc hero__desc">
         <div class="hero__info">
             <div class="main-title">
-                <h1>{{ $title }}</h1>
+                <h1>{{ $h1 }}</h1>
             </div>
-            <p class="section-desc hero__desc">{!! $page->text !!}</p>
+            {!! $page->text !!}
         </div>
         <picture class="hero__img">
-            <source srcset="{{ url('./images/hero-img.webp') }}, {{ url('./images/hero-img@2x.webp') }} 2x" type="image/webp">
-            <img src="{{ url('./images/hero-img.png') }}" srcset="{{ url('./images/hero-img@2x.png') }} 2x" alt="Raps">
+            <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
+            <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
         </picture>
     </section>
 
@@ -54,7 +54,7 @@
                         <a href="{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}" class="btn btn-primary card__btn">
                             К товарам
                             <svg aria-hidden="true">
-                                <use xlink:href="{{ url('./images/sprite.svg#arrow-right') }}"/>
+                                <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
                             </svg>
                         </a>
                     </div>
@@ -124,56 +124,32 @@
                         <div class="swiper-slide">
                             <div class="partners__brand">
                                 <picture>
-                                    <source
-                                        srcset="./images/brands/sigas.webp, ./images/brands/sigas@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/brands/sigas.png"
-                                        srcset="./images/brands/sigas@2x.png 2x"
-                                        alt="Sigas"
-                                        loading="lazy">
+                                    <source srcset="{{ url('/images/brands/sigas.webp') }}, {{ url('/images/brands/sigas@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/sigas.png') }}" srcset="{{ url('/images/brands/sigas@2x.png') }} 2x" alt="Sigas" loading="lazy">
                                 </picture>
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="partners__brand _metran">
                                 <picture>
-                                    <source
-                                        srcset="./images/brands/metran.webp, ./images/brands/metran@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/brands/metran.png"
-                                        srcset="./images/brands/metran@2x.png 2x"
-                                        alt="Метран"
-                                        loading="lazy">
+                                    <source srcset="{{ url('/images/brands/metran.webp') }}, {{ url('/images/brands/metran@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/metran.png') }}" srcset="{{ url('/images/brands/metran@2x.png') }} 2x" alt="Метран" loading="lazy">
                                 </picture>
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="partners__brand _protea">
                                 <picture>
-                                    <source
-                                        srcset="./images/brands/protea.webp, ./images/brands/protea@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/brands/protea.png"
-                                        srcset="./images/brands/protea@2x.png 2x"
-                                        alt="Protea"
-                                        loading="lazy">
+                                    <source srcset="{{ url('/images/brands/protea.webp') }}, {{ url('/images/brands/protea@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/protea.png') }}" srcset="{{ url('/images/brands/protea@2x.png') }} 2x" alt="Protea" loading="lazy">
                                 </picture>
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="partners__brand">
                                 <picture>
-                                    <source
-                                        srcset="./images/brands/raps.webp, ./images/brands/raps@2x.webp 2x"
-                                        type="image/webp">
-                                    <img
-                                        src="./images/brands/raps.png"
-                                        srcset="./images/brands/raps@2x.png 2x"
-                                        alt="Protea"
-                                        loading="lazy">
+                                    <source srcset="{{ url('/images/brands/raps.webp') }}, {{ url('/images/brands/raps@2x.webp') }} 2x" type="image/webp">
+                                    <img src="{{ url('/images/brands/raps.png') }}" srcset="{{ url('/images/brands/raps@2x.png') }} 2x" alt="Protea" loading="lazy">
                                 </picture>
                             </div>
                         </div>
@@ -181,12 +157,12 @@
                 </div>
                 <div class="swiper-button-prev">
                     <svg aria-hidden="true">
-                        <use xlink:href="./images/sprite.svg#arrow-left"/>
+                        <use xlink:href="{{ url('/images/sprite.svg#arrow-left') }}"/>
                     </svg>
                 </div>
                 <div class="swiper-button-next">
                     <svg aria-hidden="true">
-                        <use xlink:href="./images/sprite.svg#arrow-right"/>
+                        <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
                     </svg>
                 </div>
             </div>

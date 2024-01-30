@@ -42,8 +42,7 @@
 
                     <article class="product-card">
                         <picture class="product-card__img">
-                            <img src="{{ url('/images/product.jpg') }}" srcset="/images/product@2x.jpg 2x"
-                                 alt="{{ $product->title }}" loading="lazy">
+                            <img src="{{ url('/images/product.jpg') }}" srcset="{{ url('/images/product@2x.jpg') }} 2x" alt="{{ $product->title }}" loading="lazy">
                         </picture>
                         <div class="product-card__info">
                             <div>

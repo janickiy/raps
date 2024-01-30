@@ -20,7 +20,7 @@
     </ul>
     <section class="product">
         <div class="main-title container">
-            <h1>{{ $title }}</h1>
+            <h1>{{ $h1 }}</h1>
         </div>
         <ul class="product__inner-links container">
             <li>

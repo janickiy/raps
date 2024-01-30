@@ -22,7 +22,7 @@
 
     <section class="catalog container">
         <div class="main-title">
-            <h1>{{ $title }}</h1>
+            <h1>{{ $h1 }}</h1>
         </div>
         <div class="sr-only">
             <h2>Категории товаров</h2>
