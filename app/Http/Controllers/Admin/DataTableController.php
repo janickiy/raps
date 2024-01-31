@@ -10,10 +10,11 @@ use App\Models\{
     ProductParametersCategory,
     ProductPhotos,
     Products,
+    ServicesCatalog,
     Settings,
     Seo,
-    User,
-};
+    Services,
+    User};
 use Illuminate\Support\Facades\Auth;
 use DataTables;
 use URL;
@@ -44,6 +45,58 @@ class DataTableController extends Controller
     /**
      * @return mixed
      */
+    public function getServicesCatalog()
+    {
+        $row = ServicesCatalog::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.services_catalog.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('image', function ($row) {
+                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
+            })
+            ->rawColumns(['actions', 'image'])->make(true);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServices()
+    {
+        $row = Services::selectRaw('services.id,services.title,services.catalog_id,services.slug,services.created_at,services.description,services_catalog.name AS services_catalog')
+            ->leftJoin('catalog', 'catalog.id', '=', 'products.catalog_id')
+            ->groupBy('services_catalog.name')
+            ->groupBy('services.id')
+            ->groupBy('services.title')
+            ->groupBy('services.catalog_id')
+            ->groupBy('services.slug')
+            ->groupBy('services.description')
+            ->groupBy('services.created_at')
+            ->groupBy('services.description');
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary" href="' . URL::route('cp.services.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('thumbnail', function ($row) {
+                $services = Services::find($row->id);
+
+                return '<img  height="150" src="' . url($services->getImage()) . '" alt="" loading="lazy">';
+            })
+            ->rawColumns(['actions', 'title', 'thumbnail'])->make(true);
+    }
+
+
+    /**
+     * @return mixed
+     */
     public function getPages()
     {
         $row = Pages::query();
@@ -61,22 +114,7 @@ class DataTableController extends Controller
             ->rawColumns(['actions'])->make(true);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNews()
-    {
-        $row = News::query();
 
-        return Datatables::of($row)
-            ->addColumn('actions', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.news.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
-
-                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
-            })
-            ->rawColumns(['actions'])->make(true);
-    }
 
     /**
      * @return mixed
@@ -137,7 +175,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('image', function ($row) {
-                return '<img  height="150" src="' . url($row->getImage()) . '" alt="">';
+                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
             })
             ->rawColumns(['actions', 'image'])->make(true);
     }
@@ -176,7 +214,7 @@ class DataTableController extends Controller
             ->editColumn('thumbnail', function ($row) {
                 $product = Products::find($row->id);
 
-                return '<img  height="150" src="' . url($product->getThumbnailUrl()) . '" alt="">';
+                return '<img  height="150" src="' . url($product->getThumbnailUrl()) . '" alt="" loading="lazy">';
             })
             ->rawColumns(['actions', 'title', 'thumbnail'])->make(true);
     }
@@ -198,7 +236,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('thumbnail', function ($row) {
-                return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="">';
+                return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="" loading="lazy">';
             })
             ->rawColumns(['actions', 'thumbnail'])->make(true);
     }

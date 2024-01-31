@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
+use App\Models\ServicesCatalog;
 use Illuminate\Http\Request;
-use App\Models\Catalog;
 use Validator;
 use Storage;
 use Image;
 use URL;
 
-class CatalogController extends Controller
+class ServicesCatalogController extends Controller
 {
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('cp.catalog.index')->with('title', 'Категории');
+        return view('cp.services_catalog.index')->with('title', 'Категории');
     }
 
     /**
@@ -27,7 +27,7 @@ class CatalogController extends Controller
     {
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.catalog.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление категории');
+        return view('cp.services_catalog.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление категории');
     }
 
     /**
@@ -39,7 +39,7 @@ class CatalogController extends Controller
         $rules = [
             'name' => 'required',
             'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-            'slug' => 'required|unique:catalog',
+            'slug' => 'required|unique:services_catalog',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -51,29 +51,29 @@ class CatalogController extends Controller
             $filename = time();
             $originName = $filename . '.' . $extension;
 
-            if ($request->file('image')->move('uploads/catalog', $originName)) {
+            if ($request->file('image')->move('uploads/services_catalog', $originName)) {
 
-                $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+                $img = Image::make(Storage::disk('public')->path('services_catalog/' . $originName));
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
+                $img->save(Storage::disk('public')->path('services_catalog/' . '2x_' . $filename . '.' . $extension));
 
-                $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+                $small_img = Image::make(Storage::disk('public')->path('services_catalog/' . $originName));
 
                 $small_img->resize(null, 350, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-                $small_img->save(Storage::disk('public')->path('catalog/' . $originName));
+                $small_img->save(Storage::disk('public')->path('services_catalog/' . $originName));
 
             }
         }
 
-        Catalog::create(array_merge(array_merge($request->all()), [
+        ServicesCatalog::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
         ]));
 
-        return redirect(URL::route('cp.catalog.index'))->with('success', 'Информация успешно добавлена');
+        return redirect(URL::route('cp.services_catalog.index'))->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -82,13 +82,13 @@ class CatalogController extends Controller
      */
     public function edit(int $id)
     {
-        $row = Catalog::find($id);
+        $row = ServicesCatalog::find($id);
 
         if (!$row) abort(404);
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.catalog.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
+        return view('cp.services_catalog.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
     }
 
     /**
@@ -100,14 +100,14 @@ class CatalogController extends Controller
         $rules = [
             'name' => 'required',
             'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-            'slug' => 'required|unique:catalog,slug,' . $request->id,
+            'slug' => 'required|unique:services_catalog,slug,' . $request->id,
         ];
 
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) return back()->withErrors($validator)->withInput();
 
-        $row = Catalog::find($request->id);
+        $row = ServicesCatalog::find($request->id);
 
         if (!$row) abort(404);
 
@@ -125,33 +125,33 @@ class CatalogController extends Controller
             $image = $request->pic;
 
             if ($image != null) {
-                if (Storage::disk('public')->exists('catalog/' . $row->image) === true) Storage::disk('public')->delete('catalog/' . $row->image);
-                if (Storage::disk('public')->exists('catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $row->image);
+                if (Storage::disk('public')->exists('services_catalog/' . $row->image) === true) Storage::disk('public')->delete('services_catalog/' . $row->image);
+                if (Storage::disk('public')->exists('services_catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('services_catalog/' . '2x_' . $row->image);
             }
 
             if ($request->hasFile('image')) {
 
-                if (Storage::disk('public')->exists('catalog/' . $row->image) === true) Storage::disk('public')->delete('catalog/' . $row->image);
-                if (Storage::disk('public')->exists('catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $row->image);
+                if (Storage::disk('public')->exists('services_catalog/' . $row->image) === true) Storage::disk('public')->delete('services_catalog/' . $row->image);
+                if (Storage::disk('public')->exists('services_catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('services_catalog/' . '2x_' . $row->image);
 
                 $extension = $request->file('image')->getClientOriginalExtension();
                 $filename = time();
                 $originName = $filename . '.' . $extension;
 
-                if ($request->file('image')->move('uploads/catalog', $originName)) {
-                    $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+                if ($request->file('image')->move('uploads/services_catalog', $originName)) {
+                    $img = Image::make(Storage::disk('public')->path('services_catalog/' . $originName));
                     $img->resize(null, 700, function ($constraint) {
                         $constraint->aspectRatio();
                     });
-                    $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
+                    $img->save(Storage::disk('public')->path('services_catalog/' . '2x_' . $filename . '.' . $extension));
 
-                    $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
+                    $small_img = Image::make(Storage::disk('public')->path('services_catalog/' . $originName));
 
                     $small_img->resize(null, 350, function ($constraint) {
                         $constraint->aspectRatio();
                     });
 
-                    if ($small_img->save(Storage::disk('public')->path('catalog/' . $originName))) $row->image = $originName;
+                    if ($small_img->save(Storage::disk('public')->path('services_catalog/' . $originName))) $row->image = $originName;
                 }
             }
         }
@@ -161,7 +161,7 @@ class CatalogController extends Controller
 
         $row->save();
 
-        return redirect(URL::route('cp.catalog.index'))->with('success', 'Данные обновлены');
+        return redirect(URL::route('cp.services_catalog.index'))->with('success', 'Данные обновлены');
     }
 
     /**
@@ -170,7 +170,6 @@ class CatalogController extends Controller
      */
     public function destroy(Request $request)
     {
-        Catalog::find($request->id)->remove();
+        ServicesCatalog::find($request->id)->remove();
     }
-
 }

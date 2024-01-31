@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Models\{Catalog, Pages, News, Products};
+use App\Models\{Catalog, Pages, Products, Services, ServicesCatalog};
 use App\Helpers\StringHelper;
 use URL;
 
@@ -26,14 +26,6 @@ class AjaxController extends Controller
 
                     return response()->json(['slug' => $slug]);
 
-                case 'get_news_slug':
-
-                    $slug = StringHelper::slug(trim($request->title));
-                    $count = News::where('slug', 'LIKE%', $slug)->count();
-                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
-
-                    return response()->json(['slug' => $slug]);
-
                 case 'get_products_slug':
 
                     $slug = StringHelper::slug(trim($request->title));
@@ -42,10 +34,26 @@ class AjaxController extends Controller
 
                     return response()->json(['slug' => $slug]);
 
+                case 'get_services_slug':
+
+                    $slug = StringHelper::slug(trim($request->title));
+                    $count = Services::where('slug', 'LIKE%', $slug)->count();
+                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+
+                    return response()->json(['slug' => $slug]);
+
                 case 'get_catalog_slug':
 
                     $slug = StringHelper::slug(trim($request->name));
                     $count = Catalog::where('slug', 'LIKE%', $slug)->count();
+                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+
+                    return response()->json(['slug' => $slug]);
+
+                case 'get_services_catalog_slug':
+
+                    $slug = StringHelper::slug(trim($request->name));
+                    $count = ServicesCatalog::where('slug', 'LIKE%', $slug)->count();
                     $slug = $count > 0 ? $slug . ($count + 1) : $slug;
 
                     return response()->json(['slug' => $slug]);

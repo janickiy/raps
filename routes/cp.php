@@ -3,24 +3,26 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\{
-    DashboardController,
-    UsersController,
-    SettingsController,
     AuthController,
+    AjaxController,
+    CatalogController,
+    DashboardController,
     DataTableController,
-    PagesController,
     MenuController,
     RobotsController,
-    SitemapController,
     FeedbackController,
-    AjaxController,
-    SeoController,
-    CatalogController,
+    PagesController,
     ProductsController,
     ProductPhotosController,
     ProductParametersController,
     ProductDocumentsController,
     ProductParametersCategoryController,
+    SeoController,
+    ServicesCatalogController,
+    ServicesController,
+    SitemapController,
+    SettingsController,
+    UsersController,
 };
 
 
@@ -53,8 +55,8 @@ Route::group(['prefix' => 'cp'], function () {
     });
 
 
-    Route::any('manage-menus',[MenuController::class,'index'])->name('cp.menu.index')->middleware(['permission:admin|moderator']);
-    Route::get('feedback',[FeedbackController::class, 'index'])->name('cp.feedback.index')->middleware(['permission:admin|moderator']);
+    Route::any('manage-menus', [MenuController::class, 'index'])->name('cp.menu.index')->middleware(['permission:admin|moderator']);
+    Route::get('feedback', [FeedbackController::class, 'index'])->name('cp.feedback.index')->middleware(['permission:admin|moderator']);
 
 
     Route::group(['prefix' => 'users'], function () {
@@ -73,21 +75,40 @@ Route::group(['prefix' => 'cp'], function () {
     });
 
     Route::group(['prefix' => 'catalog'], function () {
-        Route::get('',[CatalogController::class, 'index'])->name('cp.catalog.index')->middleware(['permission:admin|moderator']);
-        Route::get('create',[CatalogController::class, 'create'])->name('cp.catalog.create')->middleware(['permission:admin|moderator']);
-        Route::post('store',[CatalogController::class, 'store'])->name('cp.catalog.store')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}',[CatalogController::class, 'edit'])->name('cp.catalog.edit')->where('id', '[0-9]+');
-        Route::put('update',[CatalogController::class, 'update'])->name('cp.catalog.update')->middleware(['permission:admin|moderator']);
-        Route::post('destroy',[CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->middleware(['permission:admin|moderator']);
+        Route::get('', [CatalogController::class, 'index'])->name('cp.catalog.index')->middleware(['permission:admin|moderator']);
+        Route::get('create', [CatalogController::class, 'create'])->name('cp.catalog.create')->middleware(['permission:admin|moderator']);
+        Route::post('store', [CatalogController::class, 'store'])->name('cp.catalog.store')->middleware(['permission:admin|moderator']);
+        Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit')->where('id', '[0-9]+');
+        Route::put('update', [CatalogController::class, 'update'])->name('cp.catalog.update')->middleware(['permission:admin|moderator']);
+        Route::post('destroy', [CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->middleware(['permission:admin|moderator']);
+    });
+
+
+    Route::group(['prefix' => 'catalog-services'], function () {
+        Route::get('', [ServicesCatalogController::class, 'index'])->name('cp.services_catalog.index')->middleware(['permission:admin|moderator']);
+        Route::get('create', [ServicesCatalogController::class, 'create'])->name('cp.services_catalog.create')->middleware(['permission:admin|moderator']);
+        Route::post('store', [ServicesCatalogController::class, 'store'])->name('cp.services_catalog.store')->middleware(['permission:admin|moderator']);
+        Route::get('edit/{id}', [ServicesCatalogController::class, 'edit'])->name('cp.services_catalog.edit')->where('id', '[0-9]+');
+        Route::put('update', [ServicesCatalogController::class, 'update'])->name('cp.services_catalog.update')->middleware(['permission:admin|moderator']);
+        Route::post('destroy', [ServicesCatalogController::class, 'destroy'])->name('cp.services_catalog.destroy')->middleware(['permission:admin|moderator']);
     });
 
     Route::group(['prefix' => 'product-parameters-category'], function () {
-        Route::get('',[ProductParametersCategoryController::class, 'index'])->name('cp.product_parameters_category.index')->middleware(['permission:admin|moderator']);
-        Route::get('create',[ProductParametersCategoryController::class, 'create'])->name('cp.product_parameters_category.create')->middleware(['permission:admin|moderator']);
-        Route::post('store',[ProductParametersCategoryController::class, 'store'])->name('cp.product_parameters_category.store')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}',[ProductParametersCategoryController::class, 'edit'])->name('cp.product_parameters_category.edit')->where('id', '[0-9]+');
-        Route::put('update',[ProductParametersCategoryController::class, 'update'])->name('cp.product_parameters_category.update')->middleware(['permission:admin|moderator']);
-        Route::post('destroy',[ProductParametersCategoryController::class, 'destroy'])->name('cp.product_parameters_category.destroy')->middleware(['permission:admin|moderator']);
+        Route::get('', [ProductParametersCategoryController::class, 'index'])->name('cp.product_parameters_category.index')->middleware(['permission:admin|moderator']);
+        Route::get('create', [ProductParametersCategoryController::class, 'create'])->name('cp.product_parameters_category.create')->middleware(['permission:admin|moderator']);
+        Route::post('store', [ProductParametersCategoryController::class, 'store'])->name('cp.product_parameters_category.store')->middleware(['permission:admin|moderator']);
+        Route::get('edit/{id}', [ProductParametersCategoryController::class, 'edit'])->name('cp.product_parameters_category.edit')->where('id', '[0-9]+');
+        Route::put('update', [ProductParametersCategoryController::class, 'update'])->name('cp.product_parameters_category.update')->middleware(['permission:admin|moderator']);
+        Route::post('destroy', [ProductParametersCategoryController::class, 'destroy'])->name('cp.product_parameters_category.destroy')->middleware(['permission:admin|moderator']);
+    });
+
+    Route::group(['prefix' => 'services'], function () {
+        Route::get('', [ServicesController::class, 'index'])->name('cp.services.index');
+        Route::get('create', [ServicesController::class, 'create'])->name('cp.services.create');
+        Route::post('store', [ServicesController::class, 'store'])->name('cp.services.store');
+        Route::get('edit/{id}', [ServicesController::class, 'edit'])->name('cp.services.edit')->where('id', '[0-9]+');
+        Route::put('update', [ServicesController::class, 'update'])->name('cp.services.update');
+        Route::post('destroy', [ServicesController::class, 'destroy'])->name('cp.services.destroy');
     });
 
     Route::group(['prefix' => 'products'], function () {
@@ -146,12 +167,12 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('import', [SitemapController::class, 'import'])->name('cp.sitemap.import')->middleware(['permission:admin|moderator']);
     });
 
-    Route::any('ajax',[AjaxController::class,'index'])->name('cp.ajax.action');
-
-
-    Route::group(['prefix' => 'datatable'], function () {
-        Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog')->middleware(['permission:admin|moderator']);
+    Route::any('ajax', [AjaxController::class, 'index'])->name('cp.ajax.action');
+        Route::group(['prefix' => 'datatable'], function () {
+        Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog');
         Route::any('products', [DataTableController::class, 'getProducts'])->name('cp.datatable.products');
+        Route::any('catalog-services', [DataTableController::class, 'getServicesCatalog'])->name('cp.datatable.services_catalog');
+        Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
         Route::any('users', [DataTableController::class, 'getUsers'])->name('cp.datatable.users')->middleware(['permission:admin']);
         Route::any('pages', [DataTableController::class, 'getPages'])->name('cp.datatable.pages');
         Route::any('settings', [DataTableController::class, 'getSettings'])->name('cp.datatable.settings')->middleware(['permission:admin']);
@@ -162,7 +183,6 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('product-documents/{product_id}', [DataTableController::class, 'getDocuments'])->name('cp.datatable.product_documents')->where('product_id', '[0-9]+');
         Route::any('product-parameters/{product_id}', [DataTableController::class, 'getProductParameters'])->name('cp.datatable.product_parameters')->where('product_id', '[0-9]+');
         Route::any('product-parameters-category', [DataTableController::class, 'getProductParametersCategory'])->name('cp.datatable.product_parameters_category')->middleware(['permission:admin|moderator']);
-
     });
 
 });

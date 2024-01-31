@@ -213,7 +213,8 @@ Use search to find needed section.
                     @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
                         <li {!! Request::is('cp/product-parameters-category*') ? ' class="active"' : '' !!}>
                             <a href="{{ URL::route('cp.product_parameters_category.index') }}">
-                                <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Категория характеристик</span>
+                                <i class="fa fa-fw fa-list"></i> <span
+                                    class="menu-item-parent"> Категория характеристик</span>
                             </a>
                         </li>
                     @endif
@@ -221,6 +222,28 @@ Use search to find needed section.
                     <li {!! Request::is('cp/products*') ? ' class="active"' : '' !!}>
                         <a href="{{ URL::route('cp.products.index') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Продукция</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="">
+                <a href="#">
+                    <i class="fa fa-fw fa-th-list"></i> <span class="menu-item-parent">Услуги</span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                    <li {!! Request::is('cp/catalog-services*') ? ' class="active"' : '' !!}>
+                        <a href="{{ URL::route('cp.services_catalog.index') }}">
+                            <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Категории</span>
+                        </a>
+                    </li>
+
+                    <li {!! Request::is('cp/services*') ? ' class="active"' : '' !!}>
+                        <a href="{{ URL::route('cp.services.index') }}">
+                            <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Услуги</span>
                         </a>
                     </li>
 
