@@ -47,16 +47,7 @@ class DataTableController extends Controller
      */
     public function getServices()
     {
-        $row = Services::selectRaw('services.id,services.title,services.catalog_id,services.slug,services.created_at,services.description,services_catalog.name AS services_catalog')
-            ->leftJoin('catalog', 'catalog.id', '=', 'products.catalog_id')
-            ->groupBy('services_catalog.name')
-            ->groupBy('services.id')
-            ->groupBy('services.title')
-            ->groupBy('services.catalog_id')
-            ->groupBy('services.slug')
-            ->groupBy('services.description')
-            ->groupBy('services.created_at')
-            ->groupBy('services.description');
+        $row = Services::query();
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
@@ -65,12 +56,10 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
-            ->editColumn('thumbnail', function ($row) {
-                $services = Services::find($row->id);
-
-                return '<img  height="150" src="' . url($services->getImage()) . '" alt="" loading="lazy">';
+            ->editColumn('image', function ($row) {
+                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
             })
-            ->rawColumns(['actions', 'title', 'thumbnail'])->make(true);
+            ->rawColumns(['actions', 'image'])->make(true);
     }
 
 
