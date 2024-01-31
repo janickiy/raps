@@ -18,7 +18,6 @@ use App\Http\Controllers\Admin\{
     ProductDocumentsController,
     ProductParametersCategoryController,
     SeoController,
-    ServicesCatalogController,
     ServicesController,
     SitemapController,
     SettingsController,
@@ -81,16 +80,6 @@ Route::group(['prefix' => 'cp'], function () {
         Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit')->where('id', '[0-9]+');
         Route::put('update', [CatalogController::class, 'update'])->name('cp.catalog.update')->middleware(['permission:admin|moderator']);
         Route::post('destroy', [CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->middleware(['permission:admin|moderator']);
-    });
-
-
-    Route::group(['prefix' => 'catalog-services'], function () {
-        Route::get('', [ServicesCatalogController::class, 'index'])->name('cp.services_catalog.index')->middleware(['permission:admin|moderator']);
-        Route::get('create', [ServicesCatalogController::class, 'create'])->name('cp.services_catalog.create')->middleware(['permission:admin|moderator']);
-        Route::post('store', [ServicesCatalogController::class, 'store'])->name('cp.services_catalog.store')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}', [ServicesCatalogController::class, 'edit'])->name('cp.services_catalog.edit')->where('id', '[0-9]+');
-        Route::put('update', [ServicesCatalogController::class, 'update'])->name('cp.services_catalog.update')->middleware(['permission:admin|moderator']);
-        Route::post('destroy', [ServicesCatalogController::class, 'destroy'])->name('cp.services_catalog.destroy')->middleware(['permission:admin|moderator']);
     });
 
     Route::group(['prefix' => 'product-parameters-category'], function () {
@@ -171,7 +160,6 @@ Route::group(['prefix' => 'cp'], function () {
         Route::group(['prefix' => 'datatable'], function () {
         Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog');
         Route::any('products', [DataTableController::class, 'getProducts'])->name('cp.datatable.products');
-        Route::any('catalog-services', [DataTableController::class, 'getServicesCatalog'])->name('cp.datatable.services_catalog');
         Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
         Route::any('users', [DataTableController::class, 'getUsers'])->name('cp.datatable.users')->middleware(['permission:admin']);
         Route::any('pages', [DataTableController::class, 'getPages'])->name('cp.datatable.pages');

@@ -18,7 +18,6 @@ class CreateServicesTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('image')->nullable();
-            $table->integer('catalog_id')->index('catalog_id');
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();

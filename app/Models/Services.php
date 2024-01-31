@@ -15,7 +15,6 @@ class Services extends Model
         'title',
         'description',
         'full_description',
-        'catalog_id',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -26,14 +25,6 @@ class Services extends Model
         'image_title',
         'image_alt'
     ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function catalog()
-    {
-        return $this->belongsTo(ServicesCatalog::class, 'catalog_id', 'id');
-    }
 
     /**
      * @param string|null $x

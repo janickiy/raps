@@ -10,7 +10,6 @@ use App\Models\{
     ProductParametersCategory,
     ProductPhotos,
     Products,
-    ServicesCatalog,
     Settings,
     Seo,
     Services,
@@ -42,25 +41,6 @@ class DataTableController extends Controller
             ->rawColumns(['actions'])->make(true);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getServicesCatalog()
-    {
-        $row = ServicesCatalog::query();
-
-        return Datatables::of($row)
-            ->addColumn('actions', function ($row) {
-                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.services_catalog.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
-                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
-
-                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
-            })
-            ->editColumn('image', function ($row) {
-                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
-            })
-            ->rawColumns(['actions', 'image'])->make(true);
-    }
 
     /**
      * @return mixed

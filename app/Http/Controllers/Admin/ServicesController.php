@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
-use App\Models\ServicesCatalog;
 use App\Models\Services;
 use Illuminate\Http\Request;
 use URL;
@@ -26,11 +25,10 @@ class ServicesController extends Controller
      */
     public function create()
     {
-        $options = ServicesCatalog::getOption();
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.services.create_edit', compact('options', 'maxUploadFileSize'))->with('title', 'Добавление продукции');
+        return view('cp.services.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление продукции');
     }
 
     /**
@@ -45,7 +43,6 @@ class ServicesController extends Controller
             'full_description' => 'required',
             'slug' => 'required|unique:services',
             'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-            'catalog_id' => 'integer|required|exists:services_catalog,id'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -93,11 +90,9 @@ class ServicesController extends Controller
 
         if (!$row) abort(404);
 
-        $options = ServicesCatalog::getOption();
-
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.services.create_edit', compact('row', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
+        return view('cp.services.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
 
     }
 
@@ -113,7 +108,6 @@ class ServicesController extends Controller
             'full_description' => 'required',
             'slug' => 'required|unique:services,slug,' . $request->id,
             'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-            'catalog_id' => 'integer|required|exists:services_catalog,id',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -127,7 +121,6 @@ class ServicesController extends Controller
         $row->title = $request->input('title');
         $row->description = $request->input('description');
         $row->full_description = $request->input('full_description');
-        $row->catalog_id = $request->catalog_id;
         $row->meta_title = $request->input('meta_title');
         $row->meta_description = $request->input('meta_description');
         $row->meta_keywords = $request->input('meta_keywords');
