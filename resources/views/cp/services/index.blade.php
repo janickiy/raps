@@ -37,7 +37,6 @@
                             <tr>
                                 <th>Название</th>
                                 <th>Фото</th>
-                                <th>Категория</th>
                                 <th>Описание</th>
                                 <th>slug</th>
                                 <th>Добавлен</th>
@@ -125,7 +124,6 @@
                 columns: [
                     {data: 'title', name: 'title'},
                     {data: 'image', name: 'image', searchable: false},
-                    {data: 'catalog', name: 'catalog.name'},
                     {data: 'description', name: 'description', searchable: false},
                     {data: 'slug', name: 'slug'},
                     {data: 'created_at', name: 'created_at'},

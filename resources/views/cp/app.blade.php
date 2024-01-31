@@ -230,7 +230,7 @@ Use search to find needed section.
 
 
             <li {!! Request::is('cp/services*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.feedback.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
+                <a href="{{URL::route('cp.services.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
                         class="menu-item-parent"> Услуги</span></a>
             </li>
 

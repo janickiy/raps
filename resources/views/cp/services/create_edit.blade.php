@@ -70,24 +70,6 @@
 
                             <section>
 
-                                {!! Form::label('catalog_id',  "Категория*", ['class' => 'label']) !!}
-
-                                <label class="select">
-
-                                    {!! Form::select('catalog_id', $options, old('catalog_id', isset($row) ? $row->catalog_id : null), ['placeholder' => 'Выберите', 'class' => 'input-sm']) !!}
-                                    <i></i>
-
-                                </label>
-
-                                @if ($errors->has('catalog_id'))
-                                    <p class="text-danger">{{ $errors->first('catalog_id') }}</p>
-                                @endif
-
-                            </section>
-
-
-                            <section>
-
                                 {!! Form::label('description', 'Описание*', ['class' => 'label']) !!}
 
                                 <label class="textarea textarea-resizable">
