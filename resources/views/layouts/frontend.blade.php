@@ -19,7 +19,7 @@
     <meta property="og:title" content="RAPSystem | @yield('title')">
     <meta property="og:description" content="@yield('description')">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="/favicon/android-chrome-512x512.png">
+    <meta property="og:image" content="{{ url('/favicon/android-chrome-512x512.png') }}">
     <meta property="og:image:alt" content="RAPSystem logo">
     <meta property="og:url" content="@yield('seo_url_canonical')">
     <meta property="og:locale" content="ru_RU">
@@ -78,7 +78,7 @@
 
                     </li>
                     <li class="header__submenu">
-                        <a href="#" class="header__nav-item">
+                        <a href="{{ URL::route('frontend.services') }}" class="header__nav-item">
                             Услуги
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>

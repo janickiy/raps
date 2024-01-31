@@ -19,6 +19,7 @@ Route::get('about', [FrontendController::class, 'about'])->name('frontend.catalo
 Route::get('catalog', [FrontendController::class, 'catalog'])->name('frontend.catalog');
 Route::get('product-listing/{slug}', [FrontendController::class, 'productListing'])->name('frontend.product_listing');
 Route::get('product/{slug}', [FrontendController::class, 'product'])->name('frontend.product');
+Route::get('services', [FrontendController::class,'services'])->name('frontend.services');
 Route::get('certificates', [FrontendController::class, 'certificates'])->name('frontend.certificates');
 Route::get('contact', [FrontendController::class, 'contact'])->name('frontend.contact');
 Route::get('application', [FrontendController::class,'application'])->name('frontend.application');

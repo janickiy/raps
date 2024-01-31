@@ -216,6 +216,41 @@ class FrontendController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function services()
+    {
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        $menu = [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
+
+        $seo = Seo::where('type', 'frontend.services')->first();
+
+        $title = $seo->h1 ?? 'Услуги компании';
+        $meta_description = $seo->description ?? '';
+        $meta_keywords = $seo->keyword ?? '';
+        $meta_title = $seo->title ?? '';
+        $seo_url_canonical = $seo->url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
+
+        $catalogs = Catalog::orderBy('name')->get();
+
+        return view('frontend.services', compact(
+                'catalogs',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'seo_url_canonical',
+                'h1',
+                'menu')
+        )->with('title', $title);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function about()
     {
         $seo = Seo::where('type', 'frontend.about')->first();
