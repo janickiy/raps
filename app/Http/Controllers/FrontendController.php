@@ -2,13 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{
-    Catalog,
-    Pages,
-    Products,
-    ProductParametersCategory,
-    Seo
-};
+use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Seo, Services};
 use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
@@ -23,7 +17,7 @@ class FrontendController
      */
     public function index()
     {
-        $page = Pages::where('main', 1)->first();
+        $page = Pages::where('main', 1)->published()->first();
 
         if (!$page) abort(404);
 
@@ -216,7 +210,7 @@ class FrontendController
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function services()
+    public function servicesListing()
     {
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -237,8 +231,53 @@ class FrontendController
 
         $catalogs = Catalog::orderBy('name')->get();
 
-        return view('frontend.services', compact(
+        $services = Services::orderBy('title')->published()->get();
+
+        return view('frontend.services_listing', compact(
                 'catalogs',
+                'services',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'seo_url_canonical',
+                'h1',
+                'menu')
+        )->with('title', $title);
+    }
+
+
+    /**
+     * @param string $slug
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function service(string $slug)
+    {
+        $service = Services::where('slug', $slug)->published()->first();
+
+        if (!$service) abort(404);
+
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        $menu = [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
+
+        $seo = Seo::where('type', 'frontend.services')->first();
+
+        $title = $service->title;
+        $meta_description = $service->meta_description ?? '';
+        $meta_keywords = $service->meta_keywords ?? '';
+        $meta_title = $service->meta_title ?? '';
+        $seo_url_canonical = $service->seo_url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
+
+        $catalogs = Catalog::orderBy('name')->get();
+
+        return view('frontend.service', compact(
+                'catalogs',
+                'service',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -262,6 +301,10 @@ class FrontendController
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
 
+        $page = Pages::where('slug', 'about')->published()->first();
+
+        if (!$page) abort(404);
+
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
 
@@ -273,6 +316,7 @@ class FrontendController
         $catalogs = Catalog::orderBy('name')->get();
 
         return view('frontend.about', compact(
+            'page',
                 'catalogs',
                 'meta_description',
                 'meta_keywords',
@@ -290,7 +334,7 @@ class FrontendController
      */
     public function page(string $slug)
     {
-        $page = Pages::where('slug', $slug)->first();
+        $page = Pages::where('slug', $slug)->published()->first();
 
         if (!$page) abort(404);
 
@@ -311,7 +355,7 @@ class FrontendController
 
         $catalogs = Catalog::orderBy('name')->get();
 
-        return view('frontend.index', compact(
+        return view('frontend.page', compact(
                 'page',
                 'catalogs',
                 'meta_description',

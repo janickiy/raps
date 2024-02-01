@@ -23,8 +23,35 @@ class Services extends Model
         'seo_url_canonical',
         'image',
         'image_title',
-        'image_alt'
+        'image_alt',
+        'published',
     ];
+
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('published', 1);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublishedAttribute()
+    {
+        return $this->attributes['published'] ? 'публикован' : 'не опубликован';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatusAttribute()
+    {
+        return $this->attributes['published'];
+    }
 
     /**
      * @param string|null $x

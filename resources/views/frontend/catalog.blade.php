@@ -33,7 +33,7 @@
 
             <article class="card">
                 <picture class="card__img ">
-                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
+                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x"
                         alt="{{ $row->image_alt }}"
                         title="{{ $row->image_title ?? $row->name }}"
                         loading="lazy">

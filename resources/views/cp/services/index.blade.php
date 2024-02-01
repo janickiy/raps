@@ -39,6 +39,7 @@
                                 <th>Фото</th>
                                 <th>Описание</th>
                                 <th>slug</th>
+                                <th>Опубликован</th>
                                 <th>Добавлен</th>
                                 <th width="20px">Действия</th>
                             </tr>
@@ -126,6 +127,7 @@
                     {data: 'image', name: 'image', searchable: false},
                     {data: 'description', name: 'description', searchable: false},
                     {data: 'slug', name: 'slug'},
+                    {data: 'published', name: 'published'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],

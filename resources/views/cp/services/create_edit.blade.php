@@ -258,6 +258,20 @@
 
                             </section>
 
+                            <section>
+
+                                <label class="checkbox">
+
+                                    {!! Form::checkbox('published', 1, isset($row) ? ($row->published == true ? 1 : 0): 1) !!}
+
+                                    <i></i>Публиковать</label>
+
+                                @if ($errors->has('published'))
+                                    <span class="text-danger">{{ $errors->first('published') }}</span>
+                                @endif
+
+                            </section>
+
                         </fieldset>
 
                         <footer>

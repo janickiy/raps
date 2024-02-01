@@ -16,8 +16,8 @@
 @section('content')
 
 
-    <section class="hero container section-desc hero__desc">
-        <div class="hero__info">
+    <section class="hero container">
+        <div class="hero__info section-desc content__hero-desc">
             <div class="main-title">
                 <h1>{{ $h1 }}</h1>
             </div>

@@ -116,7 +116,6 @@ class PagesController extends Controller
 
         $row->published = $published;
 
-
         $main = 0;
 
         if ($request->input('main')) {

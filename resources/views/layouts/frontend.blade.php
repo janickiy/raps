@@ -32,7 +32,8 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('css/styles.min.css') !!}
+    {!! Html::style('css/styles.min.css
+') !!}
 
     @yield('css')
 
@@ -78,7 +79,7 @@
 
                     </li>
                     <li class="header__submenu">
-                        <a href="{{ URL::route('frontend.services') }}" class="header__nav-item">
+                        <a href="{{ URL::route('frontend.services_listing') }}" class="header__nav-item">
                             Услуги
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>

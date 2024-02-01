@@ -32,7 +32,7 @@ class Pages extends Model
      */
     public function scopePublished($query)
     {
-        return $query->where('published', 'true');
+        return $query->where('published', 1);
     }
 
     /**

@@ -68,13 +68,11 @@ class ServicesController extends Controller
                     $constraint->aspectRatio();
                 });
                 $small_img->save(Storage::disk('public')->path('services/' . $originName));
-
             }
         }
 
         Services::create(array_merge(array_merge($request->all()), [
-            'thumbnail' => $thumbnailFileNameToStore ?? null,
-            'origin' => $fileNameToStore ?? null,
+            'image' => $originName ?? null,
         ]));
 
         return redirect(URL::route('cp.services.index'))->with('success', 'Информация успешно добавлена');
@@ -166,6 +164,14 @@ class ServicesController extends Controller
 
         $row->image_title = $request->input('image_title');
         $row->image_alt = $request->input('image_alt');
+
+        $published = 0;
+
+        if ($request->input('published')) {
+            $published = 1;
+        }
+
+        $row->published = $published;
 
         $row->save();
 
