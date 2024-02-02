@@ -50,25 +50,26 @@ class ProductPhotosController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $extension = $request->file('image')->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
-        $fileNameToStore = 'origin_' . $filename;
-        $thumbnailFileNameToStore = 'thumbnail_' . $filename;
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $fileNameToStore = 'origin_' . $filename;
+            $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-        if ($request->file('image')->store('images', $fileNameToStore)) {
-            $thumbnail = Image::make(Storage::disk('public')->path('/public/images/' . $fileNameToStore));
-            $thumbnail->resize(300, 300, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+            if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
+                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
+                $img->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
 
-            if ($thumbnail->save(Storage::disk('public')->path('/public/images/') . $thumbnailFileNameToStore)) {
-                ProductPhotos::create(array_merge(array_merge($request->all()), [
-                        'thumbnail' => $thumbnailFileNameToStore,
-                        'origin' => $fileNameToStore
-                    ]
-                ));
+                if ($img->save(Storage::disk('public')->path('images/' . $thumbnailFileNameToStore))) {
+                    ProductPhotos::create(array_merge(array_merge($request->all()), [
+                        'thumbnail' => $thumbnailFileNameToStore ?? null,
+                        'origin' => $fileNameToStore ?? null,
+                    ]));
 
-                return redirect(URL::route('cp.product_photos.index', ['product_id' => $request->product_id]))->with('success', 'Данные успешно добавлены');
+                    return redirect(URL::route('cp.product_photos.index', ['product_id' => $request->product_id]))->with('success', 'Данные успешно обновлены');
+                }
             }
         }
 
@@ -88,7 +89,7 @@ class ProductPhotosController extends Controller
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.product_photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title );
+        return view('cp.product_photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title);
 
     }
 
@@ -114,21 +115,29 @@ class ProductPhotosController extends Controller
         if (!$row) abort(404);
 
         if ($request->hasFile('image')) {
+
+            $image = $request->pic;
+
+            if ($image != null) {
+                if (Storage::disk('public')->exists('images/' . $row->thumbnail) === true) Storage::disk('public')->delete('images/' . $row->thumbnail);
+                if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);
+            }
+
             if (Storage::disk('public')->exists('images/' . $row->thumbnail) === true) Storage::disk('public')->delete('images/' . $row->thumbnail);
-            if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);
+            if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);;
 
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $fileNameToStore = 'origin_' . $filename;
             $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-            if ($request->file('image')->store('public/images', $fileNameToStore)) {
-                $img = Image::make(Storage::disk('public')->path('/public/images/' . $fileNameToStore));
-                $img->resize(300, 300, function ($constraint) {
+            if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
+                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore ));
+                $img->resize(null, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
-                if ($img->save(Storage::disk('public')->path('/public/images/' . $thumbnailFileNameToStore) )) {
+                if ($img->save(Storage::disk('public')->path('images/'  . $thumbnailFileNameToStore) )) {
                     $row->thumbnail = $thumbnailFileNameToStore;
                     $row->origin = $fileNameToStore;
                 }
