@@ -16,7 +16,7 @@
     <ul class="container breadcrumbs">
         <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
         <li><a href="{{ URL::route('frontend.catalog') }}">Каталог</a></li>
-        <li><a href="{{ URL::route('frontend.catalog') }}">Контроль концентрации газов в технологических процессах</a></li>
+        <li><span>{{ $title }}</span></li>
     </ul>
     <section class="product">
         <div class="main-title container">
@@ -61,99 +61,35 @@
                 <div class="swiper product__main-slider">
                     <div class="swiper-wrapper">
 
-                        <div class="swiper-slide">
-                            <picture class="product__img-main">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
+                        @foreach($product->photos as $photo)
+                            <div class="swiper-slide">
+                                <picture class="product__img-main">
+                                    <img src="{{ url($photo->getOriginUrl()) }}"
+                                         srcset="{{ url($photo->getOriginUrl()) }} 2x" alt="{{ $photo->alt }}"
+                                         title="{{ $photo->title ?? $product->title }}" loading="lazy">
+                                </picture>
+                            </div>
+                        @endforeach
 
-                        <div class="swiper-slide">
-                            <picture class="product__img-main">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
-                        <div class="swiper-slide">
-                            <picture class="product__img-main">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
-                        <div class="swiper-slide">
-                            <picture class="product__img-main">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
                     </div>
                 </div>
                 <div class="swiper product__thumbs-slider">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <picture class="product__img-thumb">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
-                        <div class="swiper-slide">
-                            <picture class="product__img-thumb">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
-                        <div class="swiper-slide">
-                            <picture class="product__img-thumb">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
-                        <div class="swiper-slide">
-                            <picture class="product__img-thumb">
-                                <source
-                                    srcset="./images/product.webp, ./images/product@2x.webp 2x"
-                                    type="image/webp">
-                                <img
-                                    src="./images/product.jpg"
-                                    srcset="./images/product@2x.jpg 2x"
-                                    alt="Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор">
-                            </picture>
-                        </div>
+
+                        @foreach($product->photos as $photo)
+                            <div class="swiper-slide">
+                                <picture class="product__img-thumb">
+                                    <img
+                                        src="{{ url($photo->getOriginUrl()) }}"
+                                        srcset="{{ url($photo->getOriginUrl()) }} 2x"
+                                        alt="{{ $photo->alt }}"
+                                        title="{{ $photo->title ?? $product->title }}"
+                                        loading="lazy"
+                                    >
+                                </picture>
+                            </div>
+                        @endforeach
+
                     </div>
                 </div>
             </div>
@@ -161,7 +97,7 @@
                 <p>{{ $product->description }}</p>
                 <ul class="product__main-list">
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#developer-guide') }}"/>
                         </svg>
@@ -169,7 +105,7 @@
                         <span class="product__main-item-text">Товар <a href="#">сертифицирован</a> и имеет проверку Узстандарт</span>
                     </li>
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#verified') }}"/>
                         </svg>
@@ -177,7 +113,7 @@
                         <span class="product__main-item-text">Гарантия завода, соответствие ГОСТ и&nbsp;ТУ</span>
                     </li>
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#swap-horizontal') }}"/>
                         </svg>
@@ -185,7 +121,7 @@
                         <span class="product__main-item-text">Политика импортозамещения</span>
                     </li>
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#delivery') }}"/>
                         </svg>
@@ -193,7 +129,7 @@
                         <span class="product__main-item-text">Доставка по всему Узбекистану</span>
                     </li>
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#directions-run') }}"/>
                         </svg>
@@ -201,7 +137,7 @@
                         <span class="product__main-item-text">Возможен самовывоз по&nbsp;адресу Мукими 178</span>
                     </li>
                     <li class="product__main-item">
-                    <span  class="product__main-item-icon">
+                    <span class="product__main-item-icon">
                         <svg aria-hidden="true">
                             <use xlink:href="{{ url('/images/sprite.svg#savings') }}"/>
                         </svg>
@@ -212,7 +148,9 @@
             </div>
             <div class="product__buy">
                 <span class="product__buy-price">от 1 000 000 сўм</span>
-                <button type="button" class="btn btn-secondary product__buy-btn" data-modal="requestModal">Рассчитать заказ</button>
+                <button type="button" class="btn btn-secondary product__buy-btn" data-modal="requestModal">Рассчитать
+                    заказ
+                </button>
                 <span class="product__buy-desc">Точные цены уточняйте у менеджера</span>
             </div>
         </div>
@@ -227,12 +165,22 @@
                 </div>
                 <ul class="product__list">
                     <li>Взрывозащищенное исполнение Ex d II CT6 Gb.</li>
-                    <li>Определение содержания нескольких газов, включая CO, CO, SO, NO, NO2, N2O, CXHY, H, O2 и другие промышленные газы.</li>
-                    <li>Различные технологии для выполнения измерения, такие как фотоакустический, технология NDIR, технология NDUV, парамагнитная технология для определения содержания кислорода и TCD детектор по теплопроводности.</li>
-                    <li>Сенсорный экран 5,6", на котором концентрация газа может отображаться в виде графика, значения и таблицы.</li>
-                    <li>Внутреннее программное обеспечение выполняет калибровку по нулевой точке, калибровочной точке и дополнительной точке, что обеспечивает идеальную линейность измеренных значений.</li>
+                    <li>Определение содержания нескольких газов, включая CO, CO, SO, NO, NO2, N2O, CXHY, H, O2 и другие
+                        промышленные газы.
+                    </li>
+                    <li>Различные технологии для выполнения измерения, такие как фотоакустический, технология NDIR,
+                        технология NDUV, парамагнитная технология для определения содержания кислорода и TCD детектор по
+                        теплопроводности.
+                    </li>
+                    <li>Сенсорный экран 5,6", на котором концентрация газа может отображаться в виде графика, значения и
+                        таблицы.
+                    </li>
+                    <li>Внутреннее программное обеспечение выполняет калибровку по нулевой точке, калибровочной точке и
+                        дополнительной точке, что обеспечивает идеальную линейность измеренных значений.
+                    </li>
                     <li>Интуитивно понятное меню обеспечивает удобство использования для полевого персонала.</li>
-                    <li>Большое разнообразие выходных сигналов позволяет использовать анализатор для различных целей.</li>
+                    <li>Большое разнообразие выходных сигналов позволяет использовать анализатор для различных целей.
+                    </li>
                 </ul>
             </section>
 
@@ -265,10 +213,10 @@
 
                         @foreach($product->parameterByCategoryId($categoryRow->id) as $row)
 
-                        <div class="product__table-row">
-                            <dt>{{ $row->name }}</dt>
-                            <dd>{{ $row->value }}</dd>
-                        </div>
+                            <div class="product__table-row">
+                                <dt>{{ $row->name }}</dt>
+                                <dd>{{ $row->value }}</dd>
+                            </div>
 
                         @endforeach
 
@@ -311,7 +259,8 @@
                 <div class="section-title">
                     <h2>Вопрос-ответ</h2>
                 </div>
-                <p class="product__accordions-desc">Если вы не нашли ответа на свой вопрос, вы можете <a href="./contacts.html">связаться с нами</a> удобным для вас способом.</p>
+                <p class="product__accordions-desc">Если вы не нашли ответа на свой вопрос, вы можете <a
+                        href="./contacts.html">связаться с нами</a> удобным для вас способом.</p>
                 <div class="product__accordions">
                     <div class="product__accordions-item">
                         <input id="ac-1" name="accordion-1" type="checkbox">
@@ -319,11 +268,17 @@
                             <svg aria-hidden="true">
                                 <use xlink:href="./images/sprite.svg#plus"/>
                             </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при ежедневной работе этого прибора?
+                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
+                            ежедневной работе этого прибора?
                         </label>
                         <div class="product__accordions-content">
                             <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при положительных результатах контроля качества (актуальность новой методики можно проверить на сайте ФГИС «АРШИН»).</p>
+                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
+                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
+                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
+                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
+                                    положительных результатах контроля качества (актуальность новой методики можно
+                                    проверить на сайте ФГИС «АРШИН»).</p>
                             </div>
                         </div>
                     </div>
@@ -333,11 +288,17 @@
                             <svg aria-hidden="true">
                                 <use xlink:href="./images/sprite.svg#plus"/>
                             </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при ежедневной работе этого прибора?
+                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
+                            ежедневной работе этого прибора?
                         </label>
                         <div class="product__accordions-content">
                             <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при положительных результатах контроля качества (актуальность новой методики можно проверить на сайте ФГИС «АРШИН»).</p>
+                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
+                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
+                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
+                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
+                                    положительных результатах контроля качества (актуальность новой методики можно
+                                    проверить на сайте ФГИС «АРШИН»).</p>
                             </div>
                         </div>
                     </div>
@@ -347,11 +308,17 @@
                             <svg aria-hidden="true">
                                 <use xlink:href="./images/sprite.svg#plus"/>
                             </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при ежедневной работе этого прибора?
+                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
+                            ежедневной работе этого прибора?
                         </label>
                         <div class="product__accordions-content">
                             <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при положительных результатах контроля качества (актуальность новой методики можно проверить на сайте ФГИС «АРШИН»).</p>
+                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
+                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
+                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
+                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
+                                    положительных результатах контроля качества (актуальность новой методики можно
+                                    проверить на сайте ФГИС «АРШИН»).</p>
                             </div>
                         </div>
                     </div>
@@ -361,11 +328,17 @@
                             <svg aria-hidden="true">
                                 <use xlink:href="./images/sprite.svg#plus"/>
                             </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при ежедневной работе этого прибора?
+                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
+                            ежедневной работе этого прибора?
                         </label>
                         <div class="product__accordions-content">
                             <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при положительных результатах контроля качества (актуальность новой методики можно проверить на сайте ФГИС «АРШИН»).</p>
+                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
+                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
+                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
+                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
+                                    положительных результатах контроля качества (актуальность новой методики можно
+                                    проверить на сайте ФГИС «АРШИН»).</p>
                             </div>
                         </div>
                     </div>
@@ -375,11 +348,17 @@
                             <svg aria-hidden="true">
                                 <use xlink:href="./images/sprite.svg#plus"/>
                             </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при ежедневной работе этого прибора?
+                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
+                            ежедневной работе этого прибора?
                         </label>
                         <div class="product__accordions-content">
                             <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при положительных результатах контроля качества (актуальность новой методики можно проверить на сайте ФГИС «АРШИН»).</p>
+                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
+                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
+                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
+                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
+                                    положительных результатах контроля качества (актуальность новой методики можно
+                                    проверить на сайте ФГИС «АРШИН»).</p>
                             </div>
                         </div>
                     </div>
@@ -412,7 +391,8 @@
                             <h3>Анализатор SIGAS S200</h3>
 
                         </div>
-                        <p class="card__desc">Cтандартный 19-дюймовый анализатор, используемый для определения содержания нескольких газов.</p>
+                        <p class="card__desc">Cтандартный 19-дюймовый анализатор, используемый для определения
+                            содержания нескольких газов.</p>
                     </div>
                     <a href="#" class="btn btn-primary card__btn">
                         от 1 000 000 сўм
@@ -421,7 +401,8 @@
                         </svg>
                     </a>
                 </div>
-            </article><article class="card">
+            </article>
+            <article class="card">
                 <picture class="card__img ">
                     <source
                         srcset="./images/category/category-3.webp, ./images/category/category-3@2x.webp 2x"
@@ -439,7 +420,8 @@
                             <h3>Анализатор SIGAS S200</h3>
 
                         </div>
-                        <p class="card__desc">Cтандартный 19-дюймовый анализатор, используемый для определения содержания нескольких газов.</p>
+                        <p class="card__desc">Cтандартный 19-дюймовый анализатор, используемый для определения
+                            содержания нескольких газов.</p>
                     </div>
                     <a href="#" class="btn btn-primary card__btn">
                         от 1 000 000 сўм
@@ -451,7 +433,6 @@
             </article>
         </div>
     </section>
-
 
 @endsection
 
