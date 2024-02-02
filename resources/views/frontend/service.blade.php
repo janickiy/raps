@@ -22,20 +22,9 @@
     </ul>
 
 
-
-
     <section class="service container">
-        <div class="service__hero">
-            <div class="service__hero-info section-desc content__hero-desc">
-                <div class="main-title">
-                    <h1>{{ $h1 }}</h1>
-                </div>
-                {!! $service->full_description !!}
-            </div>
-            <picture class="service__hero-img">
-                <img src="{{ url($service->getImage()) }}" srcset="{{ url($service->getImage('2x_')) }} 2x" title="{{ $service->image_title ?? $service->title }}" alt="{{ $service->image_alt }}" loading="lazy">
-            </picture>
-        </div>
+
+        {!! $service->full_description !!}
 
         <p class="service__questions">Остались вопросы? <a href="{{ URL::route('frontend.contact') }}">Свяжитесь с нами</a> любым удобным способом</p>
 
