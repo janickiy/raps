@@ -32,8 +32,7 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('css/styles.min.css
-') !!}
+    {!! Html::style('css/styles.min.css') !!}
 
     @yield('css')
 
