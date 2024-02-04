@@ -147,7 +147,7 @@
                 </ul>
             </div>
             <div class="product__buy">
-                <span class="product__buy-price">от 1 000 000 сўм</span>
+                @if($product->price > 0)<span class="product__buy-price">от {{ $product->price }} сўм</span>@endif
                 <button type="button" class="btn btn-secondary product__buy-btn" data-modal="requestModal">Рассчитать
                     заказ
                 </button>
@@ -155,15 +155,16 @@
             </div>
         </div>
         <div class="container">
-            <section id="description" class="product__section _part">
+            <section id="description" class="product__section _part product__text">
                 <div class="section-title">
                     <h2>Описание</h2>
                 </div>
-                <p class="product__text">{{ $product->full_description }}</p>
-                <div class="product__subtitle">
-                    <h3>Ключевые особенности</h3>
+                <div class="product__text">
+                    {!!  $product->full_description !!}
                 </div>
-                <ul class="product__list">
+
+                <h3>Ключевые особенности</h3>
+                <ul>
                     <li>Взрывозащищенное исполнение Ex d II CT6 Gb.</li>
                     <li>Определение содержания нескольких газов, включая CO, CO, SO, NO, NO2, N2O, CXHY, H, O2 и другие
                         промышленные газы.
@@ -182,36 +183,22 @@
                     <li>Большое разнообразие выходных сигналов позволяет использовать анализатор для различных целей.
                     </li>
                 </ul>
+
             </section>
 
             <section id="characteristics" class="product__section _part">
                 <div class="section-title">
                     <h2>Характеристики</h2>
                 </div>
-                <div class="product__table-title">
-                    <h3>Основные</h3>
-                </div>
-                <dl class="product__table">
 
-                    @foreach($product->parameterByCategoryId(0) as $row)
-
-                        <div class="product__table-row">
-                            <dt>{{ $row->name }}</dt>
-                            <dd>{{ $row->value }}</dd>
-                        </div>
-
-                    @endforeach
-
-                </dl>
-
-                @foreach($productParametersCategory as $categoryRow)
+                @if(is_array($product->parameterByCategoryId(0)))
 
                     <div class="product__table-title">
-                        <h3>{{ $categoryRow->name }}</h3>
+                        <h3>Основные</h3>
                     </div>
                     <dl class="product__table">
 
-                        @foreach($product->parameterByCategoryId($categoryRow->id) as $row)
+                        @foreach($product->parameterByCategoryId(0) as $row)
 
                             <div class="product__table-row">
                                 <dt>{{ $row->name }}</dt>
@@ -222,6 +209,30 @@
 
                     </dl>
 
+                @endif
+
+                @foreach($productParametersCategory as $categoryRow)
+
+                    @if(is_array($product->parameterByCategoryId($categoryRow->id)))
+
+                        <div class="product__table-title">
+                            <h3>{{ $categoryRow->name }}</h3>
+                        </div>
+                        <dl class="product__table">
+
+                            @foreach($product->parameterByCategoryId($categoryRow->id) as $row)
+
+                                <div class="product__table-row">
+                                    <dt>{{ $row->name }}</dt>
+                                    <dd>{{ $row->value }}</dd>
+                                </div>
+
+                            @endforeach
+
+                        </dl>
+
+                    @endif
+
                 @endforeach
 
             </section>
@@ -229,11 +240,13 @@
             <section id="documents" class="product__section _part">
                 <div class="section-title">
                     <h2>Документы</h2>
+
                     <div class="product__download-btns">
-                        <a href="./images/certificate-img.jpg" class="btn product__download-btn" download>
+
+                        <a href="{{ url('/images/certificate-img.jpg') }}" class="btn product__download-btn" download>
                         <span class="product__download-icon">
                             <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#download"/>
+                                <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
                             <span class="product__download-info">
@@ -241,6 +254,7 @@
                             <span class="product__download-desc">Подробная документация с таблицами и чертежами</span>
                         </span>
                         </a>
+
                         <a href="./images/certificate-img.jpg" class="btn product__download-btn" download>
                         <span class="product__download-icon">
                             <svg aria-hidden="true">
@@ -260,7 +274,7 @@
                     <h2>Вопрос-ответ</h2>
                 </div>
                 <p class="product__accordions-desc">Если вы не нашли ответа на свой вопрос, вы можете <a
-                        href="./contacts.html">связаться с нами</a> удобным для вас способом.</p>
+                        href="{{ URL::route('frontend.contact') }}">связаться с нами</a> удобным для вас способом.</p>
                 <div class="product__accordions">
                     <div class="product__accordions-item">
                         <input id="ac-1" name="accordion-1" type="checkbox">

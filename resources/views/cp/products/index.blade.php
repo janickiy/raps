@@ -40,6 +40,8 @@
                                 <th>Категория</th>
                                 <th>Описание</th>
                                 <th>slug</th>
+                                <th>Цена</th>
+                                <th>Опубликован</th>
                                 <th>Добавлен</th>
                                 <th width="20px">Действия</th>
                             </tr>
@@ -128,6 +130,8 @@
                     {data: 'catalog', name: 'catalog.name'},
                     {data: 'description', name: 'description', searchable: false},
                     {data: 'slug', name: 'slug'},
+                    {data: 'price', name: 'price', searchable: false},
+                    {data: 'published', name: 'published', searchable: false},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],

@@ -17,18 +17,20 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->mediumText('full_description');
             $table->string('thumbnail')->nullable();
             $table->string('origin')->nullable();
             $table->integer('catalog_id')->index('catalog_id');
+            $table->integer('price')->default(0);
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('slug')->unique();
             $table->string('seo_url_canonical')->nullable();
             $table->string('seo_h1')->nullable();
-            $table->mediumText('full_description');
             $table->string('image_title')->nullable();
             $table->string('image_alt')->nullable();
+            $table->boolean('published')->default(1);
             $table->timestamps();
         });
     }

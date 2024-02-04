@@ -31,7 +31,7 @@ class Catalog extends Model
      */
     public function products()
     {
-        return $this->hasMany(Products::class, 'catalog_id', 'id');
+        return $this->hasMany(Products::class, 'catalog_id', 'id')->where('published', 1);
     }
 
     /**
@@ -47,7 +47,7 @@ class Catalog extends Model
      */
     public function getProductCount()
     {
-        return (int)Products::where('catalog_id', $this->id)->count();
+        return (int)Products::where('catalog_id', $this->id)->where('published', 1)->count();
     }
 
     /**

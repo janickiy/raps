@@ -154,13 +154,15 @@ class DataTableController extends Controller
      */
     public function getProducts()
     {
-        $row = Products::selectRaw('products.id,products.title,products.catalog_id,products.slug,products.created_at,products.description,catalog.name AS catalog')
+        $row = Products::selectRaw('products.id,products.title,products.price,products.published,products.catalog_id,products.slug,products.created_at,products.description,catalog.name AS catalog')
             ->leftJoin('catalog', 'catalog.id', '=', 'products.catalog_id')
             ->groupBy('catalog.name')
             ->groupBy('products.id')
             ->groupBy('products.title')
             ->groupBy('products.catalog_id')
             ->groupBy('products.slug')
+            ->groupBy('products.price')
+            ->groupBy('products.published')
             ->groupBy('products.description')
             ->groupBy('products.created_at')
             ->groupBy('products.description');
@@ -184,6 +186,9 @@ class DataTableController extends Controller
                 $product = Products::find($row->id);
 
                 return '<img  height="150" src="' . url($product->getThumbnailUrl()) . '" alt="" loading="lazy">';
+            })
+            ->editColumn('published', function ($row) {
+                return $row->published == 1 ? 'опубликован':'не опубликован';
             })
             ->rawColumns(['actions', 'title', 'thumbnail'])->make(true);
     }

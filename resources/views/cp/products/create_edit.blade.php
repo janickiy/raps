@@ -134,6 +134,22 @@
 
                             </section>
 
+                            <section>
+
+                                {!! Form::label('price', 'Цена', ['class' => 'label']) !!}
+
+                                <label class="input">
+
+                                    {!! Form::text('price', old('price', isset($row) ? $row->price : 0), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+
+                                </label>
+
+                                @if ($errors->has('price'))
+                                    <p class="text-danger">{{ $errors->first('price') }}</p>
+                                @endif
+
+                            </section>
+
                             <h3>SEO</h3>
 
                             <section>
@@ -142,7 +158,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('meta_title', old('meta_title', isset($row) ? $row->meta_title : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('meta_title', old('meta_title', isset($row) ? $row->meta_title : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -190,7 +206,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('seo_h1', old('seo_h1', isset($row) ? $row->seo_h1 : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('seo_h1', old('seo_h1', isset($row) ? $row->seo_h1 : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -206,7 +222,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', isset($row) ? $row->seo_url_canonical : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', isset($row) ? $row->seo_url_canonical : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -266,12 +282,26 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('image_alt', old('image_alt', isset($row) ? $row->image_alt : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('image_alt', old('image_alt', isset($row) ? $row->image_alt : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
                                 @if ($errors->has('image_alt'))
                                     <p class="text-danger">{{ $errors->first('image_alt') }}</p>
+                                @endif
+
+                            </section>
+
+                            <section>
+
+                                <label class="checkbox">
+
+                                    {!! Form::checkbox('published', 1, isset($row) ? ($row->published == true ? 1 : 0): 1) !!}
+
+                                    <i></i>Публиковать</label>
+
+                                @if ($errors->has('published'))
+                                    <span class="text-danger">{{ $errors->first('published') }}</span>
                                 @endif
 
                             </section>

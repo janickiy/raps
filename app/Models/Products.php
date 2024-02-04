@@ -16,6 +16,7 @@ class Products extends Model
         'description',
         'full_description',
         'catalog_id',
+        'price',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -24,9 +25,35 @@ class Products extends Model
         'seo_url_canonical',
         'thumbnail',
         'origin',
+        'published',
         'image_title',
         'image_alt'
     ];
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('published', 1);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublishedAttribute()
+    {
+        return $this->attributes['published'] ? 'публикован' : 'не опубликован';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatusAttribute()
+    {
+        return $this->attributes['published'];
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

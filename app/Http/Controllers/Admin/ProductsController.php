@@ -104,6 +104,7 @@ class ProductsController extends Controller
             'full_description' => 'required',
             'slug' => 'required|unique:products,slug,' . $request->id,
             'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
+            'price' => 'nullable|integer',
             'catalog_id' => 'integer|required|exists:catalog,id',
         ];
 
@@ -119,6 +120,7 @@ class ProductsController extends Controller
         $row->description = $request->input('description');
         $row->full_description = $request->input('full_description');
         $row->catalog_id = $request->catalog_id;
+        $row->price = $request->input('price');
         $row->meta_title = $request->input('meta_title');
         $row->meta_description = $request->input('meta_description');
         $row->meta_keywords = $request->input('meta_keywords');
@@ -158,7 +160,6 @@ class ProductsController extends Controller
 
         $row->image_title = $request->input('image_title');
         $row->image_alt = $request->input('image_alt');
-
         $row->save();
 
         return redirect(URL::route('cp.products.index'))->with('success', 'Данные обновлены');

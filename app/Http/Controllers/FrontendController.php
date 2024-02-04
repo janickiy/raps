@@ -169,7 +169,7 @@ class FrontendController
      */
     public function product(string $slug)
     {
-        $product = Products::where('slug', $slug)->first();
+        $product = Products::where('slug', $slug)->published()->first();
 
         if (!$product) abort(404);
 
@@ -230,7 +230,6 @@ class FrontendController
         $h1 = $seo->h1 ?? $title;
 
         $catalogs = Catalog::orderBy('name')->get();
-
         $services = Services::orderBy('title')->published()->get();
 
         return view('frontend.services_listing', compact(

@@ -24,16 +24,8 @@
     <section class="products">
         <div class="main-title container">
             <h1>{{ $title }}</h1>
-            <span class="main-title__count">5</span>
+            <span class="main-title__count">{{ $catalog->getProductCount() }}</span>
         </div>
-        <ul class="products__badges container">
-            <li class="products__badges-item">
-                <button>Экстрактивные анализаторы<span>5</span></button>
-            </li>
-            <li class="products__badges-item">
-                <button>Анализаторы In-Situ (2)<span>2</span></button>
-            </li>
-        </ul>
         <div class="products__list container">
 
             @if(isset($catalog->products) && $catalog->products)
@@ -42,7 +34,7 @@
 
                     <article class="product-card">
                         <picture class="product-card__img">
-                            <img src="{{ url('/images/product.jpg') }}" srcset="{{ url('/images/product@2x.jpg') }} 2x" alt="{{ $product->title }}" loading="lazy">
+                            <img src="{{ url($product->getThumbnailUrl()) }}" srcset="{{ url($product->getOriginUrl()) }} 2x" alt="{{ $product->image_alt }}" title="{{ $product->title }}" loading="lazy">
                         </picture>
                         <div class="product-card__info">
                             <div>
@@ -64,7 +56,7 @@
                                 </dl>
                             </div>
                             <div class="product-card__footer">
-                                <span class="product-card__price">от 1 000 000 сўм</span>
+                                @if($product->price > 0)<span class="product-card__price">от {{ $product->price }} сўм</span>@endif
                                 <a href="{{ URL::route('frontend.product',['slug' => $product->slug]) }}" class="btn btn-primary product-card__btn">
                                     К товарy
                                     <svg aria-hidden="true">
