@@ -147,7 +147,9 @@
                 </ul>
             </div>
             <div class="product__buy">
-                @if($product->price > 0)<span class="product__buy-price">от {{ $product->price }} сўм</span>@endif
+                @if($product->price > 0)
+                    <span class="product__buy-price">от {{ $product->price }} сўм</span>
+                @endif
                 <button type="button" class="btn btn-secondary product__buy-btn" data-modal="requestModal">Рассчитать
                     заказ
                 </button>
@@ -162,9 +164,6 @@
                 <div class="content_text">
                     {!!  $product->full_description !!}
                 </div>
-
-
-
             </section>
 
             <section id="characteristics" class="product__section _part">
@@ -224,29 +223,22 @@
 
                     <div class="product__download-btns">
 
-                        <a href="{{ url('/images/certificate-img.jpg') }}" class="btn product__download-btn" download>
+                        @foreach($product->documents as $document)
+
+                            <a href="{{ url($document->getDocument()) }}" class="btn product__download-btn" download>
                         <span class="product__download-icon">
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
-                            <span class="product__download-info">
-                            <span class="product__download-title">SIGAS.pdf</span>
-                            <span class="product__download-desc">Подробная документация с таблицами и чертежами</span>
+                                <span class="product__download-info">
+                            <span class="product__download-title">{{ $document->path }}</span>
+                            <span class="product__download-desc">{{ $document->description }}</span>
                         </span>
-                        </a>
+                            </a>
 
-                        <a href="./images/certificate-img.jpg" class="btn product__download-btn" download>
-                        <span class="product__download-icon">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#download"/>
-                            </svg>
-                        </span>
-                            <span class="product__download-info">
-                            <span class="product__download-title">SIGAS.pdf</span>
-                            <span class="product__download-desc">Подробная документация с таблицами и чертежами</span>
-                        </span>
-                        </a>
+                        @endforeach
+
                     </div>
                 </div>
             </section>

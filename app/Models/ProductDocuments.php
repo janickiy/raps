@@ -30,6 +30,6 @@ class ProductDocuments extends Model
      */
     public function getDocument()
     {
-        return Storage::disk('public')->url('app/public/documents/' . $this->path);
+        return Storage::disk('public')->url('documents/' . $this->path);
     }
 }

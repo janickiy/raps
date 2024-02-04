@@ -45,8 +45,9 @@ class ProductDocumentsController extends Controller
      */
     public function store(Request $request)
     {
+
         $rules = [
-            'file' => 'required|mimes:doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
+            'file' => 'file|mimes:jpg,png,doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
             'description' => 'required',
             'product_id' => 'required|integer|exists:products,id'
         ];
@@ -55,12 +56,13 @@ class ProductDocumentsController extends Controller
 
         if ($validator->fails()) return back()->withErrors($validator)->withInput();
 
-        $extension = $request->file('file')->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
+        if ($request->hasFile('file')) {
+            $extension = $request->file('file')->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $request->file('file')->move('uploads/documents', $filename);
 
-        $request->file('file')->storeAs('public/documents', $filename);
-
-        ProductDocuments::create(array_merge($request->all(), ['path' => $filename]));
+            ProductDocuments::create(array_merge($request->all(), ['path' => $filename]));
+        }
 
         return redirect(URL::route('cp.product_documents.index', ['product_id' => $request->product_id]))->with('success', 'Информация успешно добавлена');
     }
@@ -77,7 +79,9 @@ class ProductDocumentsController extends Controller
 
         $product_id = $row->product_id;
 
-        return view('cp.product_documents.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование списка документации');
+        $maxUploadFileSize = StringHelper::maxUploadFileSize();
+
+        return view('cp.product_documents.create_edit', compact('row', 'product_id', 'maxUploadFileSize'))->with('title', 'Редактирование списка документации');
     }
 
     /**
@@ -87,7 +91,7 @@ class ProductDocumentsController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'file' => 'nullable|mimes:doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
+            'file' => 'nullable|file|mimes:jpg,png,doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
             'description' => 'required',
         ];
 
@@ -104,8 +108,7 @@ class ProductDocumentsController extends Controller
 
             $extension = $request->file('file')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
-
-            $request->file('file')->storeAs('public/documents', $filename);
+            $request->file('file')->move('uploads/documents', $filename);
         }
 
         $row->description = $request->input('description');
