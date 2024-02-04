@@ -85,7 +85,7 @@ class Products extends Model
      */
     public function parameterByCategoryId(int $category_id)
     {
-        return $this->hasMany(ProductParameters::class, 'product_id', 'id')->where('category_id', $category_id);
+        return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->get();
     }
 
     /**
