@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\{
     SitemapController,
     SettingsController,
     UsersController,
+    FaqController,
 };
 
 
@@ -156,8 +157,18 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('import', [SitemapController::class, 'import'])->name('cp.sitemap.import')->middleware(['permission:admin|moderator']);
     });
 
+
+    Route::group(['prefix' => 'faq'], function () {
+        Route::get('', [FaqController::class, 'index'])->name('cp.faq.index');
+        Route::get('create', [FaqController::class, 'create'])->name('cp.faq.create');
+        Route::post('store', [FaqController::class, 'store'])->name('cp.faq.store');
+        Route::get('edit/{id}', [FaqController::class, 'edit'])->name('cp.faq.edit');
+        Route::put('update', [FaqController::class, 'update'])->name('cp.faq.update');
+        Route::post('destroy', [FaqController::class, 'destroy'])->name('cp.faq.destroy');
+    });
+
     Route::any('ajax', [AjaxController::class, 'index'])->name('cp.ajax.action');
-        Route::group(['prefix' => 'datatable'], function () {
+    Route::group(['prefix' => 'datatable'], function () {
         Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog');
         Route::any('products', [DataTableController::class, 'getProducts'])->name('cp.datatable.products');
         Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
@@ -166,6 +177,7 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('settings', [DataTableController::class, 'getSettings'])->name('cp.datatable.settings')->middleware(['permission:admin']);
         Route::any('feedback', [DataTableController::class, 'getFeedback'])->name('cp.datatable.feedback');
         Route::any('seo', [DataTableController::class, 'getSeo'])->name('cp.datatable.seo')->middleware(['permission:admin|moderator']);
+        Route::any('faq', [DataTableController::class, 'getFaq'])->name('cp.datatable.faq');
         Route::any('product-photos/{product_id}', [DataTableController::class, 'getPhotos'])->name('cp.datatable.product_photos')->where('product_id', '[0-9]+');
         Route::any('product-videos/{product_id}', [DataTableController::class, 'getVideos'])->name('cp.datatable.product_videos')->where('product_id', '[0-9]+');
         Route::any('product-documents/{product_id}', [DataTableController::class, 'getDocuments'])->name('cp.datatable.product_documents')->where('product_id', '[0-9]+');

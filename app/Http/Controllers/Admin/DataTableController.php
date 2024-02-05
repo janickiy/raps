@@ -13,7 +13,9 @@ use App\Models\{
     Settings,
     Seo,
     Services,
-    User};
+    User,
+    Faq
+};
 use Illuminate\Support\Facades\Auth;
 use DataTables;
 use URL;
@@ -268,11 +270,28 @@ class DataTableController extends Controller
      */
     public function getProductParametersCategory()
     {
-        $row = ProductParametersCategory::query();;
+        $row = ProductParametersCategory::query();
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
                 $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.product_parameters_category.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFaq()
+    {
+        $row = Faq::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.faq.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
                 $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';

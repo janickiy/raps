@@ -279,6 +279,11 @@ Use search to find needed section.
                         class="menu-item-parent"> Сообщения с сайта</span></a>
             </li>
 
+            <li {!! Request::is('cp/faq*') ? ' class="active"' : '' !!}>
+                <a href="{{URL::route('cp.faq.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
+                        class="menu-item-parent"> Вопрос-ответ</span></a>
+            </li>
+
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin'))
 
                 <li {!! Request::is('cp/settings*') ? ' class="active"' : '' !!}>

@@ -123,12 +123,6 @@ class ProductDocumentsController extends Controller
      */
     public function destroy(Request $request)
     {
-        $row = ProductDocuments::find($request->id);
-
-        if ($row) {
-            if (Storage::disk('public')->exists('documents/' . $row->path) === true) Storage::disk('public')->delete('documents/' . $row->path);
-        }
-
-        $row->delete();
+        ProductDocuments::find($request->id)->remove();
     }
 }
