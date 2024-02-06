@@ -45,14 +45,16 @@ class SettingsController extends Controller
             $extension = $request->file('value')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
 
-            $request->file('value')->storeAs('public/settings', $filename);
+            if ($request->file('value')->move('uploads/settings', $filename)) {
+                Settings::create(array_merge(array_merge($request->all()), [
+                    'value' => $filename ?? $request->input('value')
+                ]));
+            }
+
+            return redirect(URL::route('cp.settings.index'))->with('success', 'Информация успешно добавлена');
         }
 
-        Settings::create(array_merge(array_merge($request->all()), [
-            'value' => $filename ?? $request->input('value')
-        ]));
-
-        return redirect(URL::route('cp.settings.index'))->with('success', 'Информация успешно добавлена');
+        return redirect(URL::route('cp.settings.index'))->with('error', 'Не удалось сохранить файл!');
 
     }
 
@@ -95,18 +97,16 @@ class SettingsController extends Controller
 
         if ($request->hasFile('value')) {
 
-            @unlink($settings->value);
-
-
            if (Storage::disk('public')->exists('settings/' . $settings->filePath()) === true) Storage::disk('public')->delete('settings/' . $settings->filePath());
 
             $extension = $request->file('value')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
 
-            if ($request->file('value')->storeAs('public/settings', $filename)) {
+            if ($request->file('value')->move('uploads/settings', $filename)) {
                 $settings->value = $filename;
+            } else {
+                return redirect(URL::route('cp.settings.index'))->with('error', 'Не удалось сохранить файл!');
             }
-
         } else {
             if (!empty($request->value)) $settings->value = $request->input('value');
         }
