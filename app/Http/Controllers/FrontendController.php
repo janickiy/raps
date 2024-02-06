@@ -464,7 +464,6 @@ class FrontendController
         $filename = $path . '/' . $name;
 
         try {
-
             Mail::to(explode(",", SettingsHelper::getSetting('EMAIL_NOTIFY')))->send(new Notification($filename));
 
         } catch (\Exception $e) {

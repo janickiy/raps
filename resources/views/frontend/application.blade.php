@@ -63,7 +63,7 @@
                 {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'id' => "requestForm", 'class' => "request-form", "autocomplete" => "off"]) !!}
 
                     <div class="request-form__input-file">
-                        <input id="requestFile" type="file" name="file">
+                        <input id="requestFile" type="file" name="attachment">
                         <label for="requestFile">
                             <span
                                 class="request-form__label-title js-request-label-title">Загрузить опросный лист</span>
