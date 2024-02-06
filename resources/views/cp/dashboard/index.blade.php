@@ -29,11 +29,28 @@
 
                             <div class="col-sm-12 col-md-6 col-lg-3">
                                 <div class="well text-center connect">
+                                    <i class="fa fa-folder-o fa-3x"></i>
+                                    <h5><small>{{ $services }}</small></h5>
+                                    <span class="font-md"><b><a href="{{URL::route('cp.services.index')}}">Услуги</a></b></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="well text-center connect">
+                                    <i class="fa fa-folder-o fa-3x"></i>
+                                    <h5><small>{{ $products }}</small></h5>
+                                    <span class="font-md"><b><a href="{{URL::route('cp.products.index')}}">Продукция</a></b></span>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="well text-center connect">
                                     <i class="fa fa-users fa-3x"></i>
                                     <h5><small>{{ $users }}</small></h5>
                                     <span class="font-md"><b><a href="{{URL::route('cp.users.index')}}">Пользователи</a></b></span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
