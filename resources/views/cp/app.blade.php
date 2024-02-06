@@ -228,12 +228,10 @@ Use search to find needed section.
                 </ul>
             </li>
 
-
             <li {!! Request::is('cp/services*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.services.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
+                <a href="{{URL::route('cp.services.index')}}"><i class="fa fa-fw fa-plus-square-o"></i> <span
                         class="menu-item-parent"> Услуги</span></a>
             </li>
-
 
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
                 <li class="">
@@ -275,12 +273,12 @@ Use search to find needed section.
             @endif
 
             <li {!! Request::is('cp/feedback*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.feedback.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
+                <a href="{{URL::route('cp.feedback.index')}}"><i class="fa fa-fw fa-bell"></i> <span
                         class="menu-item-parent"> Сообщения с сайта</span></a>
             </li>
 
             <li {!! Request::is('cp/faq*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.faq.index')}}"><i class="fa fa-fw fa-envelope"></i> <span
+                <a href="{{URL::route('cp.faq.index')}}"><i class="fa fa-fw fa-question"></i> <span
                         class="menu-item-parent"> Вопрос-ответ</span></a>
             </li>
 

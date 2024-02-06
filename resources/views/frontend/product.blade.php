@@ -249,106 +249,24 @@
                 <p class="product__accordions-desc">Если вы не нашли ответа на свой вопрос, вы можете <a
                         href="{{ URL::route('frontend.contact') }}">связаться с нами</a> удобным для вас способом.</p>
                 <div class="product__accordions">
-                    <div class="product__accordions-item">
-                        <input id="ac-1" name="accordion-1" type="checkbox">
-                        <label for="ac-1">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#plus"/>
-                            </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
-                            ежедневной работе этого прибора?
-                        </label>
-                        <div class="product__accordions-content">
-                            <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
-                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
-                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
-                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
-                                    положительных результатах контроля качества (актуальность новой методики можно
-                                    проверить на сайте ФГИС «АРШИН»).</p>
+
+                    @foreach($faq as $row)
+                        <div class="product__accordions-item">
+                            <input id="ac-1" name="accordion-1" type="checkbox">
+                            <label for="ac-1">
+                                <svg aria-hidden="true">
+                                    <use xlink:href="{{ url('/images/sprite.svg#plus') }}"/>
+                                </svg>
+                                {{ $row->question }}
+                            </label>
+                            <div class="product__accordions-content">
+                                <div class="product__accordions-content-wrap">
+                                    <p>{{ $row->answer }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="product__accordions-item">
-                        <input id="ac-2" name="accordion-2" type="checkbox">
-                        <label for="ac-2">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#plus"/>
-                            </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
-                            ежедневной работе этого прибора?
-                        </label>
-                        <div class="product__accordions-content">
-                            <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
-                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
-                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
-                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
-                                    положительных результатах контроля качества (актуальность новой методики можно
-                                    проверить на сайте ФГИС «АРШИН»).</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__accordions-item">
-                        <input id="ac-3" name="accordion-3" type="checkbox">
-                        <label for="ac-3">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#plus"/>
-                            </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
-                            ежедневной работе этого прибора?
-                        </label>
-                        <div class="product__accordions-content">
-                            <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
-                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
-                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
-                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
-                                    положительных результатах контроля качества (актуальность новой методики можно
-                                    проверить на сайте ФГИС «АРШИН»).</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__accordions-item">
-                        <input id="ac-4" name="accordion-4" type="checkbox">
-                        <label for="ac-4">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#plus"/>
-                            </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
-                            ежедневной работе этого прибора?
-                        </label>
-                        <div class="product__accordions-content">
-                            <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
-                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
-                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
-                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
-                                    положительных результатах контроля качества (актуальность новой методики можно
-                                    проверить на сайте ФГИС «АРШИН»).</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__accordions-item">
-                        <input id="ac-5" name="accordion-5" type="checkbox">
-                        <label for="ac-5">
-                            <svg aria-hidden="true">
-                                <use xlink:href="./images/sprite.svg#plus"/>
-                            </svg>
-                            Как часто необходимо проводить калибровку (градуировку) газоанализаторов ГАНК-4 при
-                            ежедневной работе этого прибора?
-                        </label>
-                        <div class="product__accordions-content">
-                            <div class="product__accordions-content-wrap">
-                                <p>При работе с ГАНК-4 нет такой необходимости ежедневно проводить градуировку. Согласно
-                                    методики МВИ-4215-002-56591409-2009, раздел 10 п.4, указано, что проверка
-                                    стабильности градуировочной характеристики выполняется 1 раз в 6 месяцев. В новой
-                                    редакции документа МВИ рекомендованный интервал между градуировками 1 раз в год при
-                                    положительных результатах контроля качества (актуальность новой методики можно
-                                    проверить на сайте ФГИС «АРШИН»).</p>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
+
                 </div>
             </section>
         </div>

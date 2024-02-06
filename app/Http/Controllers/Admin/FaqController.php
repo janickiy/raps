@@ -52,7 +52,7 @@ class FaqController extends Controller
      */
     public function edit(int $id)
     {
-        $row = Catalog::find($id);
+        $row = Faq::find($id);
 
         if (!$row) abort(404);
 

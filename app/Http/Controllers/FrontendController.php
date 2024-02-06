@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Seo, Services};
+use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Seo, Services, Faq};
 use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
@@ -192,11 +192,14 @@ class FrontendController
 
         $productParametersCategory = ProductParametersCategory::all();
 
+        $faq = Faq::all();
+
         return view('frontend.product', compact(
                 'product',
                 'productParametersCategory',
                 'slug',
                 'catalogs',
+                'faq',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
