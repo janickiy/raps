@@ -166,9 +166,9 @@ class CatalogController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         Catalog::find($request->id)->remove();
     }

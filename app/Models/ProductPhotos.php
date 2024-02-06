@@ -42,4 +42,16 @@ class ProductPhotos extends Model
     {
         return Storage::disk('public')->url('images/' . $this->origin);
     }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function scopeRemove(): void
+    {
+        if (Storage::disk('public')->exists('images/' . $this->thumbnail) === true) Storage::disk('public')->delete('images/' . $this->thumbnail);
+        if (Storage::disk('public')->exists('images/' . $this->origin) === true) Storage::disk('public')->delete('images/' . $this->origin);
+
+        $this->delete();
+    }
 }

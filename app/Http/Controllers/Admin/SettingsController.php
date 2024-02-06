@@ -119,16 +119,10 @@ class SettingsController extends Controller
 
     /**
      * @param Request $request
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
-        $row = Settings::find($request->id);
-
-        if ($row && $row->type == 'FILE') {
-            if (Storage::disk('public')->exists('settings/' . $row->filePath()) === true) Storage::disk('public')->delete('settings/' . $row->filePath());
-        }
-
-        $row->delete();
-
+        Settings::find($request->id)->remove();
     }
 }

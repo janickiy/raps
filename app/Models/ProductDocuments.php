@@ -33,7 +33,11 @@ class ProductDocuments extends Model
         return Storage::disk('public')->url('documents/' . $this->path);
     }
 
-    public function scopeRemove()
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function scopeRemove(): void
     {
         if (Storage::disk('public')->exists('documents/' . $this->path) === true) Storage::disk('public')->delete('documents/' . $this->path);
         $this->delete();

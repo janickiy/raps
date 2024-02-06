@@ -132,12 +132,12 @@ class ProductPhotosController extends Controller
             $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
             if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
-                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore ));
+                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
                 $img->resize(null, 300, function ($constraint) {
                     $constraint->aspectRatio();
                 });
 
-                if ($img->save(Storage::disk('public')->path('images/'  . $thumbnailFileNameToStore) )) {
+                if ($img->save(Storage::disk('public')->path('images/' . $thumbnailFileNameToStore))) {
                     $row->thumbnail = $thumbnailFileNameToStore;
                     $row->origin = $fileNameToStore;
                 }
@@ -155,17 +155,10 @@ class ProductPhotosController extends Controller
 
     /**
      * @param Request $request
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
-        $row = ProductPhotos::find($request->id);
-
-        if ($row) {
-            if (Storage::disk('public')->exists('images/' . $row->thumbnail) === true) Storage::disk('public')->delete('images/' . $row->thumbnail);
-            if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);
-
-            $row->delete();
-        }
-
+        ProductPhotos::find($request->id)->remove();
     }
 }

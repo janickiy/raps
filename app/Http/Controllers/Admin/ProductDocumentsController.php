@@ -119,9 +119,9 @@ class ProductDocumentsController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         ProductDocuments::find($request->id)->remove();
     }

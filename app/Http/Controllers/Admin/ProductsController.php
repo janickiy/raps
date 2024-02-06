@@ -168,8 +168,9 @@ class ProductsController extends Controller
 
     /**
      * @param Request $request
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         Products::find($request->id)->remove();
     }

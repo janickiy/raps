@@ -65,7 +65,7 @@ class Catalog extends Model
      * @return void
      * @throws \Exception
      */
-    public function scopeRemove()
+    public function scopeRemove(): void
     {
         if (Storage::disk('public')->exists('catalog/' . $this->image) === true) Storage::disk('public')->delete('catalog/' . $this->image);
         if (Storage::disk('public')->exists('catalog/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $this->image);

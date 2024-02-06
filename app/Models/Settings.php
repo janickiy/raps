@@ -45,9 +45,23 @@ class Settings extends Model
         return $this->attributes['value'];
     }
 
+    /**
+     * @return mixed
+     */
     public function filePath()
     {
         return $this->attributes['value'];
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function scopeRemove(): void
+    {
+        if (Storage::disk('public')->exists('settings/' . $this->filePath()) === true) Storage::disk('public')->delete('settings/' . $this->filePath());
+
+        $this->delete();
     }
 
 }
