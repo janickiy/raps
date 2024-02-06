@@ -407,6 +407,9 @@ class FrontendController
 
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function application()
     {
         $seo = Seo::where('type', 'frontend.application')->first();
@@ -441,9 +444,13 @@ class FrontendController
         )->with('title', 'Оформление заявки');
     }
 
+    /**
+     * @param SendApplicationRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function sendApplication(SendApplicationRequest $request)
     {
-        $path = public_path('uploads');
+        $path = public_path('uploads/attachment');
         $attachment = $request->file('attachment');
 
         $name = time() . '.' . $attachment->getClientOriginalExtension();;
