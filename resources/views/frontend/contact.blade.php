@@ -15,7 +15,7 @@
 
     <ul class="container breadcrumbs">
         <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
-        <li><span>Контакты</span></li>
+        <li><span>{{ $title }}</span></li>
     </ul>
 
     <section class="contacts container">

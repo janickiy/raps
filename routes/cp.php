@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\{
     DataTableController,
     MenuController,
     RobotsController,
-    FeedbackController,
+    RequestsController,
     PagesController,
     ProductsController,
     ProductPhotosController,
@@ -56,7 +56,7 @@ Route::group(['prefix' => 'cp'], function () {
 
 
     Route::any('manage-menus', [MenuController::class, 'index'])->name('cp.menu.index')->middleware(['permission:admin|moderator']);
-    Route::get('feedback', [FeedbackController::class, 'index'])->name('cp.feedback.index')->middleware(['permission:admin|moderator']);
+    Route::get('feedback', [RequestsController::class, 'index'])->name('cp.feedback.index')->middleware(['permission:admin|moderator']);
 
 
     Route::group(['prefix' => 'users'], function () {
@@ -145,6 +145,10 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('destroy', [SettingsController::class, 'destroy'])->name('cp.settings.destroy')->middleware(['permission:admin']);
     });
 
+    Route::group(['prefix' => 'requests'], function () {
+        Route::get('', [RequestsController::class, 'index'])->name('cp.requests.index');
+    });
+
     Route::group(['prefix' => 'robots'], function () {
         Route::get('edit', [RobotsController::class, 'edit'])->name('cp.robots.edit')->middleware(['permission:admin|moderator']);
         Route::put('update', [RobotsController::class, 'update'])->name('cp.robots.update')->middleware(['permission:admin|moderator']);
@@ -174,8 +178,8 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
         Route::any('users', [DataTableController::class, 'getUsers'])->name('cp.datatable.users')->middleware(['permission:admin']);
         Route::any('pages', [DataTableController::class, 'getPages'])->name('cp.datatable.pages');
+        Route::any('requests', [DataTableController::class, 'getRequests'])->name('cp.datatable.requests');
         Route::any('settings', [DataTableController::class, 'getSettings'])->name('cp.datatable.settings')->middleware(['permission:admin']);
-        Route::any('feedback', [DataTableController::class, 'getFeedback'])->name('cp.datatable.feedback');
         Route::any('seo', [DataTableController::class, 'getSeo'])->name('cp.datatable.seo')->middleware(['permission:admin|moderator']);
         Route::any('faq', [DataTableController::class, 'getFaq'])->name('cp.datatable.faq');
         Route::any('product-photos/{product_id}', [DataTableController::class, 'getPhotos'])->name('cp.datatable.product_photos')->where('product_id', '[0-9]+');

@@ -21,7 +21,6 @@
         <li><span>{{ $title }}</span></li>
     </ul>
 
-
     <section class="service container">
 
         {!! $service->full_description !!}

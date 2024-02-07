@@ -15,7 +15,23 @@
 
 @section('content')
 
+    <ul class="container breadcrumbs">
+        <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
+        <li><span>{{ $page->title }}</span></li>
+    </ul>
 
+    <section class="request container">
+        <div class="main-title">
+            <h1>{{ $h1 }}</h1>
+        </div>
+        <div class="request__content">
+            <div class="request__content-item">
+
+                {!! $page->text !!}
+
+            </div>
+        </div>
+    </section>
 
 
 @endsection

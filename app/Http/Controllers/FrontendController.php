@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Seo, Services, Faq};
+use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Requests, Seo, Services, Faq};
 use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
@@ -465,6 +465,8 @@ class FrontendController
 
         try {
             Mail::to(explode(",", SettingsHelper::getSetting('EMAIL_NOTIFY')))->send(new Notification($filename));
+
+            Requests::create(array_merge($request->all(), ['path' => $name, 'ip' => $request->ip()]));
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

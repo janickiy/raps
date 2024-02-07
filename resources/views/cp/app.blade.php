@@ -274,7 +274,7 @@ Use search to find needed section.
 
             <li {!! Request::is('cp/feedback*') ? ' class="active"' : '' !!}>
                 <a href="{{URL::route('cp.feedback.index')}}"><i class="fa fa-fw fa-bell"></i> <span
-                        class="menu-item-parent"> Сообщения с сайта</span></a>
+                        class="menu-item-parent"> Заявки</span></a>
             </li>
 
             <li {!! Request::is('cp/faq*') ? ' class="active"' : '' !!}>

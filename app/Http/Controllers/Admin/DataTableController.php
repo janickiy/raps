@@ -10,12 +10,12 @@ use App\Models\{
     ProductParametersCategory,
     ProductPhotos,
     Products,
+    Requests,
     Settings,
     Seo,
     Services,
     User,
-    Faq
-};
+    Faq};
 use Illuminate\Support\Facades\Auth;
 use DataTables;
 use URL;
@@ -90,11 +90,14 @@ class DataTableController extends Controller
     /**
      * @return mixed
      */
-    public function getFeedback()
+    public function getRequests()
     {
-        $row = Feedback::query();
+        $row = Requests::query();
 
         return Datatables::of($row)
+            ->editColumn('type', function ($row) {
+                return Requests::$type_name[$row->type];
+            })
             ->make(true);
     }
 

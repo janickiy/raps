@@ -22,11 +22,10 @@
                         <table id="itemList" class="table table-striped table-bordered table-hover" width="100%">
                             <thead>
                             <tr>
-                                <th>Имя</th>
-                                <th>Email</th>
-                                <th>Сообщение</th>
+                                <th>ID</th>
+                                <th>Заявка</th>
                                 <th>IP</th>
-                                <th>Добавлен</th>
+                                <th>Дата создания</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -105,12 +104,11 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.feedback') }}'
+                    url: '{{ URL::route('cp.datatable.requests') }}'
                 },
                 columns: [
-                    {data: 'name', name: 'name'},
-                    {data: 'email', name: 'email'},
-                    {data: 'message', name: 'message', orderable: false, searchable: false},
+                    {data: 'id', name: 'id'},
+                    {data: 'type', name: 'type'},
                     {data: 'ip', name: 'ip'},
                     {data: 'created_at', name: 'created_at'},
                 ],

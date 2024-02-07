@@ -85,7 +85,7 @@
                 </picture>
             </div>
 
-            <a href="{{ URL::route('frontend.contact') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
 
         </div>
         <div class="about-info__images">

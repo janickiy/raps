@@ -319,8 +319,8 @@
         <div class="container">
             <span class="footer__bottom-copyright">© 2015-{{ date("Y") }} RAPS</span>
             <ul class="footer__bottom-links">
-                <li><a href="#">Условия использования</a></li>
-                <li><a href="#">Политика конфиденциальности</a></li>
+                <li><a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия использования</a></li>
+                <li><a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика конфиденциальности</a></li>
             </ul>
         </div>
     </div>
@@ -338,9 +338,9 @@
         </div>
         <div class="request-modal__body">
             <div class="request-modal__title">
-                <h3><span>Опросный лист для заказа</span> «Газоанализатор SPTr-GAS® ANALYZER: Фотоакустический анализатор»</h3>
+                <h3><span>Опросный лист для заказа</span> {{ $title ?? '' }}</h3>
             </div>
-            <a href="{{ url('/images/certificate-img.jpg') }}" class="btn request-modal__download-btn" download>
+            <a href="{{ SettingsHelper::getSetting('BLANK_4') }}" class="btn request-modal__download-btn" download>
                 <span class="request-modal__download-icon">
                     <svg aria-hidden="true">
                         <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
@@ -351,7 +351,10 @@
             <p class="request-modal__text">После заполнения опросного листа, вам необходимо загрузить его и отправить нам. Мы изучим его и свяжемся с вами в ближайшее время с ответом.</p>
             <div class="request-modal__form">
 
-                <form action="#" method="post" id="requestForm" class="request-form">
+                {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'id' => "requestForm", 'class' => "request-form", "autocomplete" => "off"]) !!}
+
+                {!! Form::hidden('type', 2) !!}
+
                     <div class="request-form__input-file">
                         <input id="requestFile" type="file" name="file">
                         <label for="requestFile">
@@ -361,7 +364,8 @@
                     </div>
                     <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a>  любым удобным способом.</p>
                     <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
-                </form>
+
+                {!! Form::close() !!}
 
             </div>
         </div>

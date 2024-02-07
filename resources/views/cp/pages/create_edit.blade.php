@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.services.update') : URL::route('cp.services.store'), 'method' => isset($row) ? 'put' : 'post', 'files' => true,'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? URL::route('cp.pages.update') : URL::route('cp.pages.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -78,8 +78,8 @@
 
                                 </label>
 
-                                @if ($errors->has('full_description'))
-                                    <p class="text-danger">{{ $errors->first('full_description') }}</p>
+                                @if ($errors->has('text'))
+                                    <p class="text-danger">{{ $errors->first('text') }}</p>
                                 @endif
 
                             </section>

@@ -17,7 +17,7 @@
 
     <ul class="container breadcrumbs">
         <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
-        <li><span>Оформление заявки</span></li>
+        <li><span>{{ $title }}</span></li>
     </ul>
 
     <section class="request container">
@@ -61,6 +61,8 @@
                 <h2 class="sr-only">Форма загрузки опросного листа</h2>
 
                 {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'id' => "requestForm", 'class' => "request-form", "autocomplete" => "off"]) !!}
+
+                {!! Form::hidden('type', 1) !!}
 
                     <div class="request-form__input-file">
                         <input id="requestFile" type="file" name="attachment">

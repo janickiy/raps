@@ -18,6 +18,7 @@
         <li><a href="{{ URL::route('frontend.catalog') }}">Каталог</a></li>
         <li><span>{{ $title }}</span></li>
     </ul>
+
     <section class="product">
         <div class="main-title container">
             <h1>{{ $h1 }}</h1>
