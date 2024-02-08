@@ -92,7 +92,7 @@ class Products extends Model
      * @param array $productIds
      * @return mixed
      */
-    public function productsListByIds(array $productIds)
+    public static function productsListByIds(array $productIds)
     {
         return self::whereIn('id', $productIds)->get();
     }

@@ -120,6 +120,9 @@ class FrontendController
             $productIds = null;
         }
 
+
+
+
         return view('frontend.catalog', compact(
                 'catalogs',
                 'productIds',
@@ -270,6 +273,9 @@ class FrontendController
         } else {
             $productIds = null;
         }
+
+
+
 
         return view('frontend.services_listing', compact(
                 'catalogs',
