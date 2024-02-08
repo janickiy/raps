@@ -24,13 +24,18 @@
         <div class="main-title">
             <h1>{{ $h1 }}</h1>
         </div>
-        <p class="section-desc services__desc">Одним из приоритетных направлений нашего предприятия является разработка и поставка полнофункциональных газоаналитических комплексов (шкафов) для контроля технологических процессов и параметров, мониторинга промышленных выбросов, контроля пространства воздуха рабочей зоны с проведением пусконаладочных работ.</p>
+        <p class="section-desc services__desc">Одним из приоритетных направлений нашего предприятия является разработка
+            и поставка полнофункциональных газоаналитических комплексов (шкафов) для контроля технологических процессов
+            и параметров, мониторинга промышленных выбросов, контроля пространства воздуха рабочей зоны с проведением
+            пусконаладочных работ.</p>
         <div class="services__cards">
             @foreach($services as $service)
 
                 <article class="card">
                     <picture class="card__img ">
-                        <img src="{{ url($service->getImage()) }}" srcset="{{ url($service->getImage('2x_')) }} 2x" title="{{ $service->image_title ?? $service->title }}" alt="{{ $service->image_alt }}" loading="lazy">
+                        <img src="{{ url($service->getImage()) }}" srcset="{{ url($service->getImage('2x_')) }} 2x"
+                             title="{{ $service->image_title ?? $service->title }}" alt="{{ $service->image_alt }}"
+                             loading="lazy">
                     </picture>
                     <div class="card__info">
                         <div>
@@ -39,7 +44,8 @@
                             </div>
                             <p class="card__desc">{{ $service->description }}</p>
                         </div>
-                        <a href="{{ URL::route('frontend.service', ['slug' => $service->slug]) }}" class="btn btn-primary card__btn">
+                        <a href="{{ URL::route('frontend.service', ['slug' => $service->slug]) }}"
+                           class="btn btn-primary card__btn">
                             Узнать больше
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
@@ -52,7 +58,7 @@
         </div>
     </section>
 
-    @if($productId)
+    @if($productIds)
 
         <section class="watched">
             <div class="container">

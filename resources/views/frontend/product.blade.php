@@ -273,7 +273,7 @@
         </div>
     </section>
 
-    @if($productId)
+    @if($productIds)
 
         <section class="watched">
             <div class="container">
