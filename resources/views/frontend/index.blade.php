@@ -15,7 +15,6 @@
 
 @section('content')
 
-
     <section class="hero container">
         <div class="hero__info section-desc content__hero-desc">
             <div class="main-title">
@@ -118,7 +117,6 @@
 @endsection
 
 @section('js')
-
 
 
 @endsection

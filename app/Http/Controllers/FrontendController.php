@@ -8,6 +8,7 @@ use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
 use App\Mail\Notification;
 use File;
+use Illuminate\Http\Request;
 use Mail;
 
 class FrontendController
@@ -89,9 +90,10 @@ class FrontendController
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function catalog()
+    public function catalog(Request $request)
     {
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -112,8 +114,15 @@ class FrontendController
 
         $catalogs = Catalog::orderBy('name')->get();
 
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+        } else {
+            $productIds = null;
+        }
+
         return view('frontend.catalog', compact(
                 'catalogs',
+                'productIds',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -125,9 +134,10 @@ class FrontendController
 
     /**
      * @param string $slug
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function productListing(string $slug)
+    public function productListing(string $slug, Request $request)
     {
         $catalog = Catalog::where('slug', $slug)->first();
 
@@ -150,9 +160,16 @@ class FrontendController
 
         $catalogs = Catalog::orderBy('name')->get();
 
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+        } else {
+            $productIds = null;
+        }
+
         return view('frontend.product_listing', compact(
                 'catalog',
                 'catalogs',
+                'productIds',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -165,9 +182,10 @@ class FrontendController
 
     /**
      * @param string $slug
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function product(string $slug)
+    public function product(string $slug, Request $request)
     {
         $product = Products::where('slug', $slug)->published()->first();
 
@@ -194,11 +212,22 @@ class FrontendController
 
         $faq = Faq::all();
 
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+            array_push($productIds, $product->id);
+            $productIds = array_unique($productIds);
+            $request->session()->put(['productIds' => $productIds]);
+        } else {
+            $productIds = [$product->id];
+            $request->session()->put(['productIds' => $productIds]);
+        }
+
         return view('frontend.product', compact(
                 'product',
                 'productParametersCategory',
                 'slug',
                 'catalogs',
+                'productIds',
                 'faq',
                 'meta_description',
                 'meta_keywords',
@@ -211,9 +240,10 @@ class FrontendController
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function servicesListing()
+    public function servicesListing(Request $request)
     {
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -235,9 +265,16 @@ class FrontendController
         $catalogs = Catalog::orderBy('name')->get();
         $services = Services::orderBy('title')->published()->get();
 
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+        } else {
+            $productIds = null;
+        }
+
         return view('frontend.services_listing', compact(
                 'catalogs',
                 'services',
+                'productIds',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -247,12 +284,12 @@ class FrontendController
         )->with('title', $title);
     }
 
-
     /**
      * @param string $slug
+     * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function service(string $slug)
+    public function service(string $slug, Request $request)
     {
         $service = Services::where('slug', $slug)->published()->first();
 
@@ -277,9 +314,16 @@ class FrontendController
 
         $catalogs = Catalog::orderBy('name')->get();
 
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+        } else {
+            $productIds = null;
+        }
+
         return view('frontend.service', compact(
                 'catalogs',
                 'service',
+                'productIds',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -369,43 +413,7 @@ class FrontendController
         )->with('title', $title);
     }
 
-    /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function certificates()
-    {
-        $seo = Seo::where('type', 'frontend.application')->first();
 
-        $title = $seo->title ?? 'Заявка на расчет проекта';
-        $meta_description = $seo->description ?? '';
-        $meta_keywords = $seo->keyword ?? '';
-        $meta_title = $seo->title ?? '';
-        $seo_url_canonical = $seo->url_canonical ?? '';
-        $h1 = $seo->h1 ?? $title;
-
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
-        $catalogs = Catalog::orderBy('name')->get();
-
-        return view('frontend.application', compact(
-                'meta_description',
-                'meta_keywords',
-                'meta_title',
-                'menu',
-                'catalogs',
-                'h1',
-                'seo_url_canonical',
-                'title'
-            )
-        )->with('title', 'Обратная связь');
-
-    }
 
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View

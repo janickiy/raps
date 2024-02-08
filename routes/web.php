@@ -22,7 +22,6 @@ Route::get('product-listing/{slug}', [FrontendController::class, 'productListing
 Route::get('product/{slug}', [FrontendController::class, 'product'])->name('frontend.product');
 Route::get('services', [FrontendController::class,'servicesListing'])->name('frontend.services_listing');
 Route::get('service/{slug}', [FrontendController::class,'service'])->name('frontend.service');
-Route::get('certificates', [FrontendController::class, 'certificates'])->name('frontend.certificates');
 Route::get('contact', [FrontendController::class, 'contact'])->name('frontend.contact');
 Route::get('application', [FrontendController::class,'application'])->name('frontend.application');
 Route::post('send-application', [FrontendController::class,'sendApplication'])->name('frontend.send.application');
