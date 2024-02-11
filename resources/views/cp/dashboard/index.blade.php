@@ -22,8 +22,8 @@
                             <div class="col-sm-12 col-md-6 col-lg-3">
                                 <div class="well text-center connect">
                                     <i class="fa fa-folder-o fa-3x"></i>
-                                    <h5><small>{{ $pages }}</small></h5>
-                                    <span class="font-md"><b><a href="{{URL::route('cp.pages.index')}}">Страницы и разделы</a></b></span>
+                                    <h5><small>{{ $requests }}</small></h5>
+                                    <span class="font-md"><b><a href="{{URL::route('cp.feedback.index')}}">Страницы и разделы</a></b></span>
                                 </div>
                             </div>
 
