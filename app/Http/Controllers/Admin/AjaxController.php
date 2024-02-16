@@ -21,32 +21,32 @@ class AjaxController extends Controller
                 case 'get_content_slug':
 
                     $slug = StringHelper::slug(trim($request->title));
-                    $count = Pages::where('slug', 'LIKE%', $slug)->count();
-                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+                    $count = Pages::where('slug', 'LIKE', $slug)->count();
+                    $slug = $count > 0 ? substr($slug, 0, -1) . ($count + 1) : $slug;
 
                     return response()->json(['slug' => $slug]);
 
                 case 'get_products_slug':
 
                     $slug = StringHelper::slug(trim($request->title));
-                    $count = Products::where('slug', 'LIKE%', $slug)->count();
-                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+                    $count = Products::where('slug', 'LIKE', $slug)->count();
+                    $slug = $count > 0 ? substr($slug, 0, -1) . ($count + 1) : $slug;
 
                     return response()->json(['slug' => $slug]);
 
                 case 'get_services_slug':
 
                     $slug = StringHelper::slug(trim($request->title));
-                    $count = Services::where('slug', 'LIKE%', $slug)->count();
-                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+                    $count = Services::where('slug', 'LIKE', $slug)->count();
+                    $slug = $count > 0 ? substr($slug, 0, -1) . ($count + 1) : $slug;
 
                     return response()->json(['slug' => $slug]);
 
                 case 'get_catalog_slug':
 
                     $slug = StringHelper::slug(trim($request->name));
-                    $count = Catalog::where('slug', 'LIKE%', $slug)->count();
-                    $slug = $count > 0 ? $slug . ($count + 1) : $slug;
+                    $count = Catalog::where('slug', 'LIKE', $slug)->count();
+                    $slug = $count > 0 ? substr($slug, 0, -1) . ($count + 1) : $slug;
 
                     return response()->json(['slug' => $slug]);
 
