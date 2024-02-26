@@ -150,6 +150,54 @@
 
                             </section>
 
+                            <section>
+
+                                {!! Form::label('explosion_protection', 'Взрывозащита', ['class' => 'label']) !!}
+
+                                <label class="input">
+
+                                    {!! Form::text('explosion_protection', old('explosion_protection', isset($row) ? $row->explosion_protection : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+
+                                </label>
+
+                                @if ($errors->has('explosion_protection'))
+                                    <p class="text-danger">{{ $errors->first('explosion_protection') }}</p>
+                                @endif
+
+                            </section>
+
+                            <section>
+
+                                {!! Form::label('gases', 'Измеряемые газы', ['class' => 'label']) !!}
+
+                                <label class="input">
+
+                                    {!! Form::text('gases', old('gases', isset($row) ? $row->gases : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+
+                                </label>
+
+                                @if ($errors->has('gases'))
+                                    <p class="text-danger">{{ $errors->first('gases') }}</p>
+                                @endif
+
+                            </section>
+
+                            <section>
+
+                                {!! Form::label('dust_protection', 'Степень пылевлагозащиты', ['class' => 'label']) !!}
+
+                                <label class="input">
+
+                                    {!! Form::text('dust_protection', old('dust_protection', isset($row) ? $row->dust_protection : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+
+                                </label>
+
+                                @if ($errors->has('dust_protection'))
+                                    <p class="text-danger">{{ $errors->first('dust_protection') }}</p>
+                                @endif
+
+                            </section>
+
                             <h3>SEO</h3>
 
                             <section>

@@ -121,6 +121,9 @@ class ProductsController extends Controller
         $row->full_description = $request->input('full_description');
         $row->catalog_id = $request->catalog_id;
         $row->price = $request->input('price');
+        $row->explosion_protection = $request->input('explosion_protection');
+        $row->gases = $request->input('gases');
+        $row->dust_protection = $request->input('dust_protection');
         $row->meta_title = $request->input('meta_title');
         $row->meta_description = $request->input('meta_description');
         $row->meta_keywords = $request->input('meta_keywords');

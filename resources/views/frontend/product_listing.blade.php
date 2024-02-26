@@ -45,15 +45,15 @@
                                 <dl class="product-card__points">
                                     <div class="product-card__points-item">
                                         <dt>Взрывозащита:</dt>
-                                        <dd>Ex d II CT6 Gb</dd>
+                                        <dd>{{ $product->explosion_protection }}</dd>
                                     </div>
                                     <div class="product-card__points-item">
                                         <dt>Измеряемые газы:</dt>
-                                        <dd>CO, CO, SO, NO, NO2, N2O, CXHY, H, O2</dd>
+                                        <dd>{{ $product->gases }}</dd>
                                     </div>
                                     <div class="product-card__points-item">
                                         <dt>Степень пылевлагозащиты:</dt>
-                                        <dd>IP65</dd>
+                                        <dd>{{ $product->dust_protection }}</dd>
                                     </div>
                                 </dl>
                             </div>

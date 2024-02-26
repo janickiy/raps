@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCategoryIdToProductParametersTable extends Migration
+class AddExplosionProtectionToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCategoryIdToProductParametersTable extends Migration
      */
     public function up()
     {
-        Schema::table('product_parameters', function (Blueprint $table) {
-            $table->integer('category_id')->default(0)->index('category_id');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('explosion_protection')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddCategoryIdToProductParametersTable extends Migration
      */
     public function down()
     {
-        Schema::table('product_parameters', function (Blueprint $table) {
-            $table->dropColumn('category_id');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('explosion_protection');
         });
     }
 }

@@ -27,7 +27,10 @@ class Products extends Model
         'origin',
         'published',
         'image_title',
-        'image_alt'
+        'image_alt',
+        'explosion_protection',
+        'gases',
+        'dust_protection'
     ];
 
     /**
