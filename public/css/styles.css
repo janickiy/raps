@@ -3696,9 +3696,16 @@ img {
   }
 }
 
-.content_text h3, .product__subtitle h3 {
+.content_text h2, .product__subtitle h2 {
     margin-top: 4rem;
     font-size: 3.6rem;
+    font-weight: 700;
+    line-height: 111%
+}
+
+.content_text h3, .product__subtitle h3 {
+    margin-top: 3rem;
+    font-size: 2.6rem;
     font-weight: 700;
     line-height: 111%
 }
