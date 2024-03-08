@@ -23,8 +23,7 @@
             {!! $page->text !!}
         </div>
         <picture class="hero__img">
-            <source srcset="{{ url('/images/hero-img.webp') }}, {{ url('/images/hero-img@2x.webp') }} 2x" type="image/webp">
-            <img src="{{ url('/images/hero-img.png') }}" srcset="{{ url('/images/hero-img@2x.png') }} 2x" alt="Raps" loading="lazy">
+            <img src="{{ url($page->getImage()) }}" srcset="{{ url($page->getImage('2x_')) }} 2x" alt="Raps" loading="lazy">
         </picture>
     </section>
 

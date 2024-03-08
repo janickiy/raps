@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\StringHelper;
+use Storage;
 
 class Pages extends Model
 {
@@ -15,6 +16,7 @@ class Pages extends Model
     protected $fillable = [
         'title',
         'text',
+        'image',
         'meta_title',
         'meta_description',
         'meta_keywords',
@@ -101,6 +103,29 @@ class Pages extends Model
      */
     public function children(){
         return $this->hasMany($this, 'parent_id', 'id');
+    }
+
+    /**
+     * @param string|null $x
+     * @return mixed
+     */
+    public function getImage(?string $x = null)
+    {
+        $image = $x ? $x . $this->image : $this->image;
+
+        return Storage::disk('public')->url('pages/' . $image);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    public function scopeRemove(): void
+    {
+        if (Storage::disk('public')->exists('pages/' . $this->image) === true) Storage::disk('public')->delete('pages/' . $this->image);
+        if (Storage::disk('public')->exists('pages/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('pages/' . '2x_' . $this->image);
+
+        $this->delete();
     }
 
 }

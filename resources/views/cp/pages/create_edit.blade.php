@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.pages.update') : URL::route('cp.pages.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? URL::route('cp.pages.update') : URL::route('cp.pages.store'), 'method' => isset($row) ? 'put' : 'post', 'files' => true, 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -84,6 +84,33 @@
 
                             </section>
 
+                            <section>
+
+                                {!! Form::label('image', 'Фото (jpg,gif,png)', ['class' => 'label']) !!}
+
+                                <div class="input input-file">
+                                    <span class="button">
+
+                                        {!! Form::file('image',  ['id' => 'image', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
+
+                                    </span><input type="text" placeholder="выберите файл" readonly="">
+
+                                    <br>
+                                    @if (isset($row) && !empty($row->thumbnail))
+                                        <img src='{{ url($row->getThumbnailUrl()) }}' width="150">
+                                    @endif
+
+                                </div>
+
+                                @if ($errors->has('image'))
+                                    <span class="text-danger">{{ $errors->first('image') }}</span>
+                                @endif
+
+                                <div class="note">
+                                    Максимальный размер: <strong>{{ $maxUploadFileSize }}</strong>
+                                </div>
+
+                            </section>
 
                             <section>
 

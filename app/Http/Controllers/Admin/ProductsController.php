@@ -43,7 +43,7 @@ class ProductsController extends Controller
             'description' => 'required',
             'full_description' => 'required',
             'slug' => 'required|unique:products',
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
             'catalog_id' => 'integer|required|exists:catalog,id'
         ];
 
@@ -103,7 +103,7 @@ class ProductsController extends Controller
             'description' => 'required',
             'full_description' => 'required',
             'slug' => 'required|unique:products,slug,' . $request->id,
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
             'price' => 'nullable|integer',
             'catalog_id' => 'integer|required|exists:catalog,id',
         ];

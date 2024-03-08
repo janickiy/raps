@@ -38,7 +38,7 @@ class CatalogController extends Controller
     {
         $rules = [
             'name' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
             'slug' => 'required|unique:catalog',
         ];
 
@@ -99,7 +99,7 @@ class CatalogController extends Controller
     {
         $rules = [
             'name' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
             'slug' => 'required|unique:catalog,slug,' . $request->id,
         ];
 
