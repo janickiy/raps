@@ -111,6 +111,7 @@ class Pages extends Model
      */
     public function getImage(?string $x = null)
     {
+
         $image = $x ? $x . $this->image : $this->image;
 
         return Storage::disk('public')->url('pages/' . $image);
