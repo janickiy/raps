@@ -95,17 +95,17 @@ class SettingsController extends Controller
         $settings->key_cd = $request->input('key_cd');
         $settings->display_value = $request->input('display_value');
 
-        if ($settings->type == 'TEXT' && $request->hasFile('value')) {
+        if ($request->hasFile('value')) {
 
             if (Storage::disk('public')->exists('settings/' . $settings->filePath()) === true) Storage::disk('public')->delete('settings/' . $settings->filePath());
 
             $extension = $request->file('value')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
 
-            if ($request->file('value')->move('uploads/settings', $filename)) {
-                $settings->value = $filename;
-            } else {
+            if ($request->file('value')->move('uploads/settings', $filename) === false) {
                 return redirect(URL::route('cp.settings.index'))->with('error', 'Не удалось сохранить файл!');
+            } else {
+                $settings->value = $filename;
             }
         } else {
             if (!empty($request->value)) $settings->value = $request->input('value');
