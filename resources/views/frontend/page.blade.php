@@ -29,6 +29,10 @@
 
                 {!! $page->text !!}
 
+                @if (Auth::check())
+                    <a href="{{ URL::route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton"> Редактировать</a>
+                @endif
+
             </div>
         </div>
     </section>

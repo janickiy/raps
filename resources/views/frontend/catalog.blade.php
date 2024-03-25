@@ -40,7 +40,6 @@
                     </picture>
                     <div class="card__info">
                         <div>
-
                             <div>
                                 <h3>{{ $row->name }}</h3>
                                 <span class="card__count">{{ $row->getProductCount() }}</span>
@@ -57,7 +56,11 @@
                         </a>
 
                     </div>
+
+
                 </article>
+
+
 
             @endforeach
 

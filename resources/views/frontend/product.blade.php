@@ -164,6 +164,12 @@
                 </div>
                 <div class="content_text">
                     {!!  $product->full_description !!}
+
+                    @if (Auth::check())
+                        <br>
+                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton"> Редактировать</a>
+                    @endif
+
                 </div>
             </section>
 
@@ -186,6 +192,10 @@
                                 <dd>{{ $row->value }}</dd>
                             </div>
 
+                            @if (Auth::check())
+                                <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}" class="editbutton"> Редактировать</a>
+                            @endif
+
                         @endforeach
 
                     </dl>
@@ -207,6 +217,10 @@
                                     <dt>{{ $row->name }}</dt>
                                     <dd>{{ $row->value }}</dd>
                                 </div>
+
+                                @if (Auth::check())
+                                    <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}" class="editbutton"> Редактировать</a>
+                                @endif
 
                             @endforeach
 
@@ -237,6 +251,10 @@
                             <span class="product__download-desc">{{ $document->description }}</span>
                         </span>
                             </a>
+
+                            @if (Auth::check())
+                                <a href="{{ URL::route('cp.product_documents.edit', ['id' => $document->id]) }}" class="editbutton"> Редактировать</a>
+                            @endif
 
                         @endforeach
 

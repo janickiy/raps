@@ -48,6 +48,9 @@
                                 <span class="card__count">{{ $catalog->getProductCount() }}</span>
                             </div>
                             <p class="card__desc">{{ $catalog->description }}</p>
+
+
+
                         </div>
                         <a href="{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}" class="btn btn-primary card__btn">
                             К товарам

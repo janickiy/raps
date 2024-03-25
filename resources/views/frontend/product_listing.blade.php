@@ -42,6 +42,7 @@
                             <div>
                                 <h2>{{ $product->title }}</h2>
                                 <p class="product-card__desc">{{ $product->description }}</p>
+
                                 <dl class="product-card__points">
                                     <div class="product-card__points-item">
                                         <dt>Взрывозащита:</dt>
@@ -72,6 +73,10 @@
 
                         </div>
                     </article>
+
+                    @if (Auth::check())
+                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton"> Редактировать</a>
+                    @endif
 
                 @endforeach
 

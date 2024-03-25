@@ -25,6 +25,10 @@
 
         {!! $service->full_description !!}
 
+        @if (Auth::check())
+            <a href="{{ URL::route('cp.services.edit', ['id' => $service->id]) }}" class="editbutton"> Редактировать</a>
+        @endif
+
         <p class="service__questions">Остались вопросы? <a href="{{ URL::route('frontend.contact') }}">Свяжитесь с
                 нами</a> любым удобным способом</p>
 
