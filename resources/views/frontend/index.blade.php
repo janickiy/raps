@@ -20,7 +20,13 @@
             <div class="main-title">
                 <h1>{{ $h1 }}</h1>
             </div>
-            {!! $page->text !!}
+            <div class="content_text">
+                {!! $page->text !!}
+                @if (Auth::check())
+                    <br>
+                    <a href="{{ URL::route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton"> Редактировать</a>
+                @endif
+            </div>
         </div>
         <picture class="hero__img">
             <img src="{{ url($page->getImage()) }}" srcset="{{ url($page->getImage('2x_')) }} 2x" alt="Raps" loading="lazy">
@@ -48,9 +54,6 @@
                                 <span class="card__count">{{ $catalog->getProductCount() }}</span>
                             </div>
                             <p class="card__desc">{{ $catalog->description }}</p>
-
-
-
                         </div>
                         <a href="{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}" class="btn btn-primary card__btn">
                             К товарам
