@@ -26,7 +26,7 @@ class StringHelper
      */
     public static function gooleMap(string $gps): string
     {
-        return '<a href="https://www.google.com/maps/@' . $gps . ',19z?entry=ttu">' . $gps . '</a>';
+        return '<a target="_blank" href="https://www.google.com/maps/@' . $gps . ',19z?entry=ttu">' . $gps . '</a>';
     }
 
     /**
