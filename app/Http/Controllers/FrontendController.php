@@ -7,9 +7,9 @@ use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
 use App\Mail\Notification;
-use File;
 use Illuminate\Http\Request;
 use Mail;
+use File;
 
 class FrontendController
 {
@@ -73,8 +73,14 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-
         $catalogs = Catalog::orderBy('name')->get();
+
+        $phones = [];
+        $phoneList = SettingsHelper::getSetting('PHONE');
+
+        if ($phoneList) {
+            $phones = explode(',', $phoneList);
+        }
 
         return view('frontend.contact', compact(
                 'meta_description',
@@ -82,6 +88,7 @@ class FrontendController
                 'meta_title',
                 'menu',
                 'catalogs',
+                'phones',
                 'h1',
                 'seo_url_canonical',
                 'title'

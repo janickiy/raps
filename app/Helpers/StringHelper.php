@@ -8,7 +8,7 @@ class StringHelper
      * @param $data
      * @return array
      */
-    public static function ObjectToArray($data)
+    public static function ObjectToArray($data): array
     {
         if (is_array($data) || is_object($data)) {
             $result = [];
@@ -21,11 +21,20 @@ class StringHelper
     }
 
     /**
+     * @param string $gps
+     * @return string
+     */
+    public static function gooleMap(string $gps): string
+    {
+        return '<a href="https://www.google.com/maps/@' . $gps . ',19z?entry=ttu">' . $gps . '</a>';
+    }
+
+    /**
      * @param $el
      * @param bool $first
      * @return string
      */
-    public static function tree($el, $first = true)
+    public static function tree($el, bool $first = true): string
     {
         if (is_object($el)) $el = (array)$el;
 
@@ -190,7 +199,7 @@ class StringHelper
      * @param string $mbSuffix
      * @return string
      */
-    public static function formatSizeInMb(int $size, int $maxDecimals = 3, string $mbSuffix = "MB")
+    public static function formatSizeInMb(int $size, int $maxDecimals = 3, string $mbSuffix = "MB"): string
     {
         $mbSize = round($size / 1024 / 1024, $maxDecimals);
 
@@ -238,7 +247,7 @@ class StringHelper
     /**
      * @return string
      */
-    public static function maxUploadFileSize()
+    public static function maxUploadFileSize(): string
     {
         $maxUploadFileSize = self::detectMaxUploadFileSize();
 
@@ -273,7 +282,7 @@ class StringHelper
      * @param string $filename
      * @return string
      */
-    public static function get_mime_type(string $filename)
+    public static function get_mime_type(string $filename): string
     {
         $idx = explode('.', $filename);
         $count_explode = count($idx);
