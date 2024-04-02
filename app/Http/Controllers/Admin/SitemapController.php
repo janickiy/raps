@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Request\Admin\Sitemap\ImportRequest;
+use Illuminate\View\View;
 use URL;
 
 class SitemapController extends Controller
 {
 
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
         return view('cp.sitemap.index')->with('title', 'Загрузка и выгрузка файла карты сайта sitemap.xml');
     }
@@ -28,28 +33,19 @@ class SitemapController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function importForm()
+    public function importForm(): View
     {
         return view('cp.sitemap.import')->with('title', 'Выгрузка карты sitemap.xml');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|void
+     * @param ImportRequest $request
+     * @return RedirectResponse
      */
-    public function import(Request $request)
+    public function import(ImportRequest $request): RedirectResponse
     {
-        $rules = [
-            'file' => 'required|mimes:xml',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
 
         if ($request->isMethod('post')) {
             if ($request->hasFile('file')) {

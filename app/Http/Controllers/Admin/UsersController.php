@@ -4,23 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Request\Admin\Users\StoreRequest;
+use App\Http\Request\Admin\Users\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use URL;
 
 class UsersController extends Controller
 {
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.users.index')->with('title', 'Пользователи');
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $options = [
             'admin' => 'Админ',
@@ -32,24 +35,11 @@ class UsersController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'login' => 'required|unique:users|max:255',
-            'name' => 'required',
-            'password' => 'required|min:6',
-            'password_again' => 'required|min:6|same:password',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         User::create($request->all());
 
         return redirect(URL::route('cp.users.index'))->with('success', 'Информация успешно добавлена');
@@ -57,9 +47,9 @@ class UsersController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = User::find($id);
 
@@ -75,24 +65,11 @@ class UsersController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'login' => 'required|max:255|unique:users,login,' . $request->id,
-            'name' => 'required',
-            'password' => 'min:6|nullable',
-            'password_again' => 'min:6|same:password|nullable',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         $row = User::find($request->id);
 
         if (!$row) abort(404);
@@ -112,7 +89,7 @@ class UsersController extends Controller
     /**
      * @param Request $request
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         if ($request->id != \Auth::id()) User::where('id', $request->id)->delete();
     }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ProductParametersCategory;
 use App\Models\ProductParameters;
+use App\Http\Request\Admin\ProductParameters\StoreRequest;
+use App\Http\Request\Admin\ProductParameters\EditRequest;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use URL;
 
 class ProductParametersController extends Controller
@@ -13,9 +16,9 @@ class ProductParametersController extends Controller
 
     /**
      * @param int $product_id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index(int $product_id)
+    public function index(int $product_id): View
     {
         $parameters = ProductParameters::where('product_id', $product_id)->get();
 
@@ -26,9 +29,9 @@ class ProductParametersController extends Controller
 
     /**
      * @param int $product_id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create(int $product_id)
+    public function create(int $product_id): View
     {
         $options = ProductParametersCategory::getOption();
 
@@ -36,22 +39,11 @@ class ProductParametersController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-            'value' => 'required',
-            'product_id' => 'required|integer|exists:products,id',
-            'category_id' => 'nullable|integer|exists:product_parameters_category,id',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         ProductParameters::create(array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
 
         return redirect(URL::route('cp.product_parameters.index', ['product_id' => $request->product_id]))->with('success', 'Информация успешно добавлена');
@@ -59,9 +51,9 @@ class ProductParametersController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = ProductParameters::find($id);
 
@@ -75,21 +67,11 @@ class ProductParametersController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-            'value' => 'required',
-            'category_id' => 'nullable|integer|exists:product_parameters_category,id',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = ProductParameters::find($request->id);
 
         if (!$row) abort(404);
@@ -99,14 +81,14 @@ class ProductParametersController extends Controller
         $row->category_id = $request->category_id ?? 0;
         $row->save();
 
-        return redirect(URL::route('cp.product_parameters.index', ['product_id' =>  $row->product_id]))->with('success', 'Данные обновлены');
+        return redirect(URL::route('cp.product_parameters.index', ['product_id' => $row->product_id]))->with('success', 'Данные обновлены');
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         ProductParameters::where('id', $request->id)->delete();
     }

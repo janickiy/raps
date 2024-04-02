@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use App\Models\Catalog;
-use Validator;
+use App\Http\Request\Admin\Catalog\StoreRequest;
+use App\Http\Request\Admin\Catalog\EditRequest;
 use Storage;
 use Image;
 use URL;
@@ -13,17 +16,17 @@ use URL;
 class CatalogController extends Controller
 {
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.catalog.index')->with('title', 'Категории');
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
@@ -31,28 +34,17 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:catalog',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time();
             $originName = $filename . '.' . $extension;
 
             if ($request->file('image')->move('uploads/catalog', $originName)) {
-
                 $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
@@ -65,7 +57,6 @@ class CatalogController extends Controller
                     $constraint->aspectRatio();
                 });
                 $small_img->save(Storage::disk('public')->path('catalog/' . $originName));
-
             }
         }
 
@@ -78,9 +69,9 @@ class CatalogController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Catalog::find($id);
 
@@ -92,20 +83,11 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:catalog,slug,' . $request->id,
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
 
         $row = Catalog::find($request->id);
 

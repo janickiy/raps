@@ -5,25 +5,29 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\{Catalog, Products};
 use App\Helpers\StringHelper;
+use App\Http\Request\Admin\Products\StoreRequest;
+use App\Http\Request\Admin\Products\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use URL;
-use Validator;
 use Image;
 use Storage;
 
 class ProductsController extends Controller
 {
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.products.index')->with('title', 'Продукция');
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $options = Catalog::getOption();
 
@@ -33,24 +37,11 @@ class ProductsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'description' => 'required',
-            'full_description' => 'required',
-            'slug' => 'required|unique:products',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'catalog_id' => 'integer|required|exists:catalog,id'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -76,9 +67,9 @@ class ProductsController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Products::find($id);
 
@@ -93,25 +84,11 @@ class ProductsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'description' => 'required',
-            'full_description' => 'required',
-            'slug' => 'required|unique:products,slug,' . $request->id,
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'price' => 'nullable|integer',
-            'catalog_id' => 'integer|required|exists:catalog,id',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = Products::find($request->id);
 
         if (!$row) abort(404);

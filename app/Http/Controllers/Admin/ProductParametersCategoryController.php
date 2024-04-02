@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ProductParametersCategory;
+use App\Http\Request\Admin\ProductParametersCategory\StoreRequest;
+use App\Http\Request\Admin\ProductParametersCategory\EditRequest;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Storage;
 use URL;
 
 class ProductParametersCategoryController extends Controller
 {
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+
+    public function index(): View
     {
         return view('cp.product_parameters_category.index')->with('title', 'Категории');
     }
@@ -21,25 +22,17 @@ class ProductParametersCategoryController extends Controller
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function create()
+    public function create(): View
     {
         return view('cp.product_parameters_category.create_edit')->with('title', 'Добавление категории');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         ProductParametersCategory::create($request->all());
 
         return redirect(URL::route('cp.product_parameters_category.index'))->with('success', 'Информация успешно добавлена');
@@ -47,9 +40,9 @@ class ProductParametersCategoryController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = ProductParametersCategory::find($id);
 
@@ -59,19 +52,11 @@ class ProductParametersCategoryController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'name' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = ProductParametersCategory::find($request->id);
 
         if (!$row) abort(404);
@@ -84,9 +69,9 @@ class ProductParametersCategoryController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         ProductParametersCategory::find($request->id)->delete();
     }

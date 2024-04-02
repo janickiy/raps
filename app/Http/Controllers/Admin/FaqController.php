@@ -2,45 +2,39 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Models\Faq;
 use Illuminate\Http\Request;
-use Validator;
+use App\Http\Request\Admin\Faq\StoreRequest;
+use App\Http\Request\Admin\Faq\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use URL;
 
 class FaqController extends Controller
 {
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.faq.index')->with('title', 'Вопрос-ответ');
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('cp.faq.create_edit')->with('title', 'Добавление вопрос-ответ');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'question' => 'required',
-            'answer' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         Faq::create($request->all());
 
         return redirect(URL::route('cp.faq.index'))->with('success', 'Информация успешно добавлена');
@@ -48,9 +42,9 @@ class FaqController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Faq::find($id);
 
@@ -60,20 +54,11 @@ class FaqController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'question' => 'required',
-            'answer' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = Faq::find($request->id);
 
         if (!$row) abort(404);
@@ -87,9 +72,9 @@ class FaqController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         Faq::find($request->id)->remove();
     }

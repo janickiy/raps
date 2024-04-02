@@ -5,50 +5,41 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\StringHelper;
 use App\Models\Services;
 use Illuminate\Http\Request;
-use URL;
-use Validator;
+use App\Http\Request\Admin\Services\StoreRequest;
+use App\Http\Request\Admin\Services\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Image;
 use Storage;
+use URL;
 
 class ServicesController extends Controller
 {
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.services.index')->with('title', 'Продукция');
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.services.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление продукции');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'description' => 'required',
-            'full_description' => 'required',
-            'slug' => 'required|unique:services',
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time();
@@ -60,10 +51,9 @@ class ServicesController extends Controller
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
                 });
+
                 $img->save(Storage::disk('public')->path('services/' . '2x_' . $filename . '.' . $extension));
-
                 $small_img = Image::make(Storage::disk('public')->path('services/' . $originName));
-
                 $small_img->resize(null, 350, function ($constraint) {
                     $constraint->aspectRatio();
                 });
@@ -80,9 +70,9 @@ class ServicesController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Services::find($id);
 
@@ -95,23 +85,11 @@ class ServicesController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'description' => 'required',
-            'full_description' => 'required',
-            'slug' => 'required|unique:services,slug,' . $request->id,
-            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = Services::find($request->id);
 
         if (!$row) abort(404);
@@ -182,7 +160,7 @@ class ServicesController extends Controller
     /**
      * @param Request $request
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): Void
     {
         Services::find($request->id)->remove();
     }

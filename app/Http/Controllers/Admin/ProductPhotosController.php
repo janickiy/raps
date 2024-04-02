@@ -8,7 +8,10 @@ use App\Models\{
 };
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
-use Validator;
+use App\Http\Request\Admin\ProductPhotos\EditRequest;
+use App\Http\Request\Admin\ProductPhotos\UploadRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Storage;
 use Image;
 use URL;
@@ -17,12 +20,10 @@ class ProductPhotosController extends Controller
 {
 
     /**
-     * Display the specified resource.
-     *
      * @param int $product_id
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index(int $product_id)
+    public function index(int $product_id): View
     {
         $row = Products::find($product_id);
 
@@ -34,22 +35,11 @@ class ProductPhotosController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param UploadRequest $request
+     * @return RedirectResponse
      */
-    public function upload(Request $request)
+    public function upload(UploadRequest $request): RedirectResponse
     {
-        $rules = [
-            'product_id' => 'required|integer|exists:products,id',
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -74,14 +64,13 @@ class ProductPhotosController extends Controller
         }
 
         return redirect(URL::route('cp.product_photos.index', ['product_id' => $request->product_id]))->with('error', 'Ошибка добавления фото');
-
     }
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = ProductPhotos::find($id);
 
@@ -93,23 +82,12 @@ class ProductPhotosController extends Controller
 
     }
 
-
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         $row = ProductPhotos::find($request->id);
 
         if (!$row) abort(404);

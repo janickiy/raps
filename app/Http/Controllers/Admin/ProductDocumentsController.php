@@ -8,18 +8,22 @@ use App\Models\{
 };
 use Illuminate\Http\Request;
 use App\Helpers\StringHelper;
-use Validator;
+use App\Http\Request\Admin\ProductDocuments\StoreRequest;
+use App\Http\Request\Admin\ProductDocuments\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Storage;
 use URL;
 
 class ProductDocumentsController extends Controller
 {
 
+
     /**
      * @param int $product_id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index(int $product_id)
+    public function index(int $product_id): View
     {
         $row = Products::find($product_id);
 
@@ -30,9 +34,9 @@ class ProductDocumentsController extends Controller
 
     /**
      * @param int $product_id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create(int $product_id)
+    public function create(int $product_id): View
     {
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
@@ -40,22 +44,11 @@ class ProductDocumentsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-
-        $rules = [
-            'file' => 'file|mimes:jpg,png,doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
-            'description' => 'required',
-            'product_id' => 'required|integer|exists:products,id'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         if ($request->hasFile('file')) {
             $extension = $request->file('file')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -69,36 +62,26 @@ class ProductDocumentsController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = ProductDocuments::find($id);
 
         if (!$row) abort(404);
 
         $product_id = $row->product_id;
-
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.product_documents.create_edit', compact('row', 'product_id', 'maxUploadFileSize'))->with('title', 'Редактирование списка документации');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'file' => 'nullable|file|mimes:jpg,png,doc,pdf,docx,txt,pdf,xls,xlsx,odt,ods',
-            'description' => 'required',
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
-
         $row = ProductDocuments::find($request->id);
 
         if (!$row) abort(404);

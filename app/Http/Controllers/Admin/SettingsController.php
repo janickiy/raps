@@ -4,42 +4,39 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\Settings;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Request\Admin\Settings\StoreRequest;
+use App\Http\Request\Admin\Settings\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use URL;
 use Storage;
 
 class SettingsController extends Controller
 {
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.settings.index')->with('title', 'Настройки');
     }
 
     /**
      * @param string $type
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function create(string $type)
+    public function create(string $type): View
     {
         return view('cp.settings.create_edit', compact('type'))->with('title', 'Добавление настроек');
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $validator = Validator::make($request->all(), [
-            'value' => 'required',
-            'key_cd' => 'required|unique:settings|max:255',
-            'type' => 'required',
-        ]);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
 
         if ($request->hasFile('value')) {
             $extension = $request->file('value')->getClientOriginalExtension();
@@ -60,9 +57,9 @@ class SettingsController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Settings::find($id);
 
@@ -74,23 +71,14 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
         $settings = Settings::find($request->id);
 
         if (!$settings) abort(404);
-
-        $rules = [
-            'value' => $settings->type == 'FILE' ? 'nullable' : 'required',
-            'key_cd' => 'required|max:255|unique:settings,key_cd,' . $request->id,
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) return back()->withErrors($validator)->withInput();
 
         $settings->key_cd = $request->input('key_cd');
         $settings->display_value = $request->input('display_value');

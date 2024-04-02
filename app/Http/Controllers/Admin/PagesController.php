@@ -3,27 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
+use App\Models\Pages;
 use Illuminate\Http\Request;
-use App\Models\{Pages};
-use Validator;
+use App\Http\Request\Admin\Pages\StoreRequest;
+use App\Http\Request\Admin\Pages\EditRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Storage;
 use Image;
 use URL;
 
 class PagesController extends Controller
 {
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cp.pages.index')->with('title', 'Страницы и разделы');
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         $options = [];
 
@@ -37,25 +41,11 @@ class PagesController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'text' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:pages',
-            'main' => 'integer|nullable'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = time();
@@ -89,9 +79,9 @@ class PagesController extends Controller
 
     /**
      * @param int $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $row = Pages::find($id);
 
@@ -110,25 +100,11 @@ class PagesController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param EditRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request)
+    public function update(EditRequest $request): RedirectResponse
     {
-        $rules = [
-            'title' => 'required',
-            'text' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:pages,slug,' . $request->id,
-            'main' => 'integer|nullable'
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
-
         $row = Pages::find($request->id);
 
         if (!$row) abort(404);
@@ -202,8 +178,9 @@ class PagesController extends Controller
 
     /**
      * @param Request $request
+     * @return void
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): void
     {
         Pages:find($request->id)->remove();
     }
