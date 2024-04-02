@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Storage;
 
 class ProductDocuments extends Model
 {
     protected $table = 'product_documents';
-
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'path',
@@ -18,9 +17,9 @@ class ProductDocuments extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Products::class, 'product_id', 'id');
     }
@@ -40,6 +39,7 @@ class ProductDocuments extends Model
     public function scopeRemove(): void
     {
         if (Storage::disk('public')->exists('documents/' . $this->path) === true) Storage::disk('public')->delete('documents/' . $this->path);
+
         $this->delete();
     }
 }

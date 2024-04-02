@@ -10,8 +10,6 @@ class Settings extends Model
 
     protected $table = 'settings';
 
-    protected $primaryKey = 'id';
-
     protected $fillable = [
         'key_cd',
         'type',

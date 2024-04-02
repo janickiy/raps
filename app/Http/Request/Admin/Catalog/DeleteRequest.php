@@ -4,7 +4,7 @@ namespace App\Http\Request\Admin\Catalog;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-
-            'name' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:catalog,slug,' . $this->id,
-            'parent_id' => 'integer'
+            'id' => 'integer'
         ];
     }
 }

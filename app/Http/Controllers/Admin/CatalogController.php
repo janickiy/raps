@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\Catalog;
 use App\Http\Request\Admin\Catalog\StoreRequest;
 use App\Http\Request\Admin\Catalog\EditRequest;
+use App\Http\Request\Admin\Catalog\DeleteRequest;
 use Storage;
 use Image;
 use URL;
@@ -20,17 +20,33 @@ class CatalogController extends Controller
      */
     public function index(): View
     {
-        return view('cp.catalog.index')->with('title', 'Категории');
+        $catalogs = Catalog::get();
+        $cats = [];
+
+        if ($catalogs) {
+            $catalog_arr = $catalogs->toArray();
+
+            foreach ($catalog_arr as $catalog) {
+                $cats_ID[$catalog['id']][] = $catalog;
+                $cats[$catalog['parent_id']][$catalog['id']] = $catalog;
+            }
+        }
+
+        return view('cp.catalog.index', compact('cats'))->with('title', 'Категории');
     }
 
     /**
+     * @param int $parent_id
      * @return View
      */
-    public function create(): View
+    public function create(int $parent_id = 0): View
     {
+        $options[0] = 'Выберите';
+        $options = Catalog::ShowTree($options, 0);
+
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.catalog.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление категории');
+        return view('cp.catalog.create_edit', compact('maxUploadFileSize', 'parent_id', 'options'))->with('title', 'Добавление категории');
     }
 
     /**
@@ -147,12 +163,14 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return void
+     * @param DeleteRequest $request
+     * @return RedirectResponse
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): RedirectResponse
     {
-        Catalog::find($request->id)->remove();
+        Catalog::removeCatalogs($request->id);
+
+        return redirect(URL::route('cp.catalog.index'))->with('success', 'Данные удалены');
     }
 
 }

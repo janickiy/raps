@@ -46,6 +46,10 @@
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
+                        {!! isset($parent_id) ? Form::hidden('parent_id', $parent_id) : '' !!}
+
+                        {!! Form::hidden('pic', isset($row) && $row->image ? $row->image : NULL) !!}
+
                         <header>
                             *-обязательные поля
                         </header>
@@ -67,6 +71,27 @@
                                 @endif
 
                             </section>
+
+                            @if (($parent_id == 0 && !isset($row)) || isset($row))
+
+                                <section>
+
+                                    {!! Form::label('parent_id',  "Раздел", ['class' => 'label']) !!}
+
+                                    <label class="select">
+
+                                        {!! Form::select('parent_id', $options, old('parent_id', isset($row) ? $row->parent_id : 0), ['class' => 'input-sm']) !!}
+                                        <i></i>
+
+                                    </label>
+
+                                    @if ($errors->has('parent_id'))
+                                        <p class="text-danger">{{ $errors->first('parent_id') }}</p>
+                                    @endif
+
+                                </section>
+
+                            @endif
 
                             <section>
 

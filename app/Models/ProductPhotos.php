@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Storage;
 
 class ProductPhotos extends Model
 {
     protected $table = 'product_photos';
-
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'title',
@@ -20,9 +19,9 @@ class ProductPhotos extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function product()
+    public function product(): BelongsTo
     {
         return $this->belongsTo(Products::class,'product_id','id');
     }

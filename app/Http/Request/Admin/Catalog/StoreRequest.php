@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
             'name' => 'required',
             'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
             'slug' => 'required|unique:catalog',
+            'parent_id' => 'integer'
         ];
     }
 }

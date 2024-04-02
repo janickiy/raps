@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Storage;
 
 class Products extends Model
 {
     protected $table = 'products';
-
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'title',
@@ -59,9 +59,9 @@ class Products extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
-    public function catalog()
+    public function catalog(): BelongsTo
     {
         return $this->belongsTo(Catalog::class, 'catalog_id', 'id');
     }
@@ -101,25 +101,25 @@ class Products extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function parameters()
+    public function parameters(): HasMany
     {
         return $this->hasMany(ProductParameters::class, 'product_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function photos()
+    public function photos(): HasMany
     {
         return $this->hasMany(ProductPhotos::class, 'product_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function documents()
+    public function documents(): HasMany
     {
         return $this->hasMany(ProductDocuments::class, 'product_id', 'id');
     }

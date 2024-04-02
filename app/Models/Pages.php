@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Helpers\StringHelper;
 use Storage;
 
@@ -10,8 +11,6 @@ class Pages extends Model
 {
 
     protected $table = 'pages';
-
-    protected $primaryKey = 'id';
 
     protected $fillable = [
         'title',
@@ -93,15 +92,16 @@ class Pages extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo($this, 'parent_id', 'id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function children(){
+    public function children(): HasMany
+    {
         return $this->hasMany($this, 'parent_id', 'id');
     }
 

@@ -12,8 +12,6 @@ class Requests extends Model
 
     protected $table = 'requests';
 
-    protected $primaryKey = 'id';
-
     protected $fillable = [
         'type',
         'path',

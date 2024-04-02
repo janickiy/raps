@@ -54,42 +54,48 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('destroy', [PagesController::class, 'destroy'])->name('cp.pages.destroy');
     });
 
-
     Route::any('manage-menus', [MenuController::class, 'index'])->name('cp.menu.index')->middleware(['permission:admin|moderator']);
     Route::get('feedback', [RequestsController::class, 'index'])->name('cp.feedback.index')->middleware(['permission:admin|moderator']);
 
-
-    Route::group(['prefix' => 'users'], function () {
-        Route::get('', [UsersController::class, 'index'])->name('cp.users.index')->middleware(['permission:admin']);
-        Route::get('create', [UsersController::class, 'create'])->name('cp.users.create')->middleware(['permission:admin']);
-        Route::post('store', [UsersController::class, 'store'])->name('cp.users.store')->middleware(['permission:admin']);
-        Route::get('edit/{id}', [UsersController::class, 'edit'])->name('cp.users.edit')->where('id', '[0-9]+');
-        Route::put('update', [UsersController::class, 'update'])->name('cp.users.update')->middleware(['permission:admin']);
-        Route::post('destroy', [UsersController::class, 'destroy'])->name('cp.users.destroy')->middleware(['permission:admin']);
+    Route::middleware(['permission:admin'])->group(function () {
+        Route::group(['prefix' => 'users'], function () {
+            Route::get('', [UsersController::class, 'index'])->name('cp.users.index');
+            Route::get('create', [UsersController::class, 'create'])->name('cp.users.create');
+            Route::post('store', [UsersController::class, 'store'])->name('cp.users.store');
+            Route::get('edit/{id}', [UsersController::class, 'edit'])->name('cp.users.edit')->where('id', '[0-9]+');
+            Route::put('update', [UsersController::class, 'update'])->name('cp.users.update');
+            Route::post('destroy', [UsersController::class, 'destroy'])->name('cp.users.destroy');
+        });
     });
 
-    Route::group(['prefix' => 'seo'], function () {
-        Route::get('', [SeoController::class, 'index'])->name('cp.seo.index')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}', [SeoController::class, 'edit'])->name('cp.seo.edit')->where('id', '[0-9]+')->middleware(['permission:admin|moderator']);
-        Route::put('update', [SeoController::class, 'update'])->name('cp.seo.update')->middleware(['permission:admin|moderator']);
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'seo'], function () {
+            Route::get('', [SeoController::class, 'index'])->name('cp.seo.index');
+            Route::get('edit/{id}', [SeoController::class, 'edit'])->name('cp.seo.edit')->where('id', '[0-9]+');
+            Route::put('update', [SeoController::class, 'update'])->name('cp.seo.update');
+        });
     });
 
-    Route::group(['prefix' => 'catalog'], function () {
-        Route::get('', [CatalogController::class, 'index'])->name('cp.catalog.index')->middleware(['permission:admin|moderator']);
-        Route::get('create', [CatalogController::class, 'create'])->name('cp.catalog.create')->middleware(['permission:admin|moderator']);
-        Route::post('store', [CatalogController::class, 'store'])->name('cp.catalog.store')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit')->where('id', '[0-9]+');
-        Route::put('update', [CatalogController::class, 'update'])->name('cp.catalog.update')->middleware(['permission:admin|moderator']);
-        Route::post('destroy', [CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->middleware(['permission:admin|moderator']);
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'catalog'], function () {
+            Route::get('', [CatalogController::class, 'index'])->name('cp.catalog.index');
+            Route::get('create', [CatalogController::class, 'create'])->name('cp.catalog.create');
+            Route::post('store', [CatalogController::class, 'store'])->name('cp.catalog.store');
+            Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit');
+            Route::put('update', [CatalogController::class, 'update'])->name('cp.catalog.update');
+            Route::get('delete/{id}', [CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->where('id', '[0-9]+');
+        });
     });
 
-    Route::group(['prefix' => 'product-parameters-category'], function () {
-        Route::get('', [ProductParametersCategoryController::class, 'index'])->name('cp.product_parameters_category.index')->middleware(['permission:admin|moderator']);
-        Route::get('create', [ProductParametersCategoryController::class, 'create'])->name('cp.product_parameters_category.create')->middleware(['permission:admin|moderator']);
-        Route::post('store', [ProductParametersCategoryController::class, 'store'])->name('cp.product_parameters_category.store')->middleware(['permission:admin|moderator']);
-        Route::get('edit/{id}', [ProductParametersCategoryController::class, 'edit'])->name('cp.product_parameters_category.edit')->where('id', '[0-9]+');
-        Route::put('update', [ProductParametersCategoryController::class, 'update'])->name('cp.product_parameters_category.update')->middleware(['permission:admin|moderator']);
-        Route::post('destroy', [ProductParametersCategoryController::class, 'destroy'])->name('cp.product_parameters_category.destroy')->middleware(['permission:admin|moderator']);
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'product-parameters-category'], function () {
+            Route::get('', [ProductParametersCategoryController::class, 'index'])->name('cp.product_parameters_category.index');
+            Route::get('create', [ProductParametersCategoryController::class, 'create'])->name('cp.product_parameters_category.create');
+            Route::post('store', [ProductParametersCategoryController::class, 'store'])->name('cp.product_parameters_category.store');
+            Route::get('edit/{id}', [ProductParametersCategoryController::class, 'edit'])->name('cp.product_parameters_category.edit')->where('id', '[0-9]+');
+            Route::put('update', [ProductParametersCategoryController::class, 'update'])->name('cp.product_parameters_category.update');
+            Route::post('destroy', [ProductParametersCategoryController::class, 'destroy'])->name('cp.product_parameters_category.destroy');
+        });
     });
 
     Route::group(['prefix' => 'services'], function () {
@@ -136,31 +142,36 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('destroy', [ProductDocumentsController::class, 'destroy'])->name('cp.product_documents.destroy');
     });
 
-    Route::group(['prefix' => 'settings'], function () {
-        Route::get('', [SettingsController::class, 'index'])->name('cp.settings.index')->middleware(['permission:admin']);
-        Route::get('create/{type}', [SettingsController::class, 'create'])->name('cp.settings.create')->middleware(['permission:admin']);
-        Route::post('store', [SettingsController::class, 'store'])->name('cp.settings.store')->middleware(['permission:admin']);
-        Route::get('edit/{id}', [SettingsController::class, 'edit'])->name('cp.settings.edit')->where('id', '[0-9]+')->middleware(['permission:admin']);
-        Route::put('update', [SettingsController::class, 'update'])->name('cp.settings.update')->middleware(['permission:admin']);
-        Route::post('destroy', [SettingsController::class, 'destroy'])->name('cp.settings.destroy')->middleware(['permission:admin']);
+    Route::middleware(['permission:admin'])->group(function () {
+        Route::group(['prefix' => 'settings'], function () {
+            Route::get('', [SettingsController::class, 'index'])->name('cp.settings.index');
+            Route::get('create/{type}', [SettingsController::class, 'create'])->name('cp.settings.create');
+            Route::post('store', [SettingsController::class, 'store'])->name('cp.settings.store');
+            Route::get('edit/{id}', [SettingsController::class, 'edit'])->name('cp.settings.edit')->where('id', '[0-9]+');
+            Route::put('update', [SettingsController::class, 'update'])->name('cp.settings.update');
+            Route::post('destroy', [SettingsController::class, 'destroy'])->name('cp.settings.destroy');
+        });
     });
 
     Route::group(['prefix' => 'requests'], function () {
         Route::get('', [RequestsController::class, 'index'])->name('cp.requests.index');
     });
 
-    Route::group(['prefix' => 'robots'], function () {
-        Route::get('edit', [RobotsController::class, 'edit'])->name('cp.robots.edit')->middleware(['permission:admin|moderator']);
-        Route::put('update', [RobotsController::class, 'update'])->name('cp.robots.update')->middleware(['permission:admin|moderator']);
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'robots'], function () {
+            Route::get('edit', [RobotsController::class, 'edit'])->name('cp.robots.edit');
+            Route::put('update', [RobotsController::class, 'update'])->name('cp.robots.update');
+        });
     });
 
-    Route::group(['prefix' => 'sitemap'], function () {
-        Route::get('', [SitemapController::class, 'index'])->name('cp.sitemap.index')->middleware(['permission:admin|moderator']);
-        Route::get('export', [SitemapController::class, 'export'])->name('cp.sitemap.export')->middleware(['permission:admin|moderator']);
-        Route::get('import', [SitemapController::class, 'importForm'])->name('cp.sitemap.import_form')->middleware(['permission:admin|moderator']);
-        Route::post('import', [SitemapController::class, 'import'])->name('cp.sitemap.import')->middleware(['permission:admin|moderator']);
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'sitemap'], function () {
+            Route::get('', [SitemapController::class, 'index'])->name('cp.sitemap.index');
+            Route::get('export', [SitemapController::class, 'export'])->name('cp.sitemap.export');
+            Route::get('import', [SitemapController::class, 'importForm'])->name('cp.sitemap.import_form');
+            Route::post('import', [SitemapController::class, 'import'])->name('cp.sitemap.import');
+        });
     });
-
 
     Route::group(['prefix' => 'faq'], function () {
         Route::get('', [FaqController::class, 'index'])->name('cp.faq.index');
