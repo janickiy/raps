@@ -90,7 +90,7 @@ class Catalog extends Model
     private static function removeCatalog(object $catalog): void
     {
         if (Storage::disk('public')->exists('catalog/' . $catalog->image) === true) Storage::disk('public')->delete('catalog/' . $catalog->image);
-        if (Storage::disk('public')->exists('catalog/' . '2x_' . $$catalog->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $catalog->image);
+        if (Storage::disk('public')->exists('catalog/' . '2x_' . $catalog->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $catalog->image);
 
         foreach ($catalog->products as $product) {
             $product->remove();

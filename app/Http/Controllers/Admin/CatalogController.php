@@ -6,9 +6,11 @@ use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Catalog;
-use App\Http\Request\Admin\Catalog\StoreRequest;
-use App\Http\Request\Admin\Catalog\EditRequest;
-use App\Http\Request\Admin\Catalog\DeleteRequest;
+use App\Http\Request\Admin\Catalog\{
+    StoreRequest,
+    EditRequest,
+    DeleteRequest,
+};
 use Storage;
 use Image;
 use URL;
@@ -93,9 +95,16 @@ class CatalogController extends Controller
 
         if (!$row) abort(404);
 
+        $options[0] = 'Выберите';
+
+        Catalog::ShowTree($options, 0);
+
+        $parent_id = $row->parent_id;
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.catalog.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
+        unset($options[$id]);
+
+        return view('cp.catalog.create_edit', compact('row', 'parent_id', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
     }
 
     /**
@@ -117,6 +126,8 @@ class CatalogController extends Controller
         $row->meta_keywords = $request->input('meta_keywords');
         $row->seo_h1 = $request->input('seo_h1');
         $row->seo_url_canonical = $request->input('seo_url_canonical');
+        $row->parent_id = $request->input('parent_id');
+
 
         if ($request->hasFile('image')) {
 

@@ -131,7 +131,6 @@ class Products extends Model
      */
     public function scopeRemove()
     {
-
         if (Storage::disk('public')->exists('products/' . $this->thumbnail) === true) Storage::disk('public')->delete('products/' . $this->thumbnail);
         if (Storage::disk('public')->exists('products/' . $this->origin) === true) Storage::disk('public')->delete('products/' . $this->origin);
 
