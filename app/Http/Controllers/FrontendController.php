@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Mail;
 use File;
+use URL;
 
 class FrontendController
 {
@@ -121,7 +122,6 @@ class FrontendController
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-        $topbar = [];
         $pathway = '';
 
         if ($slug) {
@@ -130,9 +130,6 @@ class FrontendController
             $catalog = Catalog::where('slug', $slug)->first();
 
             if (!$catalog) abort(404);
-
-
-           // dd($catalog->hasChildren());
 
             $title = $catalog->name;
             $meta_description = $catalog->meta_description;
@@ -146,10 +143,8 @@ class FrontendController
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
             for ($i = 0; $i < count($arrayPathWay); $i++) {
-                if ($arrayPathWay[$i][0] == $catalog->id) {
-                    $pathway .= '<span>' . $arrayPathWay[$i][1] . '</span>';
-                } else {
-                    $pathway .= '<li><a href="' . URL::route('catalog', ['id' => $arrayPathWay[$i][0]]) . '">' . $arrayPathWay[$i][1] . '</a></li>';
+                if ($arrayPathWay[$i][0] != $catalog->id) {
+                    $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $arrayPathWay[$i][2]]) . '">' . $arrayPathWay[$i][1] . '</a></li>';
                 }
             }
         } else {
@@ -279,7 +274,6 @@ class FrontendController
                 'seo_url_canonical',
                 'menu')
         )->with('title', $title);
-
     }
 
     /**

@@ -63,7 +63,7 @@ class Catalog extends Model
 
         if ($result->count() > 0) {
             $catalog = $result->first();
-            $topbar[] = [$catalog->id, $catalog->name];
+            $topbar[] = [$catalog->id, $catalog->name, $catalog->slug];
 
             self::topbarMenu($topbar, $catalog->parent_id);
         }
