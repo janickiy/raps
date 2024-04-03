@@ -59,7 +59,7 @@
 
                                     <label class="textarea textarea-resizable">
 
-                                        {!! Form::textarea('content', old('content', isset($file) ? $file : null), ['rows' => "6", 'class' => 'custom-scroll']) !!}
+                                        {!! Form::textarea('content', old('content', $file ?? null), ['rows' => "6", 'class' => 'custom-scroll']) !!}
 
                                     </label>
 

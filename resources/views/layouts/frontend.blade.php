@@ -68,13 +68,13 @@
 
                         @if(isset($menu['about']) and $menu['about'])
 
-                        <ul class="header__submenu-nav">
+                            <ul class="header__submenu-nav">
 
-                            @foreach($menu['about'] as $item)
-                                <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
-                            @endforeach
+                                @foreach($menu['about'] as $item)
+                                    <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
+                                @endforeach
 
-                        </ul>
+                            </ul>
 
                         @endif
 
@@ -102,14 +102,13 @@
                 </ul>
             </nav>
 
-
             <div class="lang dropdown header__lang">
-
                 <div class="lang__dropdown dropdown__main">
                     <div class="lang lang_fixed">
                         <div id="ytWidget" style="display: none;"></div>
                         <div class="lang__link lang__link_select" data-lang-active="">
-                            <img class="lang__img lang__img_select" src="{{ url('/images/lang/lang__ru.png') }}" alt="Ru">
+                            <img class="lang__img lang__img_select" src="{{ url('/images/lang/lang__ru.png') }}"
+                                 alt="Ru">
                         </div>
                         <div class="lang__list" data-lang-list="">
                             <a class="lang__link lang__link_sub" data-ya-lang="ru">
@@ -121,12 +120,10 @@
                             <a class="lang__link lang__link_sub" data-ya-lang="uz">
                                 <img class="lang__img" src="{{ url('/images/lang/lang__uz.png') }}" alt="uz">
                             </a>
-
                         </div>
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -157,24 +154,26 @@
 
                         @foreach($catalogs as $row)
 
-                        <li class="header__input-hint">
-                            <a href="{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}">
-                                <picture>
-                                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}" alt="{{ $row->image_title ?? $row->name }}">
-                                </picture>
-                                <span class="header__input-hint-info">
+                            <li class="header__input-hint">
+                                <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@endif">
+                                    <picture>
+                                        <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
+                                             alt="{{ $row->image_title ?? $row->name }}">
+                                    </picture>
+                                    <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">{{ $row->name }}</span>
                                     <span class="header__input-hint-title">{{ $row->description }}</span>
                                 </span>
-                            </a>
-                        </li>
+                                </a>
+                            </li>
 
                         @endforeach
 
                     </ul>
                 </div>
             </div>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить
+                заявку</a>
         </div>
     </div>
     <div class="header__mobile-menu" data-menu-name="mobile-menu">
@@ -191,7 +190,8 @@
             <nav class="header__mobile-menu-links">
                 <ul>
 
-                    <li><a href="{{ URL::route('frontend.catalog') }}" class="header__mobile-menu-link js-mobile-menu-link">Каталог</a></li>
+                    <li><a href="{{ URL::route('frontend.catalog') }}"
+                           class="header__mobile-menu-link js-mobile-menu-link">Каталог</a></li>
                     <li class="header__mobile-submenu">
                         <input id="mobile-submenu-about" name="mobile-menu" type="checkbox">
                         <label for="mobile-submenu-about">
@@ -207,7 +207,9 @@
                                 <ul class="header__mobile-submenu-list">
 
                                     @foreach($menu['about'] as $item)
-                                        <li><a href="{{ $item['link'] }}" class="js-mobile-menu-link">{{ $item['label'] }}</a></li>
+                                        <li>
+                                            <a href="{{ $item['link'] }}" class="js-mobile-menu-link">{{ $item['label'] }}</a>
+                                        </li>
                                     @endforeach
 
                                 </ul>
@@ -239,7 +241,9 @@
 
                         </div>
                     </li>
-                    <li><a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
+                    <li>
+                        <a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a>
+                    </li>
                 </ul>
             </nav>
             <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить заявку</a>
@@ -252,17 +256,17 @@
 
                     @foreach($catalogs as $row)
 
-                    <li>
-                        <a href="{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}" class="header__product-menu-link">
-                            <picture class="header__product-menu-img">
-                                <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
-                            </picture>
-                            <span class="header__product-menu-title">{{ $row->name }}</span>
-                            <svg aria-hidden="true">
-                                <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
-                            </svg>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@else{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@endif" class="header__product-menu-link">
+                                <picture class="header__product-menu-img">
+                                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
+                                </picture>
+                                <span class="header__product-menu-title">{{ $row->name }}</span>
+                                <svg aria-hidden="true">
+                                    <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
+                                </svg>
+                            </a>
+                        </li>
 
                     @endforeach
 
@@ -280,9 +284,10 @@
     <div class="footer__top">
         <div class="container">
             <div class="footer__top-wrapper">
-                <a href="{{ URL::route('frontend.index') }}" class="footer__logo" aria-label="Перейти на главную страницу">
+                <a href="{{ URL::route('frontend.index') }}" class="footer__logo"
+                   aria-label="Перейти на главную страницу">
                     <svg aria-hidden="true">
-                        <use xlink:href="./images/sprite.svg#logo"/>
+                        <use xlink:href="{{ url('/images/sprite.svg#logo') }}"/>
                     </svg>
                     <span aria-hidden="true">Raps</span>
                 </a>
@@ -292,11 +297,11 @@
 
                         @if(isset($menu['about']) and $menu['about'])
 
-                        <ul>
-                            @foreach($menu['about'] as $item)
-                                <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
-                            @endforeach
-                        </ul>
+                            <ul>
+                                @foreach($menu['about'] as $item)
+                                    <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
+                                @endforeach
+                            </ul>
 
                         @endif
 
@@ -324,15 +329,20 @@
         <div class="container">
             <span class="footer__bottom-copyright">© 2015-{{ date("Y") }} RAPS</span>
             <ul class="footer__bottom-links">
-                <li><a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия использования</a></li>
-                <li><a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика конфиденциальности</a></li>
+                <li>
+                    <a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия использования</a>
+                </li>
+                <li>
+                    <a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика конфиденциальности</a>
+                </li>
             </ul>
         </div>
     </div>
 </footer>
 
 
-<div aria-label="Опросный лист для заказа" role="dialog" aria-modal="true" data-name="requestModal" class="js-modal request-modal">
+<div aria-label="Опросный лист для заказа" role="dialog" aria-modal="true" data-name="requestModal"
+     class="js-modal request-modal">
     <div class="js-modal-content request-modal__content">
         <div class="request-modal__header">
             <button type="button" class="js-close-modal-btn request-modal__close-btn">
@@ -353,22 +363,24 @@
                 </span>
                 <span class="request-modal__download-title">Скачать опросный лист</span>
             </a>
-            <p class="request-modal__text">После заполнения опросного листа, вам необходимо загрузить его и отправить нам. Мы изучим его и свяжемся с вами в ближайшее время с ответом.</p>
+            <p class="request-modal__text">После заполнения опросного листа, вам необходимо загрузить его и отправить
+                нам. Мы изучим его и свяжемся с вами в ближайшее время с ответом.</p>
             <div class="request-modal__form">
 
                 {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'id' => "requestForm", 'class' => "request-form", "autocomplete" => "off"]) !!}
 
                 {!! Form::hidden('type', 2) !!}
 
-                    <div class="request-form__input-file">
-                        <input id="requestFile" type="file" name="file">
-                        <label for="requestFile">
-                            <span class="request-form__label-title js-request-label-title">Загрузить опросный лист</span>
-                            <span class="request-form__label-desc">Перетащите документ сюда, либо выберите вручную</span>
-                        </label>
-                    </div>
-                    <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a>  любым удобным способом.</p>
-                    <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
+                <div class="request-form__input-file">
+                    <input id="requestFile" type="file" name="file">
+                    <label for="requestFile">
+                        <span class="request-form__label-title js-request-label-title">Загрузить опросный лист</span>
+                        <span class="request-form__label-desc">Перетащите документ сюда, либо выберите вручную</span>
+                    </label>
+                </div>
+                <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a
+                        href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
+                <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
 
                 {!! Form::close() !!}
 
@@ -378,28 +390,42 @@
 </div>
 
 <!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+<script type="text/javascript">
+    (function (m, e, t, r, i, k, a) {
+        m[i] = m[i] || function () {
+            (m[i].a = m[i].a || []).push(arguments)
+        };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) {
+                return;
+            }
+        }
+        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+    })
     (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
     ym(96625234, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true,
+        webvisor: true
     });
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/96625234" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript>
+    <div><img src="https://mc.yandex.ru/watch/96625234" style="position:absolute; left:-9999px;" alt=""/></div>
+</noscript>
 <!-- /Yandex.Metrika counter -->
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CY52MLBM9F"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
     gtag('js', new Date());
 
     gtag('config', 'G-CY52MLBM9F');

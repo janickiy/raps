@@ -45,6 +45,36 @@ class Catalog extends Model
     }
 
     /**
+     * @return bool
+     */
+    public function hasChildren(): bool
+    {
+        return self::where('parent_id', $this->id)->count() > 0 ? true : false;
+    }
+
+    /**
+     * @param array $topbar
+     * @param int $parent_id
+     * @return array
+     */
+    public static function topbarMenu(array &$topbar, int $parent_id): array
+    {
+        $result = self::where('id', $parent_id);
+
+        if ($result->count() > 0) {
+            $catalog = $result->first();
+            $topbar[] = [$catalog->id, $catalog->name];
+
+            self::topbarMenu($topbar, $catalog->parent_id);
+        }
+
+        sort($topbar);
+
+        return $topbar;
+    }
+
+
+    /**
      * @return int
      */
     public function getProductCount()

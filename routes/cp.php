@@ -79,9 +79,9 @@ Route::group(['prefix' => 'cp'], function () {
     Route::middleware(['permission:admin|moderator'])->group(function () {
         Route::group(['prefix' => 'catalog'], function () {
             Route::get('', [CatalogController::class, 'index'])->name('cp.catalog.index');
-            Route::get('create', [CatalogController::class, 'create'])->name('cp.catalog.create');
+            Route::get('create/{parent_id?}', [CatalogController::class, 'create'])->name('cp.catalog.create')->where('parent_id', '[0-9]+');
             Route::post('store', [CatalogController::class, 'store'])->name('cp.catalog.store');
-            Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit');
+            Route::get('edit/{id}', [CatalogController::class, 'edit'])->name('cp.catalog.edit')->where('id', '[0-9]+');
             Route::put('update', [CatalogController::class, 'update'])->name('cp.catalog.update');
             Route::get('delete/{id}', [CatalogController::class, 'destroy'])->name('cp.catalog.destroy')->where('id', '[0-9]+');
         });

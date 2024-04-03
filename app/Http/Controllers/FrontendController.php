@@ -8,15 +8,17 @@ use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
 use App\Mail\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Mail;
 use File;
 
 class FrontendController
 {
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $page = Pages::where('main', 1)->published()->first();
 
@@ -37,7 +39,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.index', compact(
                 'catalogs',
@@ -52,9 +54,9 @@ class FrontendController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function contact()
+    public function contact(): View
     {
         $seo = Seo::where('type', 'frontend.contact')->first();
 
@@ -73,7 +75,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         $phones = [];
         $phoneList = SettingsHelper::getSetting('PHONE');
@@ -97,10 +99,11 @@ class FrontendController
     }
 
     /**
+     * @param string|null $slug
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function catalog(Request $request)
+    public function catalog(?string $slug = null, Request $request): View
     {
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -118,8 +121,34 @@ class FrontendController
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
+        $topbar = [];
+        $pathway = '';
 
-        $catalogs = Catalog::orderBy('name')->get();
+        if ($slug) {
+            $topbar = [];
+
+            $catalog = Catalog::where('slug', $slug)->first();
+
+            if (!$catalog) abort(404);
+
+            $title = $catalog->name;
+            $meta_description = $catalog->meta_description;
+            $meta_keywords = $catalog->meta_keywords;
+            $meta_title = $catalog->meta_title;
+            $seo_url_canonical = $catalog->seo_url_canonical;
+            $h1 = $seo->h1 ?? $title;
+
+            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
+            $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
+
+            for ($i = 0; $i < count($arrayPathWay); $i++) {
+                if ($arrayPathWay[$i][0] == $catalog->id) {
+                    $pathway .= '<span>' . $arrayPathWay[$i][1] . '</span>';
+                } else {
+                    $pathway .= '<li><a href="' . URL::route('catalog', ['id' => $arrayPathWay[$i][0]]) . '">' . $arrayPathWay[$i][1] . '</a></li>';
+                }
+            }
+        }
 
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
@@ -127,12 +156,10 @@ class FrontendController
             $productIds = null;
         }
 
-
-
-
         return view('frontend.catalog', compact(
                 'catalogs',
                 'productIds',
+                'pathway',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -145,9 +172,9 @@ class FrontendController
     /**
      * @param string $slug
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function productListing(string $slug, Request $request)
+    public function productListing(string $slug, Request $request): View
     {
         $catalog = Catalog::where('slug', $slug)->first();
 
@@ -168,7 +195,7 @@ class FrontendController
         $seo_url_canonical = $catalog->seo_url_canonical;
         $h1 = $seo->h1 ?? $title;
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
@@ -193,9 +220,9 @@ class FrontendController
     /**
      * @param string $slug
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function product(string $slug, Request $request)
+    public function product(string $slug, Request $request): View
     {
         $product = Products::where('slug', $slug)->published()->first();
 
@@ -209,7 +236,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         $title = $product->title;
         $meta_description = $product->meta_description ?? '';
@@ -251,9 +278,9 @@ class FrontendController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function servicesListing(Request $request)
+    public function servicesListing(Request $request): View
     {
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -272,7 +299,8 @@ class FrontendController
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+
         $services = Services::orderBy('title')->published()->get();
 
         if ($request->session()->has('productIds')) {
@@ -280,9 +308,6 @@ class FrontendController
         } else {
             $productIds = null;
         }
-
-
-
 
         return view('frontend.services_listing', compact(
                 'catalogs',
@@ -300,9 +325,9 @@ class FrontendController
     /**
      * @param string $slug
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function service(string $slug, Request $request)
+    public function service(string $slug, Request $request): View
     {
         $service = Services::where('slug', $slug)->published()->first();
 
@@ -325,7 +350,7 @@ class FrontendController
         $seo_url_canonical = $service->seo_url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
@@ -347,9 +372,9 @@ class FrontendController
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function about()
+    public function about(): View
     {
         $seo = Seo::where('type', 'frontend.about')->first();
 
@@ -372,7 +397,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.about', compact(
             'page',
@@ -389,9 +414,9 @@ class FrontendController
 
     /**
      * @param string $slug
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
-    public function page(string $slug)
+    public function page(string $slug): View
     {
         $page = Pages::where('slug', $slug)->published()->first();
 
@@ -412,7 +437,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.page', compact(
                 'page',
@@ -426,12 +451,10 @@ class FrontendController
         )->with('title', $title);
     }
 
-
-
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
-    public function application()
+    public function application(): View
     {
         $seo = Seo::where('type', 'frontend.application')->first();
 
@@ -450,7 +473,7 @@ class FrontendController
             'services' => $menu_services->items->toArray(),
         ];
 
-        $catalogs = Catalog::orderBy('name')->get();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.application', compact(
                 'meta_description',
@@ -467,9 +490,9 @@ class FrontendController
 
     /**
      * @param SendApplicationRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function sendApplication(SendApplicationRequest $request)
+    public function sendApplication(SendApplicationRequest $request): RedirectResponse
     {
         $path = public_path('uploads/attachment');
         $attachment = $request->file('attachment');
@@ -495,6 +518,5 @@ class FrontendController
 
         return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
     }
-
 
 }

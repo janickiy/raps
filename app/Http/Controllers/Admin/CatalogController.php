@@ -22,6 +22,9 @@ class CatalogController extends Controller
      */
     public function index(): View
     {
+
+        $catalog = Catalog::find(1);
+
         $catalogs = Catalog::get();
         $cats = [];
 

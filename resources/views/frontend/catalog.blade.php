@@ -17,6 +17,9 @@
 
     <ul class="container breadcrumbs">
         <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
+        <li><a href="{{ URL::route('frontend.catalog') }}">Каталог</a></li>
+        {!! $pathway !!}
+
         <li><span>{{ $title }}</span></li>
     </ul>
 

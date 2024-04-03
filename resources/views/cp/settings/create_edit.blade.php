@@ -59,11 +59,11 @@
                                 <label class="input">
                                     @if(isset($row))
 
-                                        {!! Form::text('key_cd', old('key_cd', isset($row) ? $row->key_cd : null), ['class' => 'form-control', 'readonly']) !!}
+                                        {!! Form::text('key_cd', old('key_cd', $row->key_cd ?? null), ['class' => 'form-control', 'readonly']) !!}
 
                                     @else
 
-                                        {!! Form::text('key_cd', old('key_cd', isset($row) ? $row->key_cd : null), ['class' => 'form-control']) !!}
+                                        {!! Form::text('key_cd', old('key_cd', $row->key_cd ?? null), ['class' => 'form-control']) !!}
 
                                     @endif
 
@@ -112,7 +112,7 @@
 
                                     <label class="input">
 
-                                        {!! Form::text('value', old('value', isset($row) ? $row->value : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                        {!! Form::text('value', old('value', $row->value  ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                     </label>
 
@@ -130,7 +130,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('display_value', old('display_value', isset($row) ? $row->display_value : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('display_value', old('display_value', $row->display_value ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 

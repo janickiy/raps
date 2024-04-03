@@ -58,7 +58,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('name', old('name', isset($row) ? $row->name : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('name', old('name', $row->name ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -74,7 +74,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('login', old('name', isset($row) ? $row->login : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('login', old('name', $row->login ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -92,7 +92,7 @@
 
                                     <label class="select">
 
-                                        {!! Form::select('role', $options, isset($row) ? $row->role : 'admin', ['class' => 'input-sm', 'autocomplete' => 'off']) !!}
+                                        {!! Form::select('role', $options, $row->role ?? 'admin', ['class' => 'input-sm', 'autocomplete' => 'off']) !!}
                                         <i></i>
 
                                     </label>

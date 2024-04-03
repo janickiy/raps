@@ -58,7 +58,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('title', old('title', isset($row) ? $row->title : null), ['class' => 'form-control', 'id' => 'title']) !!}
+                                    {!! Form::text('title', old('title', $row->title ?? null), ['class' => 'form-control', 'id' => 'title']) !!}
 
                                 </label>
 
@@ -74,7 +74,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::textarea('text', old('text', isset($row) ? $row->text : null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 5]) !!}
+                                    {!! Form::textarea('text', old('text', $row->text ?? null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 5]) !!}
 
                                 </label>
 
@@ -118,7 +118,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('slug', old('slug', isset($row) ? $row->slug : null), ['class' => 'form-control', 'id' => 'slug']) !!}
+                                    {!! Form::text('slug', old('slug', $row->slug ?? null), ['class' => 'form-control', 'id' => 'slug']) !!}
 
                                 </label>
 
@@ -164,7 +164,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('meta_title', old('meta_title', isset($row) ? $row->meta_title : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('meta_title', old('meta_title', $row->meta_title ?? null), ['class' => 'form-control']) !!}
 
                                 </label>
 
@@ -180,7 +180,7 @@
 
                                 <label class="textarea textarea-resizable">
 
-                                    {!! Form::textarea('meta_description', old('meta_description', isset($row) ? $row->meta_description : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                    {!! Form::textarea('meta_description', old('meta_description', $row->meta_description ?? null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
                                 </label>
 
@@ -228,7 +228,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', isset($row) ? $row->seo_url_canonical : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', $row->seo_url_canonical ?? null), ['class' => 'form-control']) !!}
 
                                 </label>
 

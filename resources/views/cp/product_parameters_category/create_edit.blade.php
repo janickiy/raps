@@ -58,7 +58,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('name', old('name', isset($row) ? $row->name : ''), ['class' => 'form-control', 'autocomplete' => 'off', 'id' => 'name']) !!}
+                                    {!! Form::text('name', old('name', $row->name ?? ''), ['class' => 'form-control', 'autocomplete' => 'off', 'id' => 'name']) !!}
 
                                 </label>
 

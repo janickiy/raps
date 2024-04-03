@@ -63,7 +63,7 @@
 
                                     <label class="select">
 
-                                        {!! Form::select('category_id', $options, old('category_id', isset($row) ? $row->category_id : 0), ['placeholder' => 'Основные', 'class' => 'input-sm']) !!}
+                                        {!! Form::select('category_id', $options, old('category_id', $row->category_id ?? 0), ['placeholder' => 'Основные', 'class' => 'input-sm']) !!}
                                         <i></i>
 
                                     </label>
@@ -80,7 +80,7 @@
 
                                     <label class="input">
 
-                                        {!! Form::text('name', old('name', isset($row) ? $row->name : null), ['class' => 'form-control', 'id' => 'title']) !!}
+                                        {!! Form::text('name', old('name', $row->name ?? null), ['class' => 'form-control', 'id' => 'title']) !!}
 
                                     </label>
 
@@ -96,7 +96,7 @@
 
                                     <label class="input">
 
-                                        {!! Form::text('value', old('value', isset($row) ? $row->value : null), ['class' => 'form-control', 'id' => 'title']) !!}
+                                        {!! Form::text('value', old('value', $row->value ?? null), ['class' => 'form-control', 'id' => 'title']) !!}
 
                                     </label>
 

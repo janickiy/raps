@@ -17,7 +17,7 @@ use App\Http\Controllers\FrontendController;
 Route::get('', [FrontendController::class, 'index'])->name('frontend.index');
 Route::get('about', [FrontendController::class, 'about'])->name('frontend.catalog');
 Route::get('page/{slug}', [FrontendController::class, 'page'])->name('frontend.page');
-Route::get('catalog', [FrontendController::class, 'catalog'])->name('frontend.catalog');
+Route::get('catalog/{slug?}', [FrontendController::class, 'catalog'])->name('frontend.catalog');
 Route::get('product-listing/{slug}', [FrontendController::class, 'productListing'])->name('frontend.product_listing');
 Route::get('product/{slug}', [FrontendController::class, 'product'])->name('frontend.product');
 Route::get('services', [FrontendController::class,'servicesListing'])->name('frontend.services_listing');

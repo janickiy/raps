@@ -86,7 +86,7 @@
 
                                     <label class="input">
 
-                                        {!! Form::text('description', old('description', isset($row) ? $row->description : null), ['class' => 'form-control', 'id' => 'description']) !!}
+                                        {!! Form::text('description', old('description', $row->description ?? null), ['class' => 'form-control', 'id' => 'description']) !!}
 
                                     </label>
 

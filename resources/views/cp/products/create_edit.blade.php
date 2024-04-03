@@ -58,7 +58,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('title', old('title', isset($row) ? $row->title : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('title', old('title', $row->title ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -74,7 +74,7 @@
 
                                 <label class="select">
 
-                                    {!! Form::select('catalog_id', $options, old('catalog_id', isset($row) ? $row->catalog_id : null), ['placeholder' => 'Выберите', 'class' => 'input-sm']) !!}
+                                    {!! Form::select('catalog_id', $options, old('catalog_id', $row->catalog_id ?? null), ['placeholder' => 'Выберите', 'class' => 'input-sm']) !!}
                                     <i></i>
 
                                 </label>
@@ -92,7 +92,7 @@
 
                                 <label class="textarea textarea-resizable">
 
-                                    {!! Form::textarea('description', old('description', isset($row) ? $row->description : null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 3]) !!}
+                                    {!! Form::textarea('description', old('description', $row->description ?? null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 3]) !!}
 
                                 </label>
 
@@ -108,7 +108,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::textarea('full_description', old('full_description', isset($row) ? $row->full_description : null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 5]) !!}
+                                    {!! Form::textarea('full_description', old('full_description', $row->full_description ?? null), ['placeholder' =>'Описание','class' => 'form-control', 'rows' => 5]) !!}
 
                                 </label>
 
@@ -124,7 +124,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('slug', old('slug', isset($row) ? $row->slug : null), ['class' => 'form-control', 'id' => 'slug']) !!}
+                                    {!! Form::text('slug', old('slug', $row->slug ?? null), ['class' => 'form-control', 'id' => 'slug']) !!}
 
                                 </label>
 
@@ -140,7 +140,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('price', old('price', isset($row) ? $row->price : 0), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('price', old('price', $row->price ?? 0), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -156,7 +156,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('explosion_protection', old('explosion_protection', isset($row) ? $row->explosion_protection : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('explosion_protection', old('explosion_protection', $row->explosion_protection ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -172,7 +172,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('gases', old('gases', isset($row) ? $row->gases : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('gases', old('gases', $row->gases ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -188,7 +188,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('dust_protection', old('dust_protection', isset($row) ? $row->dust_protection : ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('dust_protection', old('dust_protection', $row->dust_protection ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -206,7 +206,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('meta_title', old('meta_title', isset($row) ? $row->meta_title : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('meta_title', old('meta_title', $row->meta_title ?? null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -222,7 +222,7 @@
 
                                 <label class="textarea textarea-resizable">
 
-                                    {!! Form::textarea('meta_description', old('meta_description', isset($row) ? $row->meta_description : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                    {!! Form::textarea('meta_description', old('meta_description', $row->meta_description ?? null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
                                 </label>
 
@@ -238,7 +238,7 @@
 
                                 <label class="textarea textarea-resizable">
 
-                                    {!! Form::textarea('meta_keywords', old('meta_keywords', isset($row) ? $row->meta_keywords : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                    {!! Form::textarea('meta_keywords', old('meta_keywords', $row->meta_keywords ?? null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
                                 </label>
 
@@ -254,7 +254,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('seo_h1', old('seo_h1', isset($row) ? $row->seo_h1 : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('seo_h1', old('seo_h1', $row->seo_h1 ?? null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -270,7 +270,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', isset($row) ? $row->seo_url_canonical : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('seo_url_canonical', old('seo_url_canonical', $row->seo_url_canonical ?? null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 
@@ -314,7 +314,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('image_title', old('image_title', isset($row) ? $row->image_title : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('image_title', old('image_title', $row->image_title ?? null), ['class' => 'form-control']) !!}
 
                                 </label>
 
@@ -330,7 +330,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('image_alt', old('image_alt', isset($row) ? $row->image_alt : null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::text('image_alt', old('image_alt', $row->image_alt ?? null), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
                                 </label>
 

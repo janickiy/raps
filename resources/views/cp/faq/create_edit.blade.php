@@ -59,7 +59,7 @@
 
                                 <label class="input">
 
-                                    {!! Form::text('question', old('question', isset($row) ? $row->question : null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('question', old('question', $row->question ?? null), ['class' => 'form-control']) !!}
 
                                 </label>
 
@@ -75,7 +75,7 @@
 
                                 <label class="textarea textarea-resizable">
 
-                                    {!! Form::textarea('answer', old('answer', isset($row) ? $row->answer : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                    {!! Form::textarea('answer', old('answer', $row->answer ?? null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
                                 </label>
 
