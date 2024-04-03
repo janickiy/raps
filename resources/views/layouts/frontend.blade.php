@@ -155,7 +155,7 @@
                         @foreach($catalogs as $row)
 
                             <li class="header__input-hint">
-                                <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@endif">
+                                <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
                                     <picture>
                                         <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
                                              alt="{{ $row->image_title ?? $row->name }}">
@@ -257,7 +257,7 @@
                     @foreach($catalogs as $row)
 
                         <li>
-                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@else{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@endif" class="header__product-menu-link">
+                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif" class="header__product-menu-link">
                                 <picture class="header__product-menu-img">
                                     <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
                                 </picture>

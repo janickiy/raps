@@ -131,6 +131,9 @@ class FrontendController
 
             if (!$catalog) abort(404);
 
+
+           // dd($catalog->hasChildren());
+
             $title = $catalog->name;
             $meta_description = $catalog->meta_description;
             $meta_keywords = $catalog->meta_keywords;
@@ -139,6 +142,7 @@ class FrontendController
             $h1 = $seo->h1 ?? $title;
 
             $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
+
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
             for ($i = 0; $i < count($arrayPathWay); $i++) {
@@ -148,6 +152,8 @@ class FrontendController
                     $pathway .= '<li><a href="' . URL::route('catalog', ['id' => $arrayPathWay[$i][0]]) . '">' . $arrayPathWay[$i][1] . '</a></li>';
                 }
             }
+        } else {
+            $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         }
 
         if ($request->session()->has('productIds')) {
