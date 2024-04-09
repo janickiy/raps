@@ -103,7 +103,7 @@
                             <use xlink:href="{{ url('/images/sprite.svg#developer-guide') }}"/>
                         </svg>
                     </span>
-                        <span class="product__main-item-text">Товар <a href="#">сертифицирован</a> и имеет проверку Узстандарт</span>
+                        <span class="product__main-item-text">Товар сертифицирован и имеет поверку Узстандарт</span>
                     </li>
                     <li class="product__main-item">
                     <span class="product__main-item-icon">
@@ -135,7 +135,7 @@
                             <use xlink:href="{{ url('/images/sprite.svg#directions-run') }}"/>
                         </svg>
                     </span>
-                        <span class="product__main-item-text">Возможен самовывоз по&nbsp;адресу Мукими 178</span>
+                        <span class="product__main-item-text">Возможен самовывоз в г. Ташкент</span>
                     </li>
                     <li class="product__main-item">
                     <span class="product__main-item-icon">
