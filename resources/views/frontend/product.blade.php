@@ -167,7 +167,8 @@
 
                     @if (Auth::check())
                         <br>
-                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton"> Редактировать</a>
+                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton">
+                            Редактировать</a>
                     @endif
 
                 </div>
@@ -193,7 +194,8 @@
                             </div>
 
                             @if (Auth::check())
-                                <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}" class="editbutton"> Редактировать</a>
+                                <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}"
+                                   class="editbutton"> Редактировать</a>
                             @endif
 
                         @endforeach
@@ -219,7 +221,8 @@
                                 </div>
 
                                 @if (Auth::check())
-                                    <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}" class="editbutton"> Редактировать</a>
+                                    <a href="{{ URL::route('cp.product_parameters.edit', ['id' => $row->id]) }}"
+                                       class="editbutton"> Редактировать</a>
                                 @endif
 
                             @endforeach
@@ -238,25 +241,32 @@
 
                     <div class="product__download-btns">
 
-                        @foreach($product->documents as $document)
+                        @if($product->documents)
 
-                            <a href="{{ url($document->getDocument()) }}" class="btn product__download-btn" download>
+                            @foreach($product->documents as $document)
+
+                                <a href="{{ url($document->getDocument()) }}" class="btn product__download-btn"
+                                   download>
                         <span class="product__download-icon">
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
-                                <span class="product__download-info">
+                                    <span class="product__download-info">
                             <span class="product__download-title">{{ $document->path }}</span>
                             <span class="product__download-desc">{{ $document->description }}</span>
                         </span>
-                            </a>
+                                </a>
 
-                            @if (Auth::check())
-                                <a href="{{ URL::route('cp.product_documents.edit', ['id' => $document->id]) }}" class="editbutton"> Редактировать</a>
-                            @endif
+                                @if (Auth::check())
+                                    <a href="{{ URL::route('cp.product_documents.edit', ['id' => $document->id]) }}"
+                                       class="editbutton"> Редактировать</a>
+                                @endif
 
-                        @endforeach
+                            @endforeach
+                        @else
+                            <p>нет документов</p>
+                        @endif
 
                     </div>
                 </div>
