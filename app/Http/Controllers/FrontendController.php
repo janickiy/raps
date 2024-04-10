@@ -204,10 +204,22 @@ class FrontendController
             $productIds = null;
         }
 
+        $pathway = '';
+        $topbar = [];
+
+        Catalog::topbarMenu($topbar, $catalog->id);
+
+        for ($i = 0; $i < count($topbar); $i++) {
+            if ($topbar[$i][0] != $catalog->id) {
+                $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
+            }
+        }
+
         return view('frontend.product_listing', compact(
                 'catalog',
                 'catalogs',
                 'productIds',
+                'pathway',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -250,6 +262,17 @@ class FrontendController
 
         $faq = Faq::all();
 
+        $pathway = '';
+        $topbar = [];
+
+        Catalog::topbarMenu($topbar, $product->catalog_id);
+
+        for ($i = 0; $i < count($topbar); $i++) {
+            if ($topbar[$i][0] != $product->catalog_id) {
+                $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
+            }
+        }
+
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
             array_push($productIds, $product->id);
@@ -265,6 +288,7 @@ class FrontendController
                 'productParametersCategory',
                 'slug',
                 'catalogs',
+                'pathway',
                 'productIds',
                 'faq',
                 'meta_description',
@@ -400,7 +424,7 @@ class FrontendController
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.about', compact(
-            'page',
+                'page',
                 'catalogs',
                 'meta_description',
                 'meta_keywords',
