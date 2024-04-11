@@ -32,13 +32,13 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('css/styles.min.css') !!}
-    {!! Html::style('css/yatranslate.css') !!}
+    {!! Html::style('/css/styles.min.css') !!}
+    {!! Html::style('/css/yatranslate.css') !!}
 
     @yield('css')
 
-    {!! Html::script('js/script.min.js') !!}
-    {!! Html::script('js/yatranslate.js') !!}
+    {!! Html::script('/js/script.min.js') !!}
+    {!! Html::script('/js/yatranslate.js') !!}
 
 </head>
 <body>
@@ -172,15 +172,14 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить
-                заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить заявку</a>
         </div>
     </div>
     <div class="header__mobile-menu" data-menu-name="mobile-menu">
         <div class="header__mobile-menu-header">
             <span class="header__mobile-menu-title">Меню</span>
             <button type="button" class="header__mobile-menu-close-btn js-close-menu">
-                Close
+                Закрыть
                 <svg aria-hidden="true">
                     <use xlink:href="{{ url('/images/sprite.svg#close') }}"/>
                 </svg>
@@ -190,8 +189,7 @@
             <nav class="header__mobile-menu-links">
                 <ul>
 
-                    <li><a href="{{ URL::route('frontend.catalog') }}"
-                           class="header__mobile-menu-link js-mobile-menu-link">Каталог</a></li>
+                    <li><a href="{{ URL::route('frontend.catalog') }}" class="header__mobile-menu-link js-mobile-menu-link">Каталог</a></li>
                     <li class="header__mobile-submenu">
                         <input id="mobile-submenu-about" name="mobile-menu" type="checkbox">
                         <label for="mobile-submenu-about">

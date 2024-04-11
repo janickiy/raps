@@ -124,6 +124,8 @@ class FrontendController
         $h1 = $seo->h1 ?? $title;
         $pathway = '';
 
+        $products = null;
+
         if ($slug) {
             $topbar = [];
 
@@ -147,6 +149,12 @@ class FrontendController
                     $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $arrayPathWay[$i][2]]) . '">' . $arrayPathWay[$i][1] . '</a></li>';
                 }
             }
+
+            $products =  Products::query()->where('catalog_id', $catalog->id);
+
+
+
+
         } else {
             $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         }
@@ -157,14 +165,18 @@ class FrontendController
             $productIds = null;
         }
 
+
+
         return view('frontend.catalog', compact(
                 'catalogs',
                 'productIds',
                 'pathway',
+                'products',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
                 'h1',
+                'slug',
                 'seo_url_canonical',
                 'menu')
         )->with('title', $title);
