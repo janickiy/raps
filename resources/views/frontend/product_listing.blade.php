@@ -10,6 +10,7 @@
 
 @section('css')
 
+    {!! Html::style('/css/pagination.css') !!}
 
 @endsection
 
@@ -29,9 +30,9 @@
         </div>
         <div class="products__list container">
 
-            @if(isset($catalog->products) && $catalog->products)
+            @if(isset($products) && $products)
 
-                @foreach($catalog->products as $product)
+                @foreach($products as $product)
 
                     <article class="product-card">
                         <picture class="product-card__img">
@@ -80,6 +81,10 @@
                     @endif
 
                 @endforeach
+
+
+                    {{ $products->links('layouts.pagination.frontend_pagination') }}
+
 
             @endif
 

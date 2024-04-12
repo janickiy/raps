@@ -152,9 +152,6 @@ class FrontendController
 
             $products =  Products::query()->where('catalog_id', $catalog->id);
 
-
-
-
         } else {
             $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         }
@@ -164,8 +161,6 @@ class FrontendController
         } else {
             $productIds = null;
         }
-
-
 
         return view('frontend.catalog', compact(
                 'catalogs',
@@ -192,6 +187,8 @@ class FrontendController
         $catalog = Catalog::where('slug', $slug)->first();
 
         if (!$catalog) abort(404);
+
+        $products = $catalog->products()->paginate(2);
 
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
@@ -231,6 +228,7 @@ class FrontendController
                 'catalog',
                 'catalogs',
                 'productIds',
+                'products',
                 'pathway',
                 'meta_description',
                 'meta_keywords',
