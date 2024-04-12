@@ -10,7 +10,7 @@
 
 @section('css')
 
-    {!! Html::style('/css/pagination.css') !!}
+{!! Html::style('/css/pagination.css') !!}
 
 @endsection
 
@@ -77,14 +77,13 @@
                     </article>
 
                     @if (Auth::check())
-                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton"> Редактировать</a>
+                        <a href="{{ URL::route('cp.products.edit', ['id' => $product->id]) }}" class="editbutton">
+                            Редактировать</a>
                     @endif
 
                 @endforeach
 
-
-                    {{ $products->links('layouts.pagination.frontend_pagination') }}
-
+                {{ $products->links('layouts.pagination.frontend_pagination') }}
 
             @endif
 
