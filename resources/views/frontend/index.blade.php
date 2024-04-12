@@ -55,7 +55,7 @@
                             </div>
                             <p class="card__desc">{{ $catalog->description }}</p>
                         </div>
-                        <a href="{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}" class="btn btn-primary card__btn">
+                        <a href="@if($catalog->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $catalog->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}@endif" class="btn btn-primary card__btn">
                             К товарам
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
