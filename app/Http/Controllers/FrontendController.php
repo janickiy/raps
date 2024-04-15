@@ -133,13 +133,6 @@ class FrontendController
 
             if (!$catalog) abort(404);
 
-            $title = $catalog->name;
-            $meta_description = $catalog->meta_description;
-            $meta_keywords = $catalog->meta_keywords;
-            $meta_title = $catalog->meta_title;
-            $seo_url_canonical = $catalog->seo_url_canonical;
-            $h1 = $seo->h1 ?? $title;
-
             $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
 
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
@@ -151,6 +144,13 @@ class FrontendController
             }
 
             $products =  Products::query()->where('catalog_id', $catalog->id);
+
+            $title = $catalog->name;
+            $meta_description = $catalog->meta_description;
+            $meta_keywords = $catalog->meta_keywords;
+            $meta_title = $catalog->meta_title;
+            $seo_url_canonical = $catalog->seo_url_canonical;
+            $h1 = $seo->h1 ?? $title;
 
         } else {
             $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();

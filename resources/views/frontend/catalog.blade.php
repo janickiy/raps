@@ -26,7 +26,8 @@
 
     <section class="catalog container">
         <div class="main-title">
-            <h1>{{ $h1 }}</h1>
+            <h1>{{ $title }}</h1>
+            <span class="main-title__count">{{ $products->count() }}</span>
         </div>
         <div class="sr-only">
             <h2>Категории товаров</h2>
@@ -71,10 +72,7 @@
     @if($slug)
 
         <section class="products">
-            <div class="main-title container">
-                <h1>{{ $title }}</h1>
-                <span class="main-title__count">{{ $products->count() }}</span>
-            </div>
+
             <div class="products__list container">
 
                 @foreach($products->get() as $product)
