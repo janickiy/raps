@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.services.update') : URL::route('cp.services.store'), 'method' => isset($row) ? 'put' : 'post', 'files' => true,'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? URL::route('cp.services.update') : URL::route('cp.services.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -194,66 +194,6 @@
 
                                 @if ($errors->has('seo_url_canonical'))
                                     <p class="text-danger">{{ $errors->first('seo_url_canonical') }}</p>
-                                @endif
-
-                            </section>
-
-                            <section>
-
-                                {!! Form::label('image', 'Фото (jpg,gif,png)', ['class' => 'label']) !!}
-
-                                <div class="input input-file">
-                                    <span class="button">
-
-                                        {!! Form::file('image',  ['id' => 'image', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
-
-                                    </span><input type="text" placeholder="выберите файл" readonly="">
-
-                                    <br>
-                                    @if (isset($row) && !empty($row->thumbnail))
-                                        <img src='{{ url($row->getThumbnailUrl()) }}' width="150">
-                                    @endif
-
-                                </div>
-
-                                @if ($errors->has('image'))
-                                    <span class="text-danger">{{ $errors->first('image') }}</span>
-                                @endif
-
-                                <div class="note">
-                                    Максимальный размер: <strong>{{ $maxUploadFileSize }}</strong>
-                                </div>
-
-                            </section>
-
-                            <section>
-
-                                {!! Form::label('image_title', 'Image Title', ['class' => 'label']) !!}
-
-                                <label class="input">
-
-                                    {!! Form::text('image_title', old('image_title', $row->image_title ?? null), ['class' => 'form-control']) !!}
-
-                                </label>
-
-                                @if ($errors->has('image_title'))
-                                    <p class="text-danger">{{ $errors->first('image_title') }}</p>
-                                @endif
-
-                            </section>
-
-                            <section>
-
-                                {!! Form::label('image_alt', 'Image Alt', ['class' => 'label']) !!}
-
-                                <label class="input">
-
-                                    {!! Form::text('image_alt', old('image_alt', $row->image_alt ?? null), ['class' => 'form-control']) !!}
-
-                                </label>
-
-                                @if ($errors->has('image_alt'))
-                                    <p class="text-danger">{{ $errors->first('image_alt') }}</p>
                                 @endif
 
                             </section>

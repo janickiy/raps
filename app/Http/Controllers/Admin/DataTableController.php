@@ -58,10 +58,7 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
-            ->editColumn('image', function ($row) {
-                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
-            })
-            ->rawColumns(['actions', 'image'])->make(true);
+            ->rawColumns(['actions'])->make(true);
     }
 
 

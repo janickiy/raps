@@ -31,8 +31,8 @@ class PagesController extends Controller
     {
         $options = [];
 
-        foreach (Pages::orderBy('id')->published()->get() as $row) {
-            $options[$row->id] = $row->title;
+        foreach (Pages::orderBy('id')->published()->get() as $page) {
+            $options[$page->id] = $page->title;
         }
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
@@ -89,8 +89,8 @@ class PagesController extends Controller
 
         $options = [];
 
-        foreach (Pages::orderBy('id')->published()->get() as $row) {
-            $options[$row->id] = $row->title;
+        foreach (Pages::orderBy('id')->published()->get() as $page) {
+            $options[$page->id] = $page->title;
         }
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
@@ -182,6 +182,6 @@ class PagesController extends Controller
      */
     public function destroy(Request $request): void
     {
-        Pages:find($request->id)->remove();
+        Pages::find($request->id)->remove();
     }
 }

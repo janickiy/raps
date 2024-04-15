@@ -22,16 +22,22 @@
     </ul>
 
     <section class="service container">
+        <div class="main-title">
+            <h1>{{ $title }}</h1>
+        </div>
 
-        {!! $service->full_description !!}
+        <div class="content_text">
 
-        @if (Auth::check())
-            <a href="{{ URL::route('cp.services.edit', ['id' => $service->id]) }}" class="editbutton"> Редактировать</a>
-        @endif
+            {!! $service->full_description !!}
 
-        <p class="service__questions">Остались вопросы? <a href="{{ URL::route('frontend.contact') }}">Свяжитесь с
-                нами</a> любым удобным способом</p>
+            @if (Auth::check())
+                <a href="{{ URL::route('cp.services.edit', ['id' => $service->id]) }}" class="editbutton">
+                    Редактировать</a>
+            @endif
 
+            <p class="service__questions">Остались вопросы? <a href="{{ URL::route('frontend.contact') }}">Свяжитесь с
+                    нами</a> любым удобным способом</p>
+        </div>
     </section>
 
     @if($productIds)
