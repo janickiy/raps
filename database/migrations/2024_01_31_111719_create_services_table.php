@@ -17,6 +17,7 @@ class CreateServicesTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('image')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('meta_keywords')->nullable();
@@ -24,6 +25,8 @@ class CreateServicesTable extends Migration
             $table->string('seo_url_canonical')->nullable();
             $table->string('seo_h1')->nullable();
             $table->mediumText('full_description');
+            $table->string('image_title')->nullable();
+            $table->string('image_alt')->nullable();
             $table->timestamps();
         });
     }

@@ -40,7 +40,30 @@ class ServicesController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        Services::create($request->all());
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = time();
+            $originName = $filename . '.' . $extension;
+
+            if ($request->file('image')->move('uploads/services', $originName)) {
+
+                $img = Image::make(Storage::disk('public')->path('services/' . $originName));
+                $img->resize(null, 700, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                $img->save(Storage::disk('public')->path('services/' . '2x_' . $filename . '.' . $extension));
+                $small_img = Image::make(Storage::disk('public')->path('services/' . $originName));
+                $small_img->resize(null, 350, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $small_img->save(Storage::disk('public')->path('services/' . $originName));
+            }
+        }
+
+        Services::create(array_merge(array_merge($request->all()), [
+            'image' => $originName ?? null,
+        ]));
 
         return redirect(URL::route('cp.services.index'))->with('success', 'Информация успешно добавлена');
     }
@@ -81,6 +104,45 @@ class ServicesController extends Controller
         $row->seo_h1 = $request->input('seo_h1');
         $row->seo_url_canonical = $request->input('seo_url_canonical');
 
+        if ($request->hasFile('image')) {
+
+            $image = $request->pic;
+
+            if ($image != null) {
+                if (Storage::disk('public')->exists('services/' . $row->image) === true) Storage::disk('public')->delete('services/' . $row->image);
+                if (Storage::disk('public')->exists('services/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('services/' . '2x_' . $row->image);
+            }
+
+            if ($request->hasFile('image')) {
+
+                if (Storage::disk('public')->exists('services/' . $row->image) === true) Storage::disk('public')->delete('services/' . $row->image);
+                if (Storage::disk('public')->exists('services/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('services/' . '2x_' . $row->image);
+
+                $extension = $request->file('image')->getClientOriginalExtension();
+                $filename = time();
+                $originName = $filename . '.' . $extension;
+
+                if ($request->file('image')->move('uploads/services', $originName)) {
+                    $img = Image::make(Storage::disk('public')->path('services/' . $originName));
+                    $img->resize(null, 700, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $img->save(Storage::disk('public')->path('services/' . '2x_' . $filename . '.' . $extension));
+
+                    $small_img = Image::make(Storage::disk('public')->path('services/' . $originName));
+
+                    $small_img->resize(null, 350, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+
+                    if ($small_img->save(Storage::disk('public')->path('services/' . $originName))) $row->image = $originName;
+                }
+            }
+        }
+
+        $row->image_title = $request->input('image_title');
+        $row->image_alt = $request->input('image_alt');
+
         $published = 0;
 
         if ($request->input('published')) {
@@ -100,6 +162,6 @@ class ServicesController extends Controller
      */
     public function destroy(Request $request): Void
     {
-        Services::find($request->id)->delete();
+        Services::find($request->id)->remove();
     }
 }

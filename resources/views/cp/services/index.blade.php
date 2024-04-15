@@ -36,6 +36,7 @@
                             <thead>
                             <tr>
                                 <th>Название</th>
+                                <th>Фото</th>
                                 <th>Описание</th>
                                 <th>slug</th>
                                 <th>Опубликован</th>
@@ -123,6 +124,7 @@
                 },
                 columns: [
                     {data: 'title', name: 'title'},
+                    {data: 'image', name: 'image', searchable: false},
                     {data: 'description', name: 'description', searchable: false},
                     {data: 'slug', name: 'slug'},
                     {data: 'published', name: 'published'},

@@ -26,6 +26,7 @@ class EditRequest extends FormRequest
             'description' => 'required',
             'full_description' => 'required',
             'slug' => 'required|unique:services,slug,' . $this->id,
+            'image' => 'image|mimes:jpeg,jpg,png|max:2048|nullable',
         ];
     }
 }
