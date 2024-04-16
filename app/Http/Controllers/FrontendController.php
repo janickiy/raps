@@ -188,7 +188,7 @@ class FrontendController
 
         if (!$catalog) abort(404);
 
-        $products = $catalog->products()->paginate(2);
+        $products = $catalog->products()->paginate(15);
 
         $menu_services = Menus::where('name', 'services')->with('items')->first();
         $menu_about = Menus::where('name', 'about')->with('items')->first();
