@@ -27,7 +27,6 @@
     <section class="catalog container">
         <div class="main-title">
             <h1>{{ $title }}</h1>
-            <span class="main-title__count">{{ $products->count() }}</span>
         </div>
         <div class="sr-only">
             <h2>Категории товаров</h2>
