@@ -101,27 +101,24 @@
                     <li><a href="{{ URL::route('frontend.contact') }}" class="header__nav-item">Контакты</a></li>
                 </ul>
             </nav>
-
-            <div class="lang dropdown header__lang">
-                <div class="lang__dropdown dropdown__main">
-                    <div class="lang lang_fixed">
-                        <div id="ytWidget" style="display: none;"></div>
-                        <div class="lang__link lang__link_select" data-lang-active="">
-                            <img class="lang__img lang__img_select" src="{{ url('/images/lang/lang__ru.png') }}"
-                                 alt="Ru">
-                        </div>
-                        <div class="lang__list" data-lang-list="">
-                            <a class="lang__link lang__link_sub" data-ya-lang="ru">
-                                <img class="lang__img" src="{{ url('/images/lang/lang__ru.png') }}" alt="ru">
-                            </a>
-                            <a class="lang__link lang__link_sub" data-ya-lang="en">
-                                <img class="lang__img" src="{{ url('/images/lang/lang__en.png') }}" alt="en">
-                            </a>
-                            <a class="lang__link lang__link_sub" data-ya-lang="uz">
-                                <img class="lang__img" src="{{ url('/images/lang/lang__uz.png') }}" alt="uz">
-                            </a>
-                        </div>
-                    </div>
+            <div class="header__menu-language">
+                <div id="ytWidget" style="display: none;"></div>
+                <button type="button" class="header__menu-language-btn js-language-btn" data-menu-trigger="language-menu" data-lang-active="">RU</button>
+                <div class="header__menu-language-wrap" data-menu-name="language-menu">
+                    <ul>
+                        <li>
+                            <input type="radio" id="language-ru" class="js-language-menu-item" value="RU" data-ya-lang="ru" name="language" checked>
+                            <label for="language-ru" class="js-close-menu">RU</label>
+                        </li>
+                        <li>
+                            <input type="radio" id="language-en" class="js-language-menu-item" value="EN" data-ya-lang="en" name="language">
+                            <label for="language-en" class="js-close-menu">EN</label>
+                        </li>
+                        <li>
+                            <input type="radio" id="language-uz" class="js-language-menu-item" value="UZ" data-ya-lang="uz" name="language">
+                            <label for="language-uz" class="js-close-menu">UZ</label>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
