@@ -4,7 +4,7 @@
  * author: Vitalii P.
  *****************************************************/
 
-const yatranslate = {
+const translate = {
     /* Original language */
     lang: "ru",
     /* The language we translate into on the first visit */
@@ -19,16 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function yaTranslateInit() {
 
-    if (yatranslate.langFirstVisit && !localStorage.getItem('yt-widget')) {
+    if (translate.langFirstVisit && !localStorage.getItem('yt-widget')) {
         /* Если установлен язык перевода для первого посещения и в localStorage нет yt-widget */
         /* If the translation language is installed for the first visit and in localStorage no yt-widget */
-        yaTranslateSetLang(yatranslate.langFirstVisit);
+        yaTranslateSetLang(translate.langFirstVisit);
     }
 
     // Подключаем виджет yandex translate
     // Connecting the yandex translate widget
     let script = document.createElement('script');
-    script.src = `https://translate.yandex.net/website-widget/v1/widget.js?widgetId=ytWidget&pageLang=${yatranslate.lang}&widgetTheme=light&autoMode=false`;
+    script.src = `https://translate.yandex.net/website-widget/v1/widget.js?widgetId=ytWidget&pageLang=${translate.lang}&widgetTheme=light&autoMode=false`;
     document.getElementsByTagName('head')[0].appendChild(script);
 
     // Получаем и записываем язык на который переводим
@@ -61,7 +61,7 @@ function yaTranslateSetLang(lang) {
 function yaTranslateGetCode() {
     // Возвращаем язык на который переводим
     // Returning the language to which we are translating
-    return (localStorage["yt-widget"] != undefined && JSON.parse(localStorage["yt-widget"]).lang != undefined) ? JSON.parse(localStorage["yt-widget"]).lang : yatranslate.lang;
+    return (localStorage["yt-widget"] != undefined && JSON.parse(localStorage["yt-widget"]).lang != undefined) ? JSON.parse(localStorage["yt-widget"]).lang : translate.lang;
 }
 
 function yaTranslateHtmlHandler(code) {

@@ -32,13 +32,13 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('/css/styles.min.css') !!}
-    {!! Html::style('/css/yatranslate.css') !!}
+    {!! Html::style('/css/styles.min.css?v=1') !!}
+    {!! Html::style('/css/translate.css?v=1') !!}
 
     @yield('css')
 
-    {!! Html::script('/js/script.min.js') !!}
-    {!! Html::script('/js/yatranslate.js') !!}
+    {!! Html::script('/js/script.min.js?v=1') !!}
+    {!! Html::script('/js/translate.js?v=1') !!}
 
 </head>
 <body>
