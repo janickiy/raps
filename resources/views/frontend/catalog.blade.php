@@ -24,69 +24,54 @@
         <li><span>{{ $title }}</span></li>
     </ul>
 
-    <section class="catalog container">
-        <div class="main-title">
-            <h1>{{ $title }}</h1>
-        </div>
-        <div class="sr-only">
-            <h2>Категории товаров</h2>
-        </div>
-        <div class="catalog__cards">
-
-            @foreach($catalogs as $catalog)
-
-                <article class="card">
-                    <picture class="card__img ">
-                        <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }} 2x"
-                             alt="{{ $catalog->image_alt }}"
-                             title="{{ $catalog->image_title ?? $catalog->name }}"
-                             loading="lazy">
-                    </picture>
-                    <div class="card__info">
-                        <div>
-                            <div>
-                                <h3>{{ $catalog->name }}</h3>
-                                <span class="card__count">{{ $catalog->getProductCount() }}</span>
-                            </div>
-                            <p class="card__desc">{{ $catalog->description }}</p>
-                        </div>
-
-                        <a href="@if($catalog->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $catalog->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $catalog->slug]) }}@endif"
-                           class="btn btn-primary card__btn">
-                            К товарам
-                            <svg aria-hidden="true">
-                                <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
-                            </svg>
-                        </a>
-
-                    </div>
-
-                </article>
-
-            @endforeach
-
-        </div>
-    </section>
-
     @if($slug)
 
         <section class="products">
+            <div class="main-title container">
+                <h1>{{ $title }}</h1>
+                @if($catalog)
+                    <span class="main-title__count">{{ $catalog->getProductCount() }}</span>
+                @endif
+            </div>
+
+            <ul class="products__badges container">
+
+                @foreach($catalogs as $row)
+
+                    <li class="products__badges-item">
+                        <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
+                            <button>{{ $row->name }}<span>{{ $row->getProductCount() }}</span></button>
+                        </a>
+
+                        @if (Auth::check())
+                            <a href="{{ URL::route('cp.catalog.edit', ['id' => $row->id]) }}" class="editbutton">
+                                Редактировать</a>
+                        @endif
+
+                    </li>
+
+                @endforeach
+
+            </ul>
 
             <div class="products__list container">
 
-                @foreach($products->get() as $product)
+                @if($catalog->getProductCount() === 0)<p>нет товаров</p>@endif
+
+                @foreach($products as $product)
 
                     <article class="product-card">
+
                         <picture class="product-card__img">
                             <img src="{{ url($product->getThumbnailUrl()) }}"
                                  srcset="{{ url($product->getOriginUrl()) }} 2x" alt="{{ $product->image_alt }}"
                                  title="{{ $product->title }}" loading="lazy">
                         </picture>
+
                         <div class="product-card__info">
                             <div>
                                 <h2>{{ $product->title }}</h2>
                                 <p class="product-card__desc">{{ $product->description }}</p>
-
                                 <dl class="product-card__points">
                                     <div class="product-card__points-item">
                                         <dt>Взрывозащита:</dt>
@@ -114,7 +99,6 @@
                                     </svg>
                                 </a>
                             </div>
-
                         </div>
                     </article>
 
@@ -125,48 +109,42 @@
 
                 @endforeach
 
+                {{ $products->links('layouts.pagination.frontend_pagination') }}
+
+
+
             </div>
         </section>
-
-    @endif
-
-    @if($productIds)
-
-        <section class="watched">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Вы смотрели</h2>
-                </div>
+    @else
+        <section class="catalog container">
+            <div class="main-title">
+                <h1>{{ $title }}</h1>
             </div>
-            <div class="watched__cards container">
+            <div class="sr-only">
+                <h2>Категории товаров</h2>
+            </div>
+            <div class="catalog__cards">
 
-                @foreach(\App\Models\Products::productsListByIds($productIds) as $product)
+                @foreach($catalogs as $row)
 
                     <article class="card">
                         <picture class="card__img ">
-                            <img
-                                src="{{ url($product->getThumbnailUrl()) }}"
-                                srcset="{{ url($product->getOriginUrl()) }} 2x"
-                                alt="{{ $product->image_alt }}"
-                                title="{{ $product->image_title ?? $product->title }}"
-                                loading="lazy">
+                            <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}" alt="{{ $row->image_alt }}" title="{{ $row->image_title ?? $row->name }}" loading="lazy">
                         </picture>
                         <div class="card__info">
                             <div>
                                 <div>
-                                    <h3>{{ $product->title }}</h3>
+                                    <h3>{{ $row->name }}</h3>
+                                    <span class="card__count">{{ $row->getProductCount() }}</span>
                                 </div>
-                                <p class="card__desc">{{ $product->description }}</p>
+                                <p class="card__desc">{{ $row->description }}</p>
                             </div>
-
-                            <a href="{{ URL::route('frontend.product',['slug' => $product->slug]) }}"
-                               class="btn btn-primary card__btn">
-                                от {{ $product->price }} сўм
+                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif" class="btn btn-primary card__btn">
+                                К товарам
                                 <svg aria-hidden="true">
                                     <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
                                 </svg>
                             </a>
-
                         </div>
                     </article>
 
@@ -174,6 +152,11 @@
 
             </div>
         </section>
+    @endif
+
+    @if($productIds)
+
+        @include('frontend._watched_cards')
 
     @endif
 

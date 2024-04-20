@@ -133,7 +133,7 @@ class FrontendController
 
             if (!$catalog) abort(404);
 
-            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
+            $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
@@ -143,7 +143,7 @@ class FrontendController
                 }
             }
 
-            $products =  Products::query()->where('catalog_id', $catalog->id);
+            $products =  Products::query()->where('catalog_id', $catalog->id)->paginate(15);
 
             $title = $catalog->name;
             $meta_description = $catalog->meta_description;
@@ -154,6 +154,7 @@ class FrontendController
 
         } else {
             $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+            $catalog = null;
         }
 
         if ($request->session()->has('productIds')) {
@@ -172,6 +173,7 @@ class FrontendController
                 'meta_title',
                 'h1',
                 'slug',
+                'catalog',
                 'seo_url_canonical',
                 'menu')
         )->with('title', $title);
