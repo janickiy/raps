@@ -38,7 +38,7 @@
 
                 @foreach($catalogs as $row)
 
-                    <li class="products__badges-item">
+                    <li class="products__badges-item" style="margin-top: 1.6rem">
                         <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
                             <button>{{ $row->name }}<span>{{ $row->getProductCount() }}</span></button>
                         </a>

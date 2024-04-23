@@ -133,7 +133,7 @@ class FrontendController
 
             if (!$catalog) abort(404);
 
-            $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
 
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
