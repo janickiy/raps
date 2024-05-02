@@ -32,6 +32,9 @@
                 @if($catalog)
                     <span class="main-title__count">{{ $catalog->getProductCount() }}</span>
                 @endif
+
+                @if(!empty($catalog->description))<p style="margin-top: 1.6rem">{{ $catalog->description }}</p>@endif
+
             </div>
 
             <ul class="products__badges container">
@@ -53,6 +56,7 @@
                 @endforeach
 
             </ul>
+
 
             <div class="products__list container">
 
