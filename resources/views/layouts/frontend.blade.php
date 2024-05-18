@@ -32,7 +32,7 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('/css/styles.min.css?v=1') !!}
+    {!! Html::style('/css/styles.min.css?v=19') !!}
     {!! Html::style('/css/translate.css?v=1') !!}
 
     @yield('css')
@@ -42,6 +42,7 @@
 
 </head>
 <body>
+
 <header class="header">
     <div class="header__top">
         <div class="container">
@@ -51,7 +52,8 @@
                     <use xlink:href="{{ url('/images/sprite.svg#menu') }}"/>
                 </svg>
             </button>
-            <a href="./" class="header__logo-short" aria-label="Перейти на главную страницу">
+            <a href="{{ URL::route('frontend.index') }}" class="header__logo-short"
+               aria-label="Перейти на главную страницу">
                 <svg aria-hidden="true">
                     <use xlink:href="{{ url('/images/sprite.svg#color-logo-short') }}"/>
                 </svg>
@@ -103,19 +105,24 @@
             </nav>
             <div class="header__menu-language">
                 <div id="ytWidget" style="display: none;"></div>
-                <button type="button" class="header__menu-language-btn js-language-btn" data-menu-trigger="language-menu" data-lang-active="">RU</button>
+                <button type="button" class="header__menu-language-btn js-language-btn"
+                        data-menu-trigger="language-menu" data-lang-active="">RU
+                </button>
                 <div class="header__menu-language-wrap" data-menu-name="language-menu">
                     <ul>
                         <li>
-                            <input type="radio" id="language-ru" class="js-language-menu-item" value="RU" data-ya-lang="ru" name="language" checked>
+                            <input type="radio" id="language-ru" class="js-language-menu-item" value="RU"
+                                   data-ya-lang="ru" name="language" checked>
                             <label for="language-ru" class="js-close-menu">RU</label>
                         </li>
                         <li>
-                            <input type="radio" id="language-en" class="js-language-menu-item" value="EN" data-ya-lang="en" name="language">
+                            <input type="radio" id="language-en" class="js-language-menu-item" value="EN"
+                                   data-ya-lang="en" name="language">
                             <label for="language-en" class="js-close-menu">EN</label>
                         </li>
                         <li>
-                            <input type="radio" id="language-uz" class="js-language-menu-item" value="UZ" data-ya-lang="uz" name="language">
+                            <input type="radio" id="language-uz" class="js-language-menu-item" value="UZ"
+                                   data-ya-lang="uz" name="language">
                             <label for="language-uz" class="js-close-menu">UZ</label>
                         </li>
                     </ul>
@@ -157,10 +164,10 @@
                                         <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
                                              alt="{{ $row->image_title ?? $row->name }}">
                                     </picture>
+
                                     <span class="header__input-hint-info">
                                     <span class="header__input-hint-category">{{ $row->name }}</span>
                                     <span class="header__input-hint-title">{{ $row->description }}</span>
-                                </span>
                                 </a>
                             </li>
 
@@ -185,8 +192,87 @@
         <div class="header__mobile-menu-body">
             <nav class="header__mobile-menu-links">
                 <ul>
+                    <li class="header__mobile-submenu">
+                        <input id="mobile-submenu-catalog" name="mobile-menu" type="checkbox">
+                        <label for="mobile-submenu-catalog">
+                            Каталог
+                            <svg aria-hidden="true">
+                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
+                            </svg>
+                        </label>
+                        <div class="header__mobile-submenu-body">
+                            <ul class="header__mobile-submenu-list">
 
-                    <li><a href="{{ URL::route('frontend.catalog') }}" class="header__mobile-menu-link js-mobile-menu-link">Каталог</a></li>
+                                <li class="header__mobile-submenu-item">
+                                    <input id="mobile-submenu-category-1" name="mobile-menu" type="checkbox">
+                                    <label for="mobile-submenu-category-1">
+                                        Контроль загазованности рабочей среды
+                                        <svg aria-hidden="true">
+                                            <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
+                                        </svg>
+                                    </label>
+                                    <div class="header__mobile-submenu-body">
+                                        <ul class="header__mobile-submenu-list">
+                                            <li>
+                                                <a class="header__mobile-submenu-sublink _all-link"
+                                                   href="./product-listing.html">Смотреть всё<span>10</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+
+                                <li class="header__mobile-submenu-item">
+                                    <input id="mobile-submenu-category-2" name="mobile-menu" type="checkbox">
+                                    <label for="mobile-submenu-category-2">
+                                        Оборудование для контроля промышленных выбросов
+                                        <svg aria-hidden="true">
+                                            <use xlink:href="./images/sprite.svg#chevron-down"/>
+                                        </svg>
+                                    </label>
+                                    <div class="header__mobile-submenu-body">
+                                        <ul class="header__mobile-submenu-list">
+                                            <li><a class="header__mobile-submenu-sublink _all-link"
+                                                   href="./product-listing.html">Смотреть всё<span>10</span></a></li>
+                                            <li><a class="header__mobile-submenu-sublink" href="./product-listing.html">Анализаторы
+                                                    Protea<span>6</span></a></li>
+                                            <ul class="ml-16">
+                                                <li><a class="header__mobile-submenu-sublink"
+                                                       href="./product-listing.html">Анализаторы
+                                                        In-Situ<span>2</span></a></li>
+                                                <li><a class="header__mobile-submenu-sublink"
+                                                       href="./product-listing.html">Экстративные
+                                                        анализаторы<span>1</span></a></li>
+                                                <li><a class="header__mobile-submenu-sublink"
+                                                       href="./product-listing.html">Промышленный масс-спектрометр
+                                                        Ptotea<span>1</span></a></li>
+                                            </ul>
+                                        </ul>
+                                    </div>
+                                </li>
+
+
+                                <li class="header__mobile-submenu-item">
+                                    <input id="mobile-submenu-category-3" name="mobile-menu" type="checkbox">
+                                    <label for="mobile-submenu-category-3">
+                                        Контроль концентрации газов в технологических процессах
+                                        <svg aria-hidden="true">
+                                            <use xlink:href="./images/sprite.svg#chevron-down"/>
+                                        </svg>
+                                    </label>
+                                    <div class="header__mobile-submenu-body">
+                                        <ul class="header__mobile-submenu-list">
+                                            <li><a class="header__mobile-submenu-sublink _all-link"
+                                                   href="./product-listing.html">Смотреть всё<span>10</span></a></li>
+                                            <li><a class="header__mobile-submenu-sublink" href="./product-listing.html">Анализаторы
+                                                    SIGAS<span>6</span></a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
                     <li class="header__mobile-submenu">
                         <input id="mobile-submenu-about" name="mobile-menu" type="checkbox">
                         <label for="mobile-submenu-about">
@@ -200,20 +286,16 @@
                             @if(isset($menu['about']) and $menu['about'])
 
                                 <ul class="header__mobile-submenu-list">
-
                                     @foreach($menu['about'] as $item)
-                                        <li>
-                                            <a href="{{ $item['link'] }}" class="js-mobile-menu-link">{{ $item['label'] }}</a>
-                                        </li>
+                                        <li><a href="{{ $item['link'] }}"
+                                               class="js-mobile-menu-link">{{ $item['label'] }}</a></li>
                                     @endforeach
-
                                 </ul>
 
                             @endif
 
                         </div>
                     </li>
-
                     <li class="header__mobile-submenu">
                         <input id="mobile-submenu-services" name="mobile-menu" type="checkbox">
                         <label for="mobile-submenu-services">
@@ -226,19 +308,19 @@
 
                             @if(isset($menu['services']) and $menu['services'])
 
-                                <ul class="header__mobile-submenu-list">
-                                    @foreach($menu['services'] as $item)
-                                        <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
-                                    @endforeach
-                                </ul>
+                            <ul class="header__mobile-submenu-list">
+
+                                @foreach($menu['services'] as $item)
+                                    <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
+                                @endforeach
+
+                            </ul>
 
                             @endif
 
                         </div>
                     </li>
-                    <li>
-                        <a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a>
-                    </li>
+                    <li><a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
                 </ul>
             </nav>
             <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить заявку</a>
@@ -247,21 +329,56 @@
     <div class="header__product-menu" data-menu-name="product-menu">
         <div class="header__product-menu-wrap">
             <div class="container">
-                <ul class="header__product-menu-item">
+                <ul class="header__product-menu-items">
 
                     @foreach($catalogs as $row)
 
-                        <li>
-                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif" class="header__product-menu-link">
-                                <picture class="header__product-menu-img">
-                                    <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
-                                </picture>
-                                <span class="header__product-menu-title">{{ $row->name }}</span>
-                                <svg aria-hidden="true">
-                                    <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
-                                </svg>
-                            </a>
-                        </li>
+                    <li class="header__product-menu-item">
+
+                        <button class="header__product-menu-btn">
+                            <picture class="header__product-menu-img">
+                                <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
+                            </picture>
+                            <span class="header__product-menu-title">{{ $row->name }}</span>
+                            <svg aria-hidden="true">
+                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
+                            </svg>
+                        </button>
+
+                        <div class="header__product-menu-submenu">
+                            <ul class="header__product-menu-submenu-wrap">
+
+
+                                <li class="header__product-menu-submenu-item">
+                                    <a class="header__product-menu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть
+                                        всё<span>10</span></a>
+                                </li>
+
+                                <li class="header__product-menu-submenu-item">
+                                    <a class="header__product-menu-sublink" href="./product-listing.html">Анализаторы
+                                        Protea<span>6</span></a>
+                                </li>
+
+                                <li class="header__product-menu-submenu-item">
+                                    <ul class="header__product-menu-submenu-item ml-16">
+                                        <li class="header__product-menu-submenu-item">
+                                            <a class="header__product-menu-sublink" href="./product-listing.html">Анализаторы
+                                                In-Situ<span>2</span></a>
+                                        </li>
+                                        <li class="header__product-menu-submenu-item">
+                                            <a class="header__product-menu-sublink" href="./product-listing.html">Экстративные
+                                                анализаторы<span>1</span></a>
+                                        </li>
+                                        <li class="header__product-menu-submenu-item">
+                                            <a class="header__product-menu-sublink" href="./product-listing.html">Промышленный
+                                                масс-спектрометр Ptotea<span>1</span></a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
 
                     @endforeach
 
@@ -325,16 +442,17 @@
             <span class="footer__bottom-copyright">© 2015-{{ date("Y") }} RAPS</span>
             <ul class="footer__bottom-links">
                 <li>
-                    <a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия использования</a>
+                    <a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия
+                        использования</a>
                 </li>
                 <li>
-                    <a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика конфиденциальности</a>
+                    <a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика
+                        конфиденциальности</a>
                 </li>
             </ul>
         </div>
     </div>
 </footer>
-
 
 <div aria-label="Опросный лист для заказа" role="dialog" aria-modal="true" data-name="requestModal"
      class="js-modal request-modal">
