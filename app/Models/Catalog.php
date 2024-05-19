@@ -118,7 +118,7 @@ class Catalog extends Model
      */
     public function getTotalProductCount(): int
     {
-        $allChildren = [];
+        $allChildren = [$this->id];
         $catalogs = Catalog::query()->orderBy('name')->get();
 
         self::getAllChildren($catalogs, $allChildren, $this->id);
@@ -258,6 +258,29 @@ class Catalog extends Model
             foreach ($catalogs[$parent_id] as $catalog) {
                 $cl .= '<li class="header__product-menu-submenu-item">';
                 $cl .= '<a class="header__product-menu-sublink" href="' . URL::route('frontend.product_listing', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= self::categoryTree($catalogs, $catalog['id']);
+                $cl .= '</li>';
+            }
+            $cl .= '</ul>';
+        }
+
+        return $cl;
+    }
+
+    /**
+     * @param array $catalogs
+     * @param int $parent_id
+     * @return string
+     */
+    public static function categoryMobileTree(array $catalogs, int $parent_id): string
+    {
+        $cl = '';
+
+        if (isset($catalogs[$parent_id])) {
+            $cl .= '<ul class="ml-16">';
+            foreach ($catalogs[$parent_id] as $catalog) {
+                $cl .= '<li>';
+                $cl .= '<a class="header__mobile-submenu-sublink" href="' . URL::route('frontend.product_listing', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
                 $cl .= self::categoryTree($catalogs, $catalog['id']);
                 $cl .= '</li>';
             }

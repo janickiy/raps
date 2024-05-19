@@ -161,7 +161,8 @@
                             <li class="header__input-hint">
                                 <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
                                     <picture>
-                                        <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x"
+                                        <img src="{{ url($row->getImage()) }}"
+                                             srcset="{{ url($row->getImage('2x_')) }} 2x"
                                              alt="{{ $row->image_title ?? $row->name }}">
                                     </picture>
 
@@ -176,7 +177,8 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить
+                заявку</a>
         </div>
     </div>
     <div class="header__mobile-menu" data-menu-name="mobile-menu">
@@ -203,72 +205,32 @@
                         <div class="header__mobile-submenu-body">
                             <ul class="header__mobile-submenu-list">
 
-                                <li class="header__mobile-submenu-item">
-                                    <input id="mobile-submenu-category-1" name="mobile-menu" type="checkbox">
-                                    <label for="mobile-submenu-category-1">
-                                        Контроль загазованности рабочей среды
-                                        <svg aria-hidden="true">
-                                            <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
-                                        </svg>
-                                    </label>
-                                    <div class="header__mobile-submenu-body">
-                                        <ul class="header__mobile-submenu-list">
-                                            <li>
-                                                <a class="header__mobile-submenu-sublink _all-link"
-                                                   href="./product-listing.html">Смотреть всё<span>10</span></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
+                                @foreach($catalogs as $row)
+                                    @if($row->parent_id == 0)
 
+                                        <li class="header__mobile-submenu-item">
+                                            <input id="mobile-submenu-category-1" name="mobile-menu" type="checkbox">
+                                            <label for="mobile-submenu-category-1">
+                                                {{ $row->name }}
+                                                <svg aria-hidden="true">
+                                                    <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
+                                                </svg>
+                                            </label>
+                                            <div class="header__mobile-submenu-body">
+                                                <ul class="header__mobile-submenu-list">
+                                                    <li>
+                                                        <a class="header__mobile-submenu-sublink _all-link"
+                                                           href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
+                                                    </li>
 
-                                <li class="header__mobile-submenu-item">
-                                    <input id="mobile-submenu-category-2" name="mobile-menu" type="checkbox">
-                                    <label for="mobile-submenu-category-2">
-                                        Оборудование для контроля промышленных выбросов
-                                        <svg aria-hidden="true">
-                                            <use xlink:href="./images/sprite.svg#chevron-down"/>
-                                        </svg>
-                                    </label>
-                                    <div class="header__mobile-submenu-body">
-                                        <ul class="header__mobile-submenu-list">
-                                            <li><a class="header__mobile-submenu-sublink _all-link"
-                                                   href="./product-listing.html">Смотреть всё<span>10</span></a></li>
-                                            <li><a class="header__mobile-submenu-sublink" href="./product-listing.html">Анализаторы
-                                                    Protea<span>6</span></a></li>
-                                            <ul class="ml-16">
-                                                <li><a class="header__mobile-submenu-sublink"
-                                                       href="./product-listing.html">Анализаторы
-                                                        In-Situ<span>2</span></a></li>
-                                                <li><a class="header__mobile-submenu-sublink"
-                                                       href="./product-listing.html">Экстративные
-                                                        анализаторы<span>1</span></a></li>
-                                                <li><a class="header__mobile-submenu-sublink"
-                                                       href="./product-listing.html">Промышленный масс-спектрометр
-                                                        Ptotea<span>1</span></a></li>
-                                            </ul>
-                                        </ul>
-                                    </div>
-                                </li>
+                                                    {!! \App\Models\Catalog::categoryMobileTree($catalogsList, $row->id) !!}
 
+                                                </ul>
+                                            </div>
+                                        </li>
 
-                                <li class="header__mobile-submenu-item">
-                                    <input id="mobile-submenu-category-3" name="mobile-menu" type="checkbox">
-                                    <label for="mobile-submenu-category-3">
-                                        Контроль концентрации газов в технологических процессах
-                                        <svg aria-hidden="true">
-                                            <use xlink:href="./images/sprite.svg#chevron-down"/>
-                                        </svg>
-                                    </label>
-                                    <div class="header__mobile-submenu-body">
-                                        <ul class="header__mobile-submenu-list">
-                                            <li><a class="header__mobile-submenu-sublink _all-link"
-                                                   href="./product-listing.html">Смотреть всё<span>10</span></a></li>
-                                            <li><a class="header__mobile-submenu-sublink" href="./product-listing.html">Анализаторы
-                                                    SIGAS<span>6</span></a></li>
-                                        </ul>
-                                    </div>
-                                </li>
+                                    @endif
+                                @endforeach
 
                             </ul>
                         </div>
@@ -355,7 +317,9 @@
                                     <ul class="header__product-menu-submenu-wrap">
 
                                         <li class="header__product-menu-submenu-item">
-                                            <a class="header__product-menu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
+                                            <a class="header__product-menu-sublink _all-link"
+                                               href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть
+                                                всё<span>{{ $row->getTotalProductCount() }}</span></a>
                                         </li>
 
                                         {!! \App\Models\Catalog::categoryTree($catalogsList, $row->id) !!}
@@ -478,7 +442,7 @@
                     </label>
                 </div>
                 <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a
-                            href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
+                        href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
                 <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
 
                 {!! Form::close() !!}
