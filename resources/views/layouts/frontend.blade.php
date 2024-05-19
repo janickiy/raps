@@ -32,7 +32,7 @@
     <link rel="preload" href="{{ url('/fonts/Inter-Medium.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ url('/fonts/Inter-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-    {!! Html::style('/css/styles.min.css?v=19') !!}
+    {!! Html::style('/css/styles.min.css?v=5') !!}
     {!! Html::style('/css/translate.css?v=1') !!}
 
     @yield('css')
@@ -161,7 +161,7 @@
                             <li class="header__input-hint">
                                 <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
                                     <picture>
-                                        <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
+                                        <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x"
                                              alt="{{ $row->image_title ?? $row->name }}">
                                     </picture>
 
@@ -308,22 +308,24 @@
 
                             @if(isset($menu['services']) and $menu['services'])
 
-                            <ul class="header__mobile-submenu-list">
+                                <ul class="header__mobile-submenu-list">
 
-                                @foreach($menu['services'] as $item)
-                                    <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
-                                @endforeach
+                                    @foreach($menu['services'] as $item)
+                                        <li><a href="{{ $item['link'] }}">{{ $item['label'] }}</a></li>
+                                    @endforeach
 
-                            </ul>
+                                </ul>
 
                             @endif
 
                         </div>
                     </li>
-                    <li><a href="{{ URL::route('frontend.contact') }}" class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
+                    <li><a href="{{ URL::route('frontend.contact') }}"
+                           class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
                 </ul>
             </nav>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить заявку</a>
+            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить
+                заявку</a>
         </div>
     </div>
     <div class="header__product-menu" data-menu-name="product-menu">
@@ -333,52 +335,36 @@
 
                     @foreach($catalogs as $row)
 
-                    <li class="header__product-menu-item">
+                        @if($row->parent_id == 0)
 
-                        <button class="header__product-menu-btn">
-                            <picture class="header__product-menu-img">
-                                <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }} 2x" alt="{{ $row->image_title ?? $row->name }}">
-                            </picture>
-                            <span class="header__product-menu-title">{{ $row->name }}</span>
-                            <svg aria-hidden="true">
-                                <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
-                            </svg>
-                        </button>
+                            <li class="header__product-menu-item">
 
-                        <div class="header__product-menu-submenu">
-                            <ul class="header__product-menu-submenu-wrap">
+                                <button class="header__product-menu-btn">
+                                    <picture class="header__product-menu-img">
+                                        <img src="{{ url($row->getImage()) }}"
+                                             srcset="{{ url($row->getImage('2x_')) }} 2x"
+                                             alt="{{ $row->image_title ?? $row->name }}">
+                                    </picture>
+                                    <span class="header__product-menu-title">{{ $row->name }}</span>
+                                    <svg aria-hidden="true">
+                                        <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
+                                    </svg>
+                                </button>
 
+                                <div class="header__product-menu-submenu">
+                                    <ul class="header__product-menu-submenu-wrap">
 
-                                <li class="header__product-menu-submenu-item">
-                                    <a class="header__product-menu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть
-                                        всё<span>10</span></a>
-                                </li>
-
-                                <li class="header__product-menu-submenu-item">
-                                    <a class="header__product-menu-sublink" href="./product-listing.html">Анализаторы
-                                        Protea<span>6</span></a>
-                                </li>
-
-                                <li class="header__product-menu-submenu-item">
-                                    <ul class="header__product-menu-submenu-item ml-16">
                                         <li class="header__product-menu-submenu-item">
-                                            <a class="header__product-menu-sublink" href="./product-listing.html">Анализаторы
-                                                In-Situ<span>2</span></a>
+                                            <a class="header__product-menu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
                                         </li>
-                                        <li class="header__product-menu-submenu-item">
-                                            <a class="header__product-menu-sublink" href="./product-listing.html">Экстративные
-                                                анализаторы<span>1</span></a>
-                                        </li>
-                                        <li class="header__product-menu-submenu-item">
-                                            <a class="header__product-menu-sublink" href="./product-listing.html">Промышленный
-                                                масс-спектрометр Ptotea<span>1</span></a>
-                                        </li>
+
+                                        {!! \App\Models\Catalog::categoryTree($catalogsList, $row->id) !!}
+
                                     </ul>
-                                </li>
+                                </div>
+                            </li>
 
-                            </ul>
-                        </div>
-                    </li>
+                        @endif
 
                     @endforeach
 
@@ -492,7 +478,7 @@
                     </label>
                 </div>
                 <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a
-                        href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
+                            href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
                 <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
 
                 {!! Form::close() !!}

@@ -31,19 +31,13 @@ class FrontendController
         $meta_title = $page->meta_title ?? '';
         $seo_url_canonical = $page->seo_url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.index', compact(
                 'catalogs',
+                'catalogsList',
                 'page',
                 'meta_description',
                 'meta_keywords',
@@ -60,23 +54,14 @@ class FrontendController
     public function contact(): View
     {
         $seo = Seo::where('type', 'frontend.contact')->first();
-
         $title = $seo->h1 ?? 'Конвертер единиц измерения концентрации';
         $meta_description = $seo->description ?? '';
         $meta_keywords = $seo->keyword ?? '';
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
-        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
 
         $phones = [];
         $phoneList = SettingsHelper::getSetting('PHONE');
@@ -91,6 +76,7 @@ class FrontendController
                 'meta_title',
                 'menu',
                 'catalogs',
+                'catalogsList',
                 'phones',
                 'h1',
                 'seo_url_canonical',
@@ -106,34 +92,24 @@ class FrontendController
      */
     public function catalog(?string $slug = null, Request $request): View
     {
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
         $seo = Seo::where('type', 'frontend.catalog')->first();
-
         $title = 'Каталог';
         $meta_description = $seo->description ?? '';
         $meta_keywords = $seo->keyword ?? '';
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $pathway = '';
 
         $products = null;
 
         if ($slug) {
             $topbar = [];
-
             $catalog = Catalog::where('slug', $slug)->first();
 
             if (!$catalog) abort(404);
-
-            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
 
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
@@ -151,6 +127,7 @@ class FrontendController
             $meta_title = $catalog->meta_title;
             $seo_url_canonical = $catalog->seo_url_canonical;
             $h1 = $seo->h1 ?? $title;
+            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
 
         } else {
             $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
@@ -165,6 +142,7 @@ class FrontendController
 
         return view('frontend.catalog', compact(
                 'catalogs',
+                'catalogsList',
                 'productIds',
                 'pathway',
                 'products',
@@ -192,22 +170,15 @@ class FrontendController
 
         $products = $catalog->products()->paginate(15);
 
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
         $title = $catalog->name;
         $meta_description = $catalog->meta_description;
         $meta_keywords = $catalog->meta_keywords;
         $meta_title = $catalog->meta_title;
         $seo_url_canonical = $catalog->seo_url_canonical;
         $h1 = $seo->h1 ?? $title;
-
+        $menu = $this->getMenuList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+        $catalogsList = $this->getCatalogsList();
 
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
@@ -229,6 +200,7 @@ class FrontendController
         return view('frontend.product_listing', compact(
                 'catalog',
                 'catalogs',
+                'catalogsList',
                 'productIds',
                 'products',
                 'pathway',
@@ -253,23 +225,15 @@ class FrontendController
 
         if (!$product) abort(404);
 
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
-        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
-
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $title = $product->title;
         $meta_description = $product->meta_description ?? '';
         $meta_keywords = $product->meta_keywords ?? '';
         $meta_title = $product->meta_title ?? '';
         $seo_url_canonical = $product->seo_url_canonical ?? '';
         $h1 = $product->h1 ?? $title;
-
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         $productParametersCategory = ProductParametersCategory::all();
 
         $faq = Faq::all();
@@ -300,6 +264,7 @@ class FrontendController
                 'productParametersCategory',
                 'slug',
                 'catalogs',
+                'catalogsList',
                 'pathway',
                 'productIds',
                 'faq',
@@ -318,25 +283,16 @@ class FrontendController
      */
     public function servicesListing(Request $request): View
     {
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
         $seo = Seo::where('type', 'frontend.services')->first();
-
         $title = $seo->h1 ?? 'Услуги компании';
         $meta_description = $seo->description ?? '';
         $meta_keywords = $seo->keyword ?? '';
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
-
         $services = Services::orderBy('title')->published()->get();
 
         if ($request->session()->has('productIds')) {
@@ -347,6 +303,7 @@ class FrontendController
 
         return view('frontend.services_listing', compact(
                 'catalogs',
+                'catalogsList',
                 'services',
                 'productIds',
                 'meta_description',
@@ -369,24 +326,16 @@ class FrontendController
 
         if (!$service) abort(404);
 
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
         $seo = Seo::where('type', 'frontend.services')->first();
-
         $title = $service->title;
         $meta_description = $service->meta_description ?? '';
         $meta_keywords = $service->meta_keywords ?? '';
         $meta_title = $service->meta_title ?? '';
         $seo_url_canonical = $service->seo_url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
+        $menu = $this->getMenuList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+        $catalogsList = $this->getCatalogsList();
 
         if ($request->session()->has('productIds')) {
             $productIds = $request->session()->get('productIds');
@@ -396,6 +345,7 @@ class FrontendController
 
         return view('frontend.service', compact(
                 'catalogs',
+                'catalogsList',
                 'service',
                 'productIds',
                 'meta_description',
@@ -420,24 +370,18 @@ class FrontendController
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         $page = Pages::where('slug', 'about')->published()->first();
 
         if (!$page) abort(404);
 
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
-        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
 
         return view('frontend.about', compact(
                 'page',
                 'catalogs',
+                'catalogsList',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -464,20 +408,14 @@ class FrontendController
         $meta_title = $page->meta_title ?? '';
         $seo_url_canonical = $page->seo_url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.page', compact(
                 'page',
                 'catalogs',
+                'catalogsList',
                 'meta_description',
                 'meta_keywords',
                 'meta_title',
@@ -500,15 +438,8 @@ class FrontendController
         $meta_title = $seo->title ?? '';
         $seo_url_canonical = $seo->url_canonical ?? '';
         $h1 = $seo->h1 ?? $title;
-
-        $menu_services = Menus::where('name', 'services')->with('items')->first();
-        $menu_about = Menus::where('name', 'about')->with('items')->first();
-
-        $menu = [
-            'about' => $menu_about->items->toArray(),
-            'services' => $menu_services->items->toArray(),
-        ];
-
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
         $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         return view('frontend.application', compact(
@@ -517,6 +448,7 @@ class FrontendController
                 'meta_title',
                 'menu',
                 'catalogs',
+                'catalogsList',
                 'h1',
                 'seo_url_canonical',
                 'title'
@@ -553,6 +485,38 @@ class FrontendController
         }
 
         return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
+    }
+
+    /**
+     * @return array
+     */
+    private function getCatalogsList(): array
+    {
+        $catalogs = Catalog::query()->orderBy('name')->get();
+
+        $catalogsList = [];
+
+        if ($catalogs) {
+            foreach ($catalogs->toArray() as $catalog) {
+                $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+            }
+        }
+
+        return $catalogsList;
+    }
+
+    /**
+     * @return array
+     */
+    private function getMenuList(): array
+    {
+        $menu_services = Menus::where('name', 'services')->with('items')->first();
+        $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+        return [
+            'about' => $menu_about->items->toArray(),
+            'services' => $menu_services->items->toArray(),
+        ];
     }
 
 }

@@ -32,7 +32,7 @@
 
                     <br>
 
-                    {!! \App\Models\Catalog::buildTree($cats,0) !!}
+                    {!! \App\Models\Catalog::buildTree($catalogsList,0) !!}
 
                 </div>
                 <!-- end widget content -->

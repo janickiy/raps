@@ -28,6 +28,7 @@ class Catalog extends Model
         'parent_id',
     ];
 
+
     /**
      * @return HasMany
      */
@@ -73,11 +74,10 @@ class Catalog extends Model
         return $topbar;
     }
 
-
     /**
      * @return int
      */
-    public function getProductCount()
+    public function getProductCount(): int
     {
         return (int)Products::where('catalog_id', $this->id)->where('published', 1)->count();
     }
@@ -111,6 +111,19 @@ class Catalog extends Model
 
         self::removeCatalog($parent);
 
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalProductCount(): int
+    {
+        $allChildren = [];
+        $catalogs = Catalog::query()->orderBy('name')->get();
+
+        self::getAllChildren($catalogs, $allChildren, $this->id);
+
+        return Products::query()->whereIn('catalog_id', $allChildren)->count();
     }
 
     /**
@@ -157,8 +170,8 @@ class Catalog extends Model
             $ids[] = $row->id;
             $ids = array_merge($ids, self::getChildren($row));
         }
-        return
-            $ids;
+
+        return $ids;
     }
 
 
@@ -202,32 +215,73 @@ class Catalog extends Model
     }
 
     /**
-     * @param array $cats
+     * @param array $catalogs
      * @param int $parent_id
      * @param bool $only_parent
      * @return string|null
      */
-    public static function buildTree(array $cats, int $parent_id, bool $only_parent = false)
+    public static function buildTree(array $catalogs, int $parent_id, bool $only_parent = false): string
     {
-        if (isset($cats[$parent_id])) {
-            $tree = '<ul>';
-            if ($only_parent == false) {
-                foreach ($cats[$parent_id] as $cat) {
-                    $tree .= '<li>' . $cat['name'] . ' <a title="Добавить подкатегорию" href="' . URL::route('cp.catalog.create', ['parent_id' => $cat['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . URL::route('cp.catalog.edit', ['id' => $cat['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . URL::route('cp.catalog.destroy', $cat['id']) . '"> <span class="fa fa-trash-o"></span> </a>';
-                    $tree .= self::buildTree($cats, $cat['id']);
-                    $tree .= '</li>';
-                }
-            } elseif (is_numeric($only_parent)) {
-                $cat = $cats[$parent_id][$only_parent];
-                $tree .= '<li>' . $cat['name'] . ' #' . $cat['id'];
-                $tree .= self::buildTree($cats, $cat['id']);
-                $tree .= '</li>';
-            }
-            $tree .= '</ul>';
-        } else
-            return null;
+        $cl = '';
 
-        return $tree;
+        if (isset($catalogs[$parent_id])) {
+            $cl .= '<ul>';
+            if ($only_parent === false) {
+                foreach ($catalogs[$parent_id] as $catalog) {
+                    $cl .= '<li>' . $catalog['name'] . ' <a title="Добавить подкатегорию" href="' . URL::route('cp.catalog.create', ['parent_id' => $catalog['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . URL::route('cp.catalog.edit', ['id' => $catalog['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . URL::route('cp.catalog.destroy', $catalog['id']) . '"> <span class="fa fa-trash-o"></span> </a>';
+                    $cl .= self::buildTree($catalogs, $catalog['id']);
+                    $cl .= '</li>';
+                }
+            } else {
+                $catalog = $catalogs[$parent_id][$only_parent];
+                $cl .= '<li>' . $catalog['name'] . ' #' . $catalog['id'];
+                $cl .= self::buildTree($catalogs, $catalog['id'], true);
+                $cl .= '</li>';
+            }
+            $cl .= '</ul>';
+        }
+
+        return $cl;
     }
 
+    /**
+     * @param array $catalogs
+     * @param int $parent_id
+     * @return string
+     */
+    public static function categoryTree(array $catalogs, int $parent_id): string
+    {
+        $cl = '';
+
+        if (isset($catalogs[$parent_id])) {
+            $cl .= '<ul class="header__product-menu-submenu-item ml-16">';
+            foreach ($catalogs[$parent_id] as $catalog) {
+                $cl .= '<li class="header__product-menu-submenu-item">';
+                $cl .= '<a class="header__product-menu-sublink" href="' . URL::route('frontend.product_listing', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= self::categoryTree($catalogs, $catalog['id']);
+                $cl .= '</li>';
+            }
+            $cl .= '</ul>';
+        }
+
+        return $cl;
+    }
+
+    /**
+     * @param object $categories
+     * @param array $allChildren
+     * @param int $parent_id
+     * @return void
+     */
+    public static function getAllChildren(object $categories, array &$allChildren, int $parent_id = 0): void
+    {
+        $cats = $categories->filter(function ($item) use ($parent_id) {
+            return $item->parent_id == $parent_id;
+        });
+
+        foreach ($cats as $cat) {
+            array_push($allChildren, $cat->id);
+            self::getAllChildren($categories, $allChildren, $cat->id);
+        }
+    }
 }

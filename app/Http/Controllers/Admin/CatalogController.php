@@ -22,20 +22,16 @@ class CatalogController extends Controller
      */
     public function index(): View
     {
-
-        $catalogs = Catalog::get();
-        $cats = [];
+        $catalogs = Catalog::query()->orderBy('name')->get();
+        $catalogsList = [];
 
         if ($catalogs) {
-            $catalog_arr = $catalogs->toArray();
-
-            foreach ($catalog_arr as $catalog) {
-                $cats_ID[$catalog['id']][] = $catalog;
-                $cats[$catalog['parent_id']][$catalog['id']] = $catalog;
+            foreach ($catalogs->toArray() as $catalog) {
+                $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
             }
         }
 
-        return view('cp.catalog.index', compact('cats'))->with('title', 'Категории');
+        return view('cp.catalog.index', compact('catalogsList'))->with('title', 'Категории');
     }
 
     /**
@@ -128,7 +124,6 @@ class CatalogController extends Controller
         $row->seo_h1 = $request->input('seo_h1');
         $row->seo_url_canonical = $request->input('seo_url_canonical');
         $row->parent_id = $request->input('parent_id');
-
 
         if ($request->hasFile('image')) {
 
