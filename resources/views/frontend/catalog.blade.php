@@ -33,13 +33,15 @@
                     <span class="main-title__count">{{ $catalog->getProductCount() }}</span>
                 @endif
 
-                @if(!empty($catalog->description))<p style="margin-top: 1.6rem">{{ $catalog->description }}</p>@endif
+                @if(!empty($catalog->description))
+                    <p style="margin-top: 1.6rem">{{ $catalog->description }}</p>
+                @endif
 
             </div>
 
             <ul class="products__badges container">
 
-                @foreach($catalogs as $row)
+                @foreach(\App\Models\Catalog::orderBy('name')->where('parent_id', $catalog->id)->get() as $row)
 
                     <li class="products__badges-item" style="margin-top: 1.6rem">
                         <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
@@ -57,10 +59,11 @@
 
             </ul>
 
-
             <div class="products__list container">
 
-                @if($catalog->getProductCount() === 0)<p>нет товаров</p>@endif
+                @if($catalog->getProductCount() === 0)
+                    <p>нет товаров</p>
+                @endif
 
                 @foreach($products as $product)
 
@@ -115,8 +118,6 @@
 
                 {{ $products->links('layouts.pagination.frontend_pagination') }}
 
-
-
             </div>
         </section>
     @else
@@ -133,7 +134,9 @@
 
                     <article class="card">
                         <picture class="card__img ">
-                            <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}" alt="{{ $row->image_alt }}" title="{{ $row->image_title ?? $row->name }}" loading="lazy">
+                            <img src="{{ url($row->getImage()) }}" srcset="{{ url($row->getImage('2x_')) }}"
+                                 alt="{{ $row->image_alt }}" title="{{ $row->image_title ?? $row->name }}"
+                                 loading="lazy">
                         </picture>
                         <div class="card__info">
                             <div>
@@ -143,7 +146,8 @@
                                 </div>
                                 <p class="card__desc">{{ $row->description }}</p>
                             </div>
-                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif" class="btn btn-primary card__btn">
+                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif"
+                               class="btn btn-primary card__btn">
                                 К товарам
                                 <svg aria-hidden="true">
                                     <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>

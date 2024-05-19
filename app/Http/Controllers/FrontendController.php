@@ -62,6 +62,7 @@ class FrontendController
         $h1 = $seo->h1 ?? $title;
         $menu = $this->getMenuList();
         $catalogsList = $this->getCatalogsList();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
 
         $phones = [];
         $phoneList = SettingsHelper::getSetting('PHONE');
@@ -101,6 +102,7 @@ class FrontendController
         $h1 = $seo->h1 ?? $title;
         $menu = $this->getMenuList();
         $catalogsList = $this->getCatalogsList();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
         $pathway = '';
 
         $products = null;
@@ -110,6 +112,7 @@ class FrontendController
             $catalog = Catalog::where('slug', $slug)->first();
 
             if (!$catalog) abort(404);
+
 
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
@@ -127,10 +130,7 @@ class FrontendController
             $meta_title = $catalog->meta_title;
             $seo_url_canonical = $catalog->seo_url_canonical;
             $h1 = $seo->h1 ?? $title;
-            $catalogs = Catalog::orderBy('name')->where('parent_id', $catalog->id)->get();
-
         } else {
-            $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
             $catalog = null;
         }
 
