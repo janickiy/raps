@@ -1945,10 +1945,12 @@ img {
 
 @media (min-width: 1024px) {
     .header__product-menu-wrap {
-        width: 100%;
-        background-color: #FAFAFA;
-        border-bottom: thin solid #EDEDED;
-        border-top: thin solid #EDEDED;
+        width:100%;
+        padding-bottom:2.4rem;
+        padding-top:2.4rem;
+        background-color:#fafafa;
+        border-bottom:thin solid #ededed;
+        border-top:thin solid #ededed;
     }
 }
 
