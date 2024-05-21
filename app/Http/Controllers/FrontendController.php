@@ -162,63 +162,6 @@ class FrontendController
      * @param Request $request
      * @return View
      */
-    public function productListing(string $slug, Request $request): View
-    {
-        $catalog = Catalog::where('slug', $slug)->first();
-
-        if (!$catalog) abort(404);
-
-        $products = $catalog->products()->paginate(15);
-
-        $title = $catalog->name;
-        $meta_description = $catalog->meta_description;
-        $meta_keywords = $catalog->meta_keywords;
-        $meta_title = $catalog->meta_title;
-        $seo_url_canonical = $catalog->seo_url_canonical;
-        $h1 = $seo->h1 ?? $title;
-        $menu = $this->getMenuList();
-        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
-        $catalogsList = $this->getCatalogsList();
-
-        if ($request->session()->has('productIds')) {
-            $productIds = $request->session()->get('productIds');
-        } else {
-            $productIds = null;
-        }
-
-        $pathway = '';
-        $topbar = [];
-
-        Catalog::topbarMenu($topbar, $catalog->id);
-
-        for ($i = 0; $i < count($topbar); $i++) {
-            if ($topbar[$i][0] != $catalog->id) {
-                $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
-            }
-        }
-
-        return view('frontend.product_listing', compact(
-                'catalog',
-                'catalogs',
-                'catalogsList',
-                'productIds',
-                'products',
-                'pathway',
-                'meta_description',
-                'meta_keywords',
-                'meta_title',
-                'seo_url_canonical',
-                'h1',
-                'menu')
-        )->with('title', $title);
-
-    }
-
-    /**
-     * @param string $slug
-     * @param Request $request
-     * @return View
-     */
     public function product(string $slug, Request $request): View
     {
         $product = Products::where('slug', $slug)->published()->first();

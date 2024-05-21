@@ -37,7 +37,7 @@
 
     @yield('css')
 
-    {!! Html::script('/js/script.min.js?v=1') !!}
+    {!! Html::script('/js/script.min.js?v=4') !!}
     {!! Html::script('/js/translate.js?v=1') !!}
 
 </head>
@@ -159,7 +159,7 @@
                         @foreach($catalogs as $row)
 
                             <li class="header__input-hint">
-                                <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
+                                <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">
                                     <picture>
                                         <img src="{{ url($row->getImage()) }}"
                                              srcset="{{ url($row->getImage('2x_')) }} 2x"
@@ -219,8 +219,7 @@
                                             <div class="header__mobile-submenu-body">
                                                 <ul class="header__mobile-submenu-list">
                                                     <li>
-                                                        <a class="header__mobile-submenu-sublink _all-link"
-                                                           href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
+                                                        <a class="header__mobile-submenu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
                                                     </li>
 
                                                     {!! \App\Models\Catalog::categoryMobileTree($catalogsList, $row->id) !!}

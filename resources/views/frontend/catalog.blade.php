@@ -44,7 +44,7 @@
                 @foreach(\App\Models\Catalog::orderBy('name')->where('parent_id', $catalog->id)->get() as $row)
 
                     <li class="products__badges-item" style="margin-top: 1.6rem">
-                        <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif">
+                        <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">
                             <button>{{ $row->name }}<span>{{ $row->getProductCount() }}</span></button>
                         </a>
 
@@ -146,7 +146,7 @@
                                 </div>
                                 <p class="card__desc">{{ $row->description }}</p>
                             </div>
-                            <a href="@if($row->hasChildren() == true){{ URL::route('frontend.catalog',['slug' => $row->slug]) }}@else{{ URL::route('frontend.product_listing',['slug' => $row->slug]) }}@endif"
+                            <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}"
                                class="btn btn-primary card__btn">
                                 К товарам
                                 <svg aria-hidden="true">

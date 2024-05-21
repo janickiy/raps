@@ -257,7 +257,7 @@ class Catalog extends Model
             $cl .= '<ul class="header__product-menu-submenu-item ml-16">';
             foreach ($catalogs[$parent_id] as $catalog) {
                 $cl .= '<li class="header__product-menu-submenu-item">';
-                $cl .= '<a class="header__product-menu-sublink" href="' . URL::route('frontend.product_listing', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= '<a class="header__product-menu-sublink" href="' . URL::route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
                 $cl .= self::categoryTree($catalogs, $catalog['id']);
                 $cl .= '</li>';
             }
@@ -280,7 +280,7 @@ class Catalog extends Model
             $cl .= '<ul class="ml-16">';
             foreach ($catalogs[$parent_id] as $catalog) {
                 $cl .= '<li>';
-                $cl .= '<a class="header__mobile-submenu-sublink" href="' . URL::route('frontend.product_listing', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= '<a class="header__mobile-submenu-sublink" href="' . URL::route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
                 $cl .= self::categoryTree($catalogs, $catalog['id']);
                 $cl .= '</li>';
             }
