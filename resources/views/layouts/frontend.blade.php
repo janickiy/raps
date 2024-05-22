@@ -37,7 +37,7 @@
 
     @yield('css')
 
-    {!! Html::script('/js/script.min.js?v=5') !!}
+    {!! Html::script('/js/script.min.js?v=6') !!}
     {!! Html::script('/js/translate.js?v=1') !!}
 
 </head>
