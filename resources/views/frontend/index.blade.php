@@ -56,7 +56,7 @@
                                 <div>
                                     <div>
                                         <h3>{{ $catalog->name }}</h3>
-                                        <span class="card__count">{{ $catalog->getProductCount() }}</span>
+                                        <span class="card__count">{{ $catalog->getTotalProductCount() }}</span>
                                     </div>
                                     <p class="card__desc">{{ $catalog->description }}</p>
                                 </div>

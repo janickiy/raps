@@ -142,7 +142,7 @@
                             <div>
                                 <div>
                                     <h3>{{ $row->name }}</h3>
-                                    <span class="card__count">{{ $row->getProductCount() }}</span>
+                                    <span class="card__count">{{ $row->getTotalProductCount() }}</span>
                                 </div>
                                 <p class="card__desc">{{ $row->description }}</p>
                             </div>
