@@ -119,9 +119,8 @@ class Catalog extends Model
     public function getTotalProductCount(): int
     {
         $allChildren = [$this->id];
-        $catalogs = Catalog::query()->orderBy('name')->get();
 
-        self::getAllChildren($catalogs, $allChildren, $this->id);
+        self::getAllChildren(Catalog::query()->orderBy('name')->get(), $allChildren, $this->id);
 
         return Products::query()->whereIn('catalog_id', $allChildren)->count();
     }

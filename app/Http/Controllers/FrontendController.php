@@ -113,7 +113,6 @@ class FrontendController
 
             if (!$catalog) abort(404);
 
-
             $arrayPathWay = Catalog::topbarMenu($topbar, $catalog->id);
 
             for ($i = 0; $i < count($arrayPathWay); $i++) {
@@ -122,7 +121,11 @@ class FrontendController
                 }
             }
 
-            $products =  Products::query()->where('catalog_id', $catalog->id)->paginate(15);
+            $allChildren = [$catalog->id];
+
+            Catalog::getAllChildren(Catalog::query()->orderBy('name')->get(), $allChildren, $catalog->id);
+
+            $products = Products::query()->whereIn('catalog_id', $allChildren)->paginate(15);
 
             $title = $catalog->name;
             $meta_description = $catalog->meta_description;

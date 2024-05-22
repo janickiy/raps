@@ -30,7 +30,7 @@
             <div class="main-title container">
                 <h1>{{ $title }}</h1>
                 @if($catalog)
-                    <span class="main-title__count">{{ $catalog->getProductCount() }}</span>
+                    <span class="main-title__count">{{ $catalog->getTotalProductCount() }}</span>
                 @endif
 
                 @if(!empty($catalog->description))
@@ -45,7 +45,7 @@
 
                     <li class="products__badges-item" style="margin-top: 1.6rem">
                         <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">
-                            <button>{{ $row->name }}<span>{{ $row->getProductCount() }}</span></button>
+                            <button>{{ $row->name }}<span>{{ $row->getTotalProductCount() }}</span></button>
                         </a>
 
                         @if (Auth::check())
@@ -61,7 +61,7 @@
 
             <div class="products__list container">
 
-                @if($catalog->getProductCount() === 0)
+                @if($catalog->getTotalProductCount() === 0)
                     <p>нет товаров</p>
                 @endif
 
