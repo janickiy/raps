@@ -14,7 +14,7 @@ use Mail;
 use File;
 use URL;
 
-class FrontendController
+class FrontendController extends Controller
 {
     /**
      * @return View
