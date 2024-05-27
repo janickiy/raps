@@ -44,7 +44,7 @@
 
                         {!! Form::open(['url' => route('cp.photos.upload'), 'files' => true, 'method' => 'post', 'id' => 'smart-form']) !!}
 
-                        {!! Form::hidden('product_id', $row->id) !!}
+                        {!! Form::hidden('photoalbum_id', $row->id) !!}
 
                         <div class="smart-form">
 
@@ -69,6 +69,22 @@
 
                                     @if ($errors->has('title'))
                                         <p class="text-danger">{{ $errors->first('title') }}</p>
+                                    @endif
+
+                                </section>
+
+                                <section>
+
+                                    {!! Form::label('description', 'Описание', ['class' => 'label']) !!}
+
+                                    <label class="textarea textarea-resizable">
+
+                                        {!! Form::textarea('description', old('description'), ['rows' => "5", 'class' => 'custom-scroll']) !!}
+
+                                    </label>
+
+                                    @if ($errors->has('description'))
+                                        <p class="text-danger">{{ $errors->first('description') }}</p>
                                     @endif
 
                                 </section>

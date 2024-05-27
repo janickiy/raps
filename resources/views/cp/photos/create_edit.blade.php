@@ -67,6 +67,22 @@
 
                             <section>
 
+                                {!! Form::label('description', 'Описание', ['class' => 'label']) !!}
+
+                                <label class="textarea textarea-resizable">
+
+                                    {!! Form::textarea('description', old('description', $row->description ?? null), ['rows' => "5", 'class' => 'custom-scroll']) !!}
+
+                                </label>
+
+                                @if ($errors->has('description'))
+                                    <p class="text-danger">{{ $errors->first('description') }}</p>
+                                @endif
+
+                            </section>
+
+                            <section>
+
                                 {!! Form::label('alt', 'Alt', ['class' => 'label']) !!}
 
                                 <label class="input">
