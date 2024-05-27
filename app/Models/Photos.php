@@ -12,6 +12,7 @@ class Photos extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'alt',
         'thumbnail',
         'origin',

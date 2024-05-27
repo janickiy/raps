@@ -55,12 +55,12 @@ class PhotosController extends Controller
                         'origin' => $fileNameToStore ?? null,
                     ]));
 
-                    return redirect(URL::route('cp.photos.index', ['product_id' => $request->product_id]))->with('success', 'Данные успешно обновлены');
+                    return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id]))->with('success', 'Данные успешно обновлены');
                 }
             }
         }
 
-        return redirect(URL::route('cp.photos.index', ['product_id' => $request->product_id]))->with('error', 'Ошибка добавления фото');
+        return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id]))->with('error', 'Ошибка добавления фото');
     }
 
     /**
@@ -120,11 +120,12 @@ class PhotosController extends Controller
         }
 
         $row->title = $request->input('title');
+        $row->description = $request->input('description');
         $row->alt = $request->input('alt');
 
         $row->save();
 
-        return redirect(URL::route('cp.photos.index', ['product_id' => $row->product_id]))->with('success', 'Данные успешно обновлены');
+        return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id]))->with('success', 'Данные успешно обновлены');
 
     }
 
