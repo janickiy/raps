@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\{
     ProductParametersController,
     ProductDocumentsController,
     ProductParametersCategoryController,
+    PhotoalbumController,
     SeoController,
     ServicesController,
     SitemapController,
@@ -73,6 +74,17 @@ Route::group(['prefix' => 'cp'], function () {
             Route::get('', [SeoController::class, 'index'])->name('cp.seo.index');
             Route::get('edit/{id}', [SeoController::class, 'edit'])->name('cp.seo.edit')->where('id', '[0-9]+');
             Route::put('update', [SeoController::class, 'update'])->name('cp.seo.update');
+        });
+    });
+
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'photoalbum'], function () {
+            Route::get('', [PhotoalbumController::class, 'index'])->name('cp.photoalbum.index');
+            Route::get('create', [PhotoalbumController::class, 'create'])->name('cp.photoalbum.create');
+            Route::post('store', [PhotoalbumController::class, 'store'])->name('cp.photoalbum.store');
+            Route::get('edit/{id}', [PhotoalbumController::class, 'edit'])->name('cp.photoalbum.edit')->where('id', '[0-9]+');
+            Route::put('update', [PhotoalbumController::class, 'update'])->name('cp.photoalbum.update');
+            Route::post('destroy', [PhotoalbumController::class, 'destroy'])->name('cp.photoalbum.destroy');
         });
     });
 
@@ -185,6 +197,7 @@ Route::group(['prefix' => 'cp'], function () {
     Route::any('ajax', [AjaxController::class, 'index'])->name('cp.ajax.action');
     Route::group(['prefix' => 'datatable'], function () {
         Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog');
+        Route::any('photoalbum', [DataTableController::class, 'getPhotoalbum'])->name('cp.datatable.photoalbum');
         Route::any('products', [DataTableController::class, 'getProducts'])->name('cp.datatable.products');
         Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
         Route::any('users', [DataTableController::class, 'getUsers'])->name('cp.datatable.users')->middleware(['permission:admin']);

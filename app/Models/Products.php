@@ -129,7 +129,7 @@ class Products extends Model
      * @return void
      * @throws \Exception
      */
-    public function scopeRemove()
+    public function scopeRemove(): void
     {
         if (Storage::disk('public')->exists('products/' . $this->thumbnail) === true) Storage::disk('public')->delete('products/' . $this->thumbnail);
         if (Storage::disk('public')->exists('products/' . $this->origin) === true) Storage::disk('public')->delete('products/' . $this->origin);

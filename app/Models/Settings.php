@@ -20,7 +20,13 @@ class Settings extends Model
     /**
      * @param $value
      */
-    public function setKeyCdAttribute($value) {
+
+    /**
+     * @param $value
+     * @return void
+     */
+    public function setKeyCdAttribute($value): void
+    {
         $this->attributes['key_cd'] = str_replace(' ', '_', strtoupper($value));
     }
 
@@ -34,8 +40,8 @@ class Settings extends Model
     /**
      * @return array|string
      */
-    public function getValueAttribute() {
-
+    public function getValueAttribute()
+    {
         if ($this->attributes['type'] == 'FILE') {
             return Storage::disk('public')->url('settings/' . $this->attributes['value']);
         }

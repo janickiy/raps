@@ -17,8 +17,6 @@ use URL;
 
 class ProductDocumentsController extends Controller
 {
-
-
     /**
      * @param int $product_id
      * @return View

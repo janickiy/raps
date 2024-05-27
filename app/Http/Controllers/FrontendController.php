@@ -433,6 +433,11 @@ class FrontendController extends Controller
         return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
     }
 
+    public function certificates()
+    {
+
+    }
+
     /**
      * @return array
      */

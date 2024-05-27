@@ -234,6 +234,14 @@ Use search to find needed section.
             </li>
 
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
+                <li {!! Request::is('cp/photoalbum*') ? ' class="active"' : '' !!}>
+                    <a href="{{ URL::route('cp.photoalbum.index') }}">
+                        <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Фотоальбом</span>
+                    </a>
+                </li>
+            @endif
+
+            @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
                 <li class="">
                     <a href="#">
                         <i class="fa fa-fw fa-folder"></i> <span class="menu-item-parent">SEO</span>

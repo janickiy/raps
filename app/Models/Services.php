@@ -66,9 +66,8 @@ class Services extends Model
      * @return void
      * @throws \Exception
      */
-    public function scopeRemove()
+    public function scopeRemove(): void
     {
-
         if (Storage::disk('public')->exists('services/' . $this->image) === true) Storage::disk('public')->delete('services/' . $this->image);
         if (Storage::disk('public')->exists('services/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('services/' . '2x_' . $this->image);
 

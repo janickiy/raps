@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\{
-    Catalog,
+use App\Models\{Catalog,
     Pages,
+    Photoalbum,
     ProductDocuments,
     ProductParameters,
     ProductParametersCategory,
@@ -15,7 +15,8 @@ use App\Models\{
     Seo,
     Services,
     User,
-    Faq};
+    Faq
+};
 use Illuminate\Support\Facades\Auth;
 use DataTables;
 use URL;
@@ -84,7 +85,6 @@ class DataTableController extends Controller
             })
             ->rawColumns(['actions'])->make(true);
     }
-
 
 
     /**
@@ -193,7 +193,7 @@ class DataTableController extends Controller
                 return '<img  height="150" src="' . url($product->getThumbnailUrl()) . '" alt="" loading="lazy">';
             })
             ->editColumn('published', function ($row) {
-                return $row->published == 1 ? 'опубликован':'не опубликован';
+                return $row->published == 1 ? 'опубликован' : 'не опубликован';
             })
             ->rawColumns(['actions', 'title', 'thumbnail'])->make(true);
     }
@@ -244,7 +244,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('category', function ($row) {
-                return $row->category ? $row->category:'Разное';
+                return $row->category ? $row->category : 'Разное';
             })
             ->rawColumns(['actions'])->make(true);
     }
@@ -295,6 +295,23 @@ class DataTableController extends Controller
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
                 $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.faq.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotoalbum()
+    {
+        $row = Photoalbum::query();
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.photoalbum.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
                 $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
