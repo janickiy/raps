@@ -48,7 +48,7 @@
 
                         <article class="card">
                             <picture class="card__img ">
-                                <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }}"
+                                <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }} 2x"
                                      alt="{{ $catalog->image_alt }}"
                                      title="{{ $catalog->image_title ?? $catalog->name }}" loading="lazy">
                             </picture>

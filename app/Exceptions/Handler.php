@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Throwable  $exception
+     * @param \Throwable $exception
      * @return void
      *
      * @throws \Throwable
@@ -44,8 +44,8 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Throwable $exception
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
@@ -54,6 +54,7 @@ class Handler extends ExceptionHandler
     {
         if ($this->isHttpException($exception)) {
             if ($exception->getStatusCode() == 404) {
+
                 $menu_services = Menus::where('name', 'services')->with('items')->first();
                 $menu_about = Menus::where('name', 'about')->with('items')->first();
 
@@ -62,10 +63,21 @@ class Handler extends ExceptionHandler
                     'services' => $menu_services->items->toArray(),
                 ];
 
+                $catalogs = Catalog::query()->orderBy('name')->get();
+
+                $catalogsList = [];
+
+                if ($catalogs) {
+                    foreach ($catalogs->toArray() as $catalog) {
+                        $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+                    }
+                }
+
                 $catalogs = Catalog::orderBy('name')->get();
 
                 return response()->view('errors.404', [
                     'menu' => $menu,
+                    'catalogsList' => $catalogsList,
                     'catalogs' => $catalogs
                 ], 404);
             }

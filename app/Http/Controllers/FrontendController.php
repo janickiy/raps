@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Catalog, Pages, Products, ProductParametersCategory, Requests, Seo, Services, Faq};
+use App\Models\{Catalog, Pages, Photoalbum, Products, ProductParametersCategory, Requests, Seo, Services, Faq};
 use App\Http\Request\Frontend\SendApplicationRequest;
 use Harimayco\Menu\Models\Menus;
 use App\Helpers\SettingsHelper;
@@ -433,9 +433,37 @@ class FrontendController extends Controller
         return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
     }
 
-    public function certificates()
+    /**
+     * @param string $slug
+     * @return View
+     */
+    public function album(string $slug): View
     {
+        $album = Photoalbum::where('slug', $slug)->first();
 
+        if (!$album) abort(404);
+
+        $title = $album->name ?? '';
+        $meta_description = $album->meta_description ?? '';
+        $meta_keywords = $album->meta_keywords ?? '';
+        $meta_title = $album->meta_title ?? '';
+        $seo_url_canonical = $album->seo_url_canonical ?? '';
+        $h1 = $seo->h1 ?? $title;
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+
+        return view('frontend.album', compact(
+                'album',
+                'catalogs',
+                'catalogsList',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'h1',
+                'seo_url_canonical',
+                'menu')
+        )->with('title', $title);
     }
 
     /**

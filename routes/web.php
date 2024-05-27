@@ -24,7 +24,7 @@ Route::get('service/{slug}', [FrontendController::class,'service'])->name('front
 Route::get('contact', [FrontendController::class, 'contact'])->name('frontend.contact');
 Route::get('application', [FrontendController::class,'application'])->name('frontend.application');
 Route::post('send-application', [FrontendController::class,'sendApplication'])->name('frontend.send.application');
-Route::post('certificates', [FrontendController::class,'certificates'])->name('frontend.certificates');
+Route::get('album/{slug}', [FrontendController::class,'album'])->name('frontend.album');
 
 
 
