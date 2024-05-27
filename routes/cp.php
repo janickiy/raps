@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\{
     ProductDocumentsController,
     ProductParametersCategoryController,
     PhotoalbumController,
+    PhotosController,
     SeoController,
     ServicesController,
     SitemapController,
@@ -85,6 +86,16 @@ Route::group(['prefix' => 'cp'], function () {
             Route::get('edit/{id}', [PhotoalbumController::class, 'edit'])->name('cp.photoalbum.edit')->where('id', '[0-9]+');
             Route::put('update', [PhotoalbumController::class, 'update'])->name('cp.photoalbum.update');
             Route::post('destroy', [PhotoalbumController::class, 'destroy'])->name('cp.photoalbum.destroy');
+        });
+    });
+
+    Route::middleware(['permission:admin|moderator'])->group(function () {
+        Route::group(['prefix' => 'photos'], function () {
+            Route::get('{photoalbum_id}', [PhotosController::class, 'index'])->name('cp.photos.index')->where('photoalbum_id', '[0-9]+');
+            Route::post('upload', [PhotosController::class, 'upload'])->name('cp.photos.upload');
+            Route::get('edit/{id}', [PhotosController::class, 'edit'])->name('cp.photos.edit')->where('id', '[0-9]+');
+            Route::put('update', [PhotosController::class, 'update'])->name('cp.photos.update');
+            Route::post('destroy', [PhotosController::class, 'destroy'])->name('cp.photos.destroy');
         });
     });
 
@@ -198,6 +209,7 @@ Route::group(['prefix' => 'cp'], function () {
     Route::group(['prefix' => 'datatable'], function () {
         Route::any('catalog', [DataTableController::class, 'getCatalog'])->name('cp.datatable.catalog');
         Route::any('photoalbum', [DataTableController::class, 'getPhotoalbum'])->name('cp.datatable.photoalbum');
+        Route::any('photos/{photoalbum_id}', [DataTableController::class, 'getPhotos'])->name('cp.datatable.photos')->where('photoalbum_id', '[0-9]+');
         Route::any('products', [DataTableController::class, 'getProducts'])->name('cp.datatable.products');
         Route::any('services', [DataTableController::class, 'getServices'])->name('cp.datatable.services');
         Route::any('users', [DataTableController::class, 'getUsers'])->name('cp.datatable.users')->middleware(['permission:admin']);
@@ -206,7 +218,7 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('settings', [DataTableController::class, 'getSettings'])->name('cp.datatable.settings')->middleware(['permission:admin']);
         Route::any('seo', [DataTableController::class, 'getSeo'])->name('cp.datatable.seo')->middleware(['permission:admin|moderator']);
         Route::any('faq', [DataTableController::class, 'getFaq'])->name('cp.datatable.faq');
-        Route::any('product-photos/{product_id}', [DataTableController::class, 'getPhotos'])->name('cp.datatable.product_photos')->where('product_id', '[0-9]+');
+        Route::any('product-photos/{product_id}', [DataTableController::class, 'getProductPhotos'])->name('cp.datatable.product_photos')->where('product_id', '[0-9]+');
         Route::any('product-videos/{product_id}', [DataTableController::class, 'getVideos'])->name('cp.datatable.product_videos')->where('product_id', '[0-9]+');
         Route::any('product-documents/{product_id}', [DataTableController::class, 'getDocuments'])->name('cp.datatable.product_documents')->where('product_id', '[0-9]+');
         Route::any('product-parameters/{product_id}', [DataTableController::class, 'getProductParameters'])->name('cp.datatable.product_parameters')->where('product_id', '[0-9]+');

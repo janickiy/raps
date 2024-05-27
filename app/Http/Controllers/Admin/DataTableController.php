@@ -9,6 +9,7 @@ use App\Models\{Catalog,
     ProductParameters,
     ProductParametersCategory,
     ProductPhotos,
+    Photos,
     Products,
     Requests,
     Settings,
@@ -202,7 +203,7 @@ class DataTableController extends Controller
      * @param int $product_id
      * @return mixed
      */
-    public function getPhotos(int $product_id)
+    public function getProductPhotos(int $product_id)
     {
         $row = ProductPhotos::where('product_id', $product_id);
 
@@ -316,7 +317,35 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
-            ->rawColumns(['actions'])->make(true);
+            ->editColumn('name', function ($row) {
+                $title = $row->name;
+                $title .= '<br><br><a href="' . URL::route('cp.photos.index', ['photoalbum_id' => $row->id]) . '">Фото</a>';
+
+                return $title;
+            })
+            ->rawColumns(['actions','name'])->make(true);
+    }
+
+    /**
+     * @param int $photoalbum_id
+     * @return mixed
+     */
+    public function getPhotos(int $photoalbum_id)
+    {
+        $row = Photos::where('photoalbum_id', $photoalbum_id);
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.photos.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->editColumn('thumbnail', function ($row) {
+                return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="" loading="lazy">';
+            })
+            ->rawColumns(['actions', 'thumbnail'])->make(true);
     }
 
 }

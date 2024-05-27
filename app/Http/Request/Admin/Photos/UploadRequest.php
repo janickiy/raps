@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Request\Admin\ProductPhotos;
+namespace App\Http\Request\Admin\Photos;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class UploadRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+
         ];
     }
 }
