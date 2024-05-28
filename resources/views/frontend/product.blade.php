@@ -282,8 +282,8 @@
 
                     @foreach($faq as $row)
                         <div class="product__accordions-item">
-                            <input id="ac-1" name="accordion-1" type="checkbox">
-                            <label for="ac-1">
+                            <input id="ac-{{ $row->id }}" name="accordion-{{ $row->id }}" type="checkbox">
+                            <label for="ac-{{ $row->id }}">
                                 <svg aria-hidden="true">
                                     <use xlink:href="{{ url('/images/sprite.svg#plus') }}"/>
                                 </svg>
