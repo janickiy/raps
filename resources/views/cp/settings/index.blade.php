@@ -25,6 +25,10 @@
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить Text параметр
                                 </a><br><br>
+                                <a href="{{ URL::route('cp.settings.create', ['type' => 'HTML']) }}"
+                                   class="btn btn-info btn-sm pull-left">
+                                    <span class="fa fa-plus"> &nbsp;</span> Добавить HTML параметр
+                                </a><br><br>
                                 <a href="{{ URL::route('cp.settings.create', ['type' => 'FILE']) }}"
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить File параметр

@@ -93,26 +93,34 @@
 
                             <section>
 
-                                @if(isset($row) && $row->type == 'FILE' || $type == 'FILE' )
+                                @if(isset($row) && $row->type == 'FILE' || $type == 'FILE')
 
                                     {!! Form::label('value', 'Файл* (jpg,png,txt,doc,docx,pdf,xls,xlsx,odt,ods,pdf)', ['class' => 'label']) !!}
 
                                     <div class="input input-file">
                                         <span class="button">
 
-                                        {!! Form::file('value',  ['id' => 'value', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
+                                        {!! Form::file('value',  ['id' => 'file', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
 
                                         </span><input type="text" placeholder="выберите файл" readonly="">
 
                                     </div>
 
-                                @else
-
+                                @elseif (isset($row) && $row->type == 'HTML' || $type == 'HTML')
                                     {!! Form::label('value', 'Значение*', ['class' => 'label']) !!}
 
                                     <label class="textarea textarea-resizable">
 
                                         {!! Form::textarea('value', old('value', $row->value ?? null), ['rows' => "5", 'class' => 'custom-scroll']) !!}
+
+                                    </label>
+                                @else
+
+                                    {!! Form::label('value', 'Значение*', ['class' => 'label']) !!}
+
+                                    <label class="input">
+
+                                        {!! Form::text('value', old('value', $row->value ?? null), ['class' => 'form-control']) !!}
 
                                     </label>
 
@@ -169,32 +177,14 @@
     {!! Html::script('/admin/js/plugin/ckeditor/ckeditor.js') !!}
 
     <script>
-        $(document).ready(function () {
-            if ($("#options-select").length > 0) {
-                let options = [];
-                $("#options-select").tagit({
-                    tags: options,
-                    field: "value[]"
-                });
-                let values = $("#options-select").data("values");
-                if (values.length > 0) {
-                    $.each(values, function (i, e) {
-                        $("#options-select").tagit("addTag", e);
-                    });
-                }
-            }
-        });
-    </script>
+        $(function() {
+        @if(isset($row) && $row->type == 'HTML' || $type == 'HTML' )
 
-
-
-    <script>
-        $(document).ready(function () {
-            CKEDITOR.replace( 'text', {
+            CKEDITOR.replace( 'value', {
                 extraAllowedContent: 'img[title]',
                 height: 380,
                 startupFocus: true,
-                filebrowserUploadUrl: '/upload.php',
+                filebrowserUploadUrl: '{{ url('/upload.php') }}',
                 on: {
                     instanceReady: function() {
                         this.dataProcessor.htmlFilter.addRules( {
@@ -212,27 +202,21 @@
             CKEDITOR.config.removePlugins = 'spellchecker, about, save, newpage, print, templates, scayt, flash, pagebreak, smiley,preview,find';
             CKEDITOR.config.extraAllowedContent = 'img[title]';
 
-            $("#title").on("change keyup input click", function () {
-                if (this.value.length >= 2) {
-                    let title = this.value;
-                    let request = $.ajax({
-                        url: '{!! URL::route('cp.ajax.action') !!}',
-                        method: "POST",
-                        data: {
-                            action: "get_content_slug",
-                            title: title
-                        },
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        dataType: "json"
-                    });
-                    request.done(function (data) {
-                        if (data.slug != null && data.slug != '') {
-                            $("#slug").val(data.slug);
-                        }
+        @endif
+
+            if ($("#options-select").length > 0) {
+                let options = [];
+                $("#options-select").tagit({
+                    tags: options,
+                    field: "value[]"
+                });
+                let values = $("#options-select").data("values");
+                if (values.length > 0) {
+                    $.each(values, function (i, e) {
+                        $("#options-select").tagit("addTag", e);
                     });
                 }
-                console.log(html);
-            });
+            }
         });
     </script>
 
