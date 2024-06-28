@@ -211,10 +211,11 @@
 @section('js')
 
     <script>
-        $(document).ready(function () {
+        $(function() {
             $("#name").on("change keyup input click", function () {
                 if (this.value.length >= 2) {
-                    let name = this.value;
+                    let name = this.value
+
                     let request = $.ajax({
                         url: '{!! URL::route('cp.ajax.action') !!}',
                         method: "POST",
@@ -225,6 +226,7 @@
                         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         dataType: "json"
                     });
+
                     request.done(function (data) {
                         if (data.slug != null && data.slug != '') {
                             $("#slug").val(data.slug);
@@ -233,7 +235,6 @@
                 }
                 console.log(html);
             });
-
         });
     </script>
 

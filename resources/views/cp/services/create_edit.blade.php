@@ -301,8 +301,7 @@
     {!! Html::script('/admin/js/plugin/ckeditor/ckeditor.js') !!}
 
     <script>
-        $(document).ready(function () {
-
+        $(function() {
             CKEDITOR.replace( 'full_description', {
                 extraAllowedContent: 'img[title]',
                 height: 380,
@@ -344,9 +343,7 @@
                         }
                     });
                 }
-                console.log(html);
             });
-
         });
     </script>
 

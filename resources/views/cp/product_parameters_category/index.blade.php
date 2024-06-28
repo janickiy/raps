@@ -62,7 +62,8 @@
 @section('js')
 
     <script>
-        $(document).ready(function () {
+
+        $(function() {
             pageSetUp();
             /* // DOM Position key index //
             l - Length changing (dropdown)
@@ -79,9 +80,11 @@
             */
             /* BASIC ;*/
             let responsiveHelper_dt_basic = undefined;
+
             let breakpointDefinition = {
                 tablet: 1024,
             };
+
             $('#itemList').dataTable({
                 "sDom": "flrtip",
                 "autoWidth": true,
@@ -124,6 +127,7 @@
                     {data: "actions", name: 'actions', orderable: false, searchable: false}
                 ],
             });
+
             $('#itemList').on('click', 'a.deleteRow', function () {
                 let rowid = $(this).attr('id');
                 swal({

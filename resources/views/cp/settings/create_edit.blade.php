@@ -110,9 +110,9 @@
 
                                     {!! Form::label('value', 'Значение*', ['class' => 'label']) !!}
 
-                                    <label class="input">
+                                    <label class="textarea textarea-resizable">
 
-                                        {!! Form::text('value', old('value', $row->value  ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                        {!! Form::textarea('value', old('value', $row->value ?? null), ['rows' => "5", 'class' => 'custom-scroll']) !!}
 
                                     </label>
 
@@ -128,9 +128,9 @@
 
                                 {!! Form::label('display_value', 'Описание', ['class' => 'label']) !!}
 
-                                <label class="input">
+                                <label class="textarea textarea-resizable">
 
-                                    {!! Form::text('display_value', old('display_value', $row->display_value ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
+                                    {!! Form::textarea('display_value', old('display_value', $row->display_value ?? null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
                                 </label>
 
@@ -166,6 +166,8 @@
 
 @section('js')
 
+    {!! Html::script('/admin/js/plugin/ckeditor/ckeditor.js') !!}
+
     <script>
         $(document).ready(function () {
             if ($("#options-select").length > 0) {
@@ -181,6 +183,56 @@
                     });
                 }
             }
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace( 'text', {
+                extraAllowedContent: 'img[title]',
+                height: 380,
+                startupFocus: true,
+                filebrowserUploadUrl: '/upload.php',
+                on: {
+                    instanceReady: function() {
+                        this.dataProcessor.htmlFilter.addRules( {
+                            elements: {
+                                img: function( el ) {
+                                    el.attributes.title = el.attributes.alt;
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.config.removePlugins = 'spellchecker, about, save, newpage, print, templates, scayt, flash, pagebreak, smiley,preview,find';
+            CKEDITOR.config.extraAllowedContent = 'img[title]';
+
+            $("#title").on("change keyup input click", function () {
+                if (this.value.length >= 2) {
+                    let title = this.value;
+                    let request = $.ajax({
+                        url: '{!! URL::route('cp.ajax.action') !!}',
+                        method: "POST",
+                        data: {
+                            action: "get_content_slug",
+                            title: title
+                        },
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        dataType: "json"
+                    });
+                    request.done(function (data) {
+                        if (data.slug != null && data.slug != '') {
+                            $("#slug").val(data.slug);
+                        }
+                    });
+                }
+                console.log(html);
+            });
         });
     </script>
 

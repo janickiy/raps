@@ -285,7 +285,6 @@
 
     <script>
         $(document).ready(function () {
-
             CKEDITOR.replace( 'text', {
                 extraAllowedContent: 'img[title]',
                 height: 380,
@@ -329,7 +328,6 @@
                 }
                 console.log(html);
             });
-
         });
     </script>
 
