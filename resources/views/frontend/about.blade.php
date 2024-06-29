@@ -56,10 +56,22 @@
 
             </div>
 
+            <div class="about-info__images">
+
+                {!! SettingsHelper::getSetting('BLOCK_ABOUT_IMAGES') !!}
+
+                @if (Auth::check())
+                    <p>
+                        <a href="{{ URL::route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_IMAGES')]) }}" class="editbutton">Редактировать</a>
+                    </p>
+                @endif
+            </div>
+
             <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
 
         </div>
         <div class="about-info__images">
+
             {!! SettingsHelper::getSetting('BLOCK_ABOUT_IMAGES') !!}
 
             @if (Auth::check())
