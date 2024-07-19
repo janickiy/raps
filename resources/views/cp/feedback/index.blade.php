@@ -105,7 +105,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.feedback') }}'
+                    url: '{{ route('cp.datatable.feedback') }}'
                 },
                 columns: [
                     {data: 'name', name: 'name'},

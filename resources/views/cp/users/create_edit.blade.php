@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.users.update') : URL::route('cp.users.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.users.update') : route('cp.users.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -144,7 +144,7 @@
                             <button type="submit" class="btn btn-primary button-apply">
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
-                            <a class="btn btn-default" href="{{ URL::route('cp.users.index') }}">
+                            <a class="btn btn-default" href="{{ route('cp.users.index') }}">
                                 Назад
                             </a>
                         </footer>

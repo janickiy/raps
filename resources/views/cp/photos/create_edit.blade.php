@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => URL::route('cp.photos.update'), 'method' => 'put', 'files' => true, 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => route('cp.photos.update'), 'method' => 'put', 'files' => true, 'class' => "smart-form"]) !!}
 
                         {!! Form::hidden('id', $row->id) !!}
 
@@ -132,7 +132,7 @@
                             <button type="submit" class="btn btn-primary button-apply">
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
-                            <a class="btn btn-default" href="{{ URL::route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id]) }}">
+                            <a class="btn btn-default" href="{{ route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id]) }}">
                                 Назад
                             </a>
                         </footer>

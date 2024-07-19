@@ -18,7 +18,7 @@
                 <!-- widget div-->
                 <div>
 
-                    <a href="{{ URL::route('cp.products.index') }}">
+                    <a href="{{ route('cp.products.index') }}">
                         назад
                     </a><br><br>
 
@@ -26,7 +26,7 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <a href="{{ URL::route('cp.product_documents.create', ['product_id' => $product_id]) }}"
+                                <a href="{{ route('cp.product_documents.create', ['product_id' => $product_id]) }}"
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить
                                 </a>
@@ -123,7 +123,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.product_documents', ['product_id' => $product_id]) }}'
+                    url: '{{ route('cp.datatable.product_documents', ['product_id' => $product_id]) }}'
                 },
                 columns: [
 
@@ -148,7 +148,7 @@
                     function (isConfirm) {
                         if (!isConfirm) return;
                         $.ajax({
-                            url: '{{ URL::route('cp.product_documents.destroy') }}',
+                            url: '{{ route('cp.product_documents.destroy') }}',
                             type: "POST",
                             dataType: "html",
                             data: {id: rowid},

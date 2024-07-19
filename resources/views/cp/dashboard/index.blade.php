@@ -23,7 +23,7 @@
                                 <div class="well text-center connect">
                                     <i class="fa fa-bell fa-3x"></i>
                                     <h5><small>{{ $requests }}</small></h5>
-                                    <span class="font-md"><b><a href="{{URL::route('cp.feedback.index')}}">Заявки</a></b></span>
+                                    <span class="font-md"><b><a href="{{route('cp.feedback.index')}}">Заявки</a></b></span>
                                 </div>
                             </div>
 
@@ -31,7 +31,7 @@
                                 <div class="well text-center connect">
                                     <i class="fa fa-th-list fa-3x"></i>
                                     <h5><small>{{ $services }}</small></h5>
-                                    <span class="font-md"><b><a href="{{URL::route('cp.services.index')}}">Услуги</a></b></span>
+                                    <span class="font-md"><b><a href="{{route('cp.services.index')}}">Услуги</a></b></span>
                                 </div>
                             </div>
 
@@ -39,7 +39,7 @@
                                 <div class="well text-center connect">
                                     <i class="fa fa-th-list fa-3x"></i>
                                     <h5><small>{{ $products }}</small></h5>
-                                    <span class="font-md"><b><a href="{{URL::route('cp.products.index')}}">Продукция</a></b></span>
+                                    <span class="font-md"><b><a href="{{route('cp.products.index')}}">Продукция</a></b></span>
                                 </div>
                             </div>
 
@@ -47,7 +47,7 @@
                                 <div class="well text-center connect">
                                     <i class="fa fa-users fa-3x"></i>
                                     <h5><small>{{ $users }}</small></h5>
-                                    <span class="font-md"><b><a href="{{URL::route('cp.users.index')}}">Пользователи</a></b></span>
+                                    <span class="font-md"><b><a href="{{route('cp.users.index')}}">Пользователи</a></b></span>
                                 </div>
                             </div>
 

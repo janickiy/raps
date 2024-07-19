@@ -16,7 +16,7 @@
 @section('content')
 
     <ul class="container breadcrumbs">
-        <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
+        <li><a href="{{ route('frontend.index') }}">Главная</a></li>
         <li><span>{{ $page->title }}</span></li>
     </ul>
 
@@ -30,7 +30,7 @@
                 {!! $page->text !!}
 
                 @if (Auth::check())
-                    <a href="{{ URL::route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton"> Редактировать</a>
+                    <a href="{{ route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton"> Редактировать</a>
                 @endif
 
             </div>

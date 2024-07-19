@@ -106,7 +106,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.requests') }}'
+                    url: '{{ route('cp.datatable.requests') }}'
                 },
                 columns: [
                     {data: 'id', name: 'id'},

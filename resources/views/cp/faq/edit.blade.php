@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.faq.update') : URL::route('cp.faq.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.faq.update') : route('cp.faq.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -91,7 +91,7 @@
                             <button type="submit" class="btn btn-primary button-apply">
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
-                            <a class="btn btn-default" href="{{ URL::route('cp.faq.index') }}">
+                            <a class="btn btn-default" href="{{ route('cp.faq.index') }}">
                                 Назад
                             </a>
                         </footer>

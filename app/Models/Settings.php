@@ -12,9 +12,11 @@ class Settings extends Model
 
     protected $fillable = [
         'key_cd',
+        'name',
         'type',
         'display_value',
-        'value'
+        'value',
+        'hide',
     ];
 
     /**
@@ -67,5 +69,4 @@ class Settings extends Model
 
         $this->delete();
     }
-
 }

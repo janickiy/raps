@@ -59,7 +59,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="well no-padding">
 
-                    {!! Form::open(['url' => URL::route('login'), 'method' => 'post', 'class' => 'smart-form client-form', 'id' => 'login-form']) !!}
+                    {!! Form::open(['url' => route('login'), 'method' => 'post', 'class' => 'smart-form client-form', 'id' => 'login-form']) !!}
 
                     @if ($errors->has('message'))
                         <p class="text-danger">{{ $errors->first('message') }}</p>

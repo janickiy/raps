@@ -111,7 +111,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.seo') }}'
+                    url: '{{ route('cp.datatable.seo') }}'
                 },
                 columns: [
                     {data: 'type', name: 'type'},

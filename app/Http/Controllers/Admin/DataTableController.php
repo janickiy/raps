@@ -116,6 +116,9 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
+            ->editColumn('hide', function ($row) {
+                return $row->hide == 0 ? 'да':'нет';
+            })
             ->rawColumns(['actions'])->make(true);
     }
 
@@ -268,7 +271,6 @@ class DataTableController extends Controller
             ->rawColumns(['actions'])->make(true);
     }
 
-
     /**
      * @return mixed
      */
@@ -347,5 +349,4 @@ class DataTableController extends Controller
             })
             ->rawColumns(['actions', 'thumbnail'])->make(true);
     }
-
 }

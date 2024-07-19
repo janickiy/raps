@@ -52,7 +52,7 @@
                     <use xlink:href="{{ url('/images/sprite.svg#menu') }}"/>
                 </svg>
             </button>
-            <a href="{{ URL::route('frontend.index') }}" class="header__logo-short"
+            <a href="{{ route('frontend.index') }}" class="header__logo-short"
                aria-label="Перейти на главную страницу">
                 <svg aria-hidden="true">
                     <use xlink:href="{{ url('/images/sprite.svg#color-logo-short') }}"/>
@@ -82,7 +82,7 @@
 
                     </li>
                     <li class="header__submenu">
-                        <a href="{{ URL::route('frontend.services_listing') }}" class="header__nav-item">
+                        <a href="{{ route('frontend.services_listing') }}" class="header__nav-item">
                             Услуги
                             <svg aria-hidden="true">
                                 <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
@@ -100,7 +100,7 @@
                         @endif
 
                     </li>
-                    <li><a href="{{ URL::route('frontend.contact') }}" class="header__nav-item">Контакты</a></li>
+                    <li><a href="{{ route('frontend.contact') }}" class="header__nav-item">Контакты</a></li>
                 </ul>
             </nav>
             <div class="header__menu-language">
@@ -132,7 +132,7 @@
         </div>
     </div>
     <div class="header__bottom container">
-        <a href="{{ URL::route('frontend.index') }}" class="header__logo" aria-label="Перейти на главную страницу">
+        <a href="{{ route('frontend.index') }}" class="header__logo" aria-label="Перейти на главную страницу">
             <svg aria-hidden="true">
                 <use xlink:href="{{ url('/images/sprite.svg#color-logo') }}"/>
             </svg>
@@ -159,7 +159,7 @@
                         @foreach($catalogs as $row)
 
                             <li class="header__input-hint">
-                                <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">
+                                <a href="{{ route('frontend.catalog',['slug' => $row->slug]) }}">
                                     <picture>
                                         <img src="{{ url($row->getImage()) }}"
                                              srcset="{{ url($row->getImage('2x_')) }} 2x"
@@ -177,7 +177,7 @@
                     </ul>
                 </div>
             </div>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить
+            <a href="{{ route('frontend.application') }}" class="btn btn-primary-outline header__controls-btn">Оформить
                 заявку</a>
         </div>
     </div>
@@ -219,7 +219,7 @@
                                             <div class="header__mobile-submenu-body">
                                                 <ul class="header__mobile-submenu-list">
                                                     <li>
-                                                        <a class="header__mobile-submenu-sublink _all-link" href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
+                                                        <a class="header__mobile-submenu-sublink _all-link" href="{{ route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть всё<span>{{ $row->getTotalProductCount() }}</span></a>
                                                     </li>
 
                                                     {!! \App\Models\Catalog::categoryMobileTree($catalogsList, $row->id) !!}
@@ -281,11 +281,11 @@
 
                         </div>
                     </li>
-                    <li><a href="{{ URL::route('frontend.contact') }}"
+                    <li><a href="{{ route('frontend.contact') }}"
                            class="header__mobile-menu-link js-mobile-menu-link">Контакты</a></li>
                 </ul>
             </nav>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить
+            <a href="{{ route('frontend.application') }}" class="btn btn-primary header__mobile-menu-request">Оформить
                 заявку</a>
         </div>
     </div>
@@ -317,7 +317,7 @@
 
                                         <li class="header__product-menu-submenu-item">
                                             <a class="header__product-menu-sublink _all-link"
-                                               href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть
+                                               href="{{ route('frontend.catalog',['slug' => $row->slug]) }}">Смотреть
                                                 всё<span>{{ $row->getTotalProductCount() }}</span></a>
                                         </li>
 
@@ -345,7 +345,7 @@
     <div class="footer__top">
         <div class="container">
             <div class="footer__top-wrapper">
-                <a href="{{ URL::route('frontend.index') }}" class="footer__logo"
+                <a href="{{ route('frontend.index') }}" class="footer__logo"
                    aria-label="Перейти на главную страницу">
                     <svg aria-hidden="true">
                         <use xlink:href="{{ url('/images/sprite.svg#logo') }}"/>
@@ -383,7 +383,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-secondary footer__btn">Оформить заявку</a>
+            <a href="{{ route('frontend.application') }}" class="btn btn-secondary footer__btn">Оформить заявку</a>
         </div>
     </div>
     <div class="footer__bottom">
@@ -391,11 +391,11 @@
             <span class="footer__bottom-copyright">© 2015-{{ date("Y") }} RAPS</span>
             <ul class="footer__bottom-links">
                 <li>
-                    <a href="{{ URL::route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия
+                    <a href="{{ route('frontend.page', ['slug' => 'usloviya-ispolzovaniya']) }}">Условия
                         использования</a>
                 </li>
                 <li>
-                    <a href="{{ URL::route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика
+                    <a href="{{ route('frontend.page', ['slug' => 'politika-konfidentsialnosti']) }}">Политика
                         конфиденциальности</a>
                 </li>
             </ul>
@@ -441,7 +441,7 @@
                     </label>
                 </div>
                 <p class="request-form__text">Если у вас возникли какие-либо вопросы, <a
-                        href="{{ URL::route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
+                        href="{{ route('frontend.contact') }}">свяжитесь с нами</a> любым удобным способом.</p>
                 <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
 
                 {!! Form::close() !!}

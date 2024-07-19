@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => URL::route('cp.sitemap.import'), 'files' => true, 'method' => 'post', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => route('cp.sitemap.import'), 'files' => true, 'method' => 'post', 'id' => 'smart-form']) !!}
 
                         <div class="smart-form">
 
@@ -71,7 +71,7 @@
                                 <button type="submit" class="btn btn-primary button-apply">
                                     Загрузить
                                 </button>
-                                <a class="btn btn-default" href="{{ URL::route('cp.sitemap.index') }}">
+                                <a class="btn btn-default" href="{{ route('cp.sitemap.index') }}">
                                     Назад
                                 </a>
                             </footer>

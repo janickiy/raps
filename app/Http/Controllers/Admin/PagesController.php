@@ -52,7 +52,6 @@ class PagesController extends Controller
             $originName = $filename . '.' . $extension;
 
             if ($request->file('image')->move('uploads/pages', $originName)) {
-
                 $img = Image::make(Storage::disk('public')->path('pages/' . $originName));
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
@@ -65,7 +64,6 @@ class PagesController extends Controller
                     $constraint->aspectRatio();
                 });
                 $small_img->save(Storage::disk('public')->path('pages/' . $originName));
-
             }
         }
 
@@ -74,7 +72,6 @@ class PagesController extends Controller
         ]));
 
         return redirect(URL::route('cp.pages.index'))->with('success', 'Данные успешно добавлены');
-
     }
 
     /**

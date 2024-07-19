@@ -16,7 +16,7 @@
 @section('content')
 
     <ul class="container breadcrumbs">
-        <li><a href="{{ URL::route('frontend.index') }}">Главная</a></li>
+        <li><a href="{{ route('frontend.index') }}">Главная</a></li>
         <li><span>{{ $title }}</span></li>
     </ul>
 
@@ -27,7 +27,7 @@
 
             @if (Auth::check())
                 <p>
-                <a href="{{ URL::route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT')]) }}" class="editbutton">Редактировать</a>
+                <a href="{{ route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT')]) }}" class="editbutton">Редактировать</a>
                 </p>
             @endif
         </div>
@@ -36,7 +36,7 @@
 
         @if (Auth::check())
             <p>
-                <a href="{{ URL::route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_2')]) }}" class="editbutton">Редактировать</a>
+                <a href="{{ route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_2')]) }}" class="editbutton">Редактировать</a>
             </p>
         @endif
 
@@ -51,7 +51,7 @@
 
                 @if (Auth::check())
                     <br>
-                    <a href="{{ URL::route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton">Редактировать</a>
+                    <a href="{{ route('cp.pages.edit', ['id' => $page->id]) }}" class="editbutton">Редактировать</a>
                 @endif
 
             </div>
@@ -62,12 +62,12 @@
 
                 @if (Auth::check())
                     <p>
-                        <a href="{{ URL::route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_IMAGES')]) }}" class="editbutton">Редактировать</a>
+                        <a href="{{ route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_IMAGES')]) }}" class="editbutton">Редактировать</a>
                     </p>
                 @endif
             </div>
 
-            <a href="{{ URL::route('frontend.application') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
+            <a href="{{ route('frontend.application') }}" class="btn btn-primary about-info__btn">Оформить заявку</a>
 
         </div>
         <div class="about-info__images">
@@ -76,7 +76,7 @@
 
             @if (Auth::check())
                 <p>
-                    <a href="{{ URL::route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_IMAGES')]) }}" class="editbutton">Редактировать</a>
+                    <a href="{{ route('cp.settings.edit', ['id' =>  SettingsHelper::getId('BLOCK_ABOUT_IMAGES')]) }}" class="editbutton">Редактировать</a>
                 </p>
             @endif
         </div>

@@ -52,6 +52,5 @@ class SeoController extends Controller
         $row->save();
 
         return redirect(URL::route('cp.seo.index'))->with('success', 'Данные успешно обновлены');
-
     }
 }

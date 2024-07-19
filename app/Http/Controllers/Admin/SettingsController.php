@@ -37,7 +37,6 @@ class SettingsController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-
         if ($request->hasFile('value')) {
             $extension = $request->file('value')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
@@ -47,12 +46,18 @@ class SettingsController extends Controller
             }
         }
 
+        $hide = 0;
+
+        if ($request->input('hide') === null) {
+            $hide = 1;
+        }
+
         Settings::create(array_merge(array_merge($request->all()), [
-            'value' => $filename ?? $request->input('value')
+            'value' => $filename ?? $request->input('value'),
+            'hide' => $hide,
         ]));
 
         return redirect(URL::route('cp.settings.index'))->with('success', 'Информация успешно добавлена');
-
     }
 
     /**
@@ -81,10 +86,19 @@ class SettingsController extends Controller
         if (!$settings) abort(404);
 
         $settings->key_cd = $request->input('key_cd');
+        $settings->name = $request->input('name');
         $settings->display_value = $request->input('display_value');
+        $settings->hide = $request->input('hide');
+
+        $hide = 0;
+
+        if ($request->input('hide') === null) {
+            $hide = 1;
+        }
+
+        $settings->hide = $hide;
 
         if ($request->hasFile('value')) {
-
             if (Storage::disk('public')->exists('settings/' . $settings->filePath()) === true) Storage::disk('public')->delete('settings/' . $settings->filePath());
 
             $extension = $request->file('value')->getClientOriginalExtension();
@@ -102,7 +116,6 @@ class SettingsController extends Controller
         $settings->save();
 
         return redirect(URL::route('cp.settings.index'))->with('success', 'Данные обновлены');
-
     }
 
     /**

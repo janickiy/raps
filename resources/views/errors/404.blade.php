@@ -20,7 +20,7 @@
                     <h1>404</h1>
                 </div>
                 <p class="section-desc error__desc">Мы не можем найти запрашиваемую&nbsp;страницу.<br>Пожалуйста, проверьте URL страницы или вернитесь на Главную.</p>
-                <a href="{{ URL::route('frontend.index') }}" class="btn btn-primary error__btn">
+                <a href="{{ route('frontend.index') }}" class="btn btn-primary error__btn">
                     Перейти на Главную страницу
                     <svg aria-hidden="true">
                         <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>

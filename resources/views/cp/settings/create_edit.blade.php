@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.settings.update') : URL::route('cp.settings.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.settings.update') : route('cp.settings.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -131,6 +131,21 @@
                                 @endif
 
                             </section>
+                            <section>
+
+                                {!! Form::label('name', 'Название', ['class' => 'label']) !!}
+
+                                <label class="input">
+
+                                    {!! Form::text('name', old('value', $row->name ?? null), ['class' => 'form-control']) !!}
+
+                                </label>
+
+                                @if ($errors->has('name'))
+                                    <p class="text-danger">{{ $errors->first('name') }}</p>
+                                @endif
+
+                            </section>
 
                             <section>
 
@@ -148,13 +163,27 @@
 
                             </section>
 
+                            <section>
+
+                                <label class="checkbox">
+
+                                    {!! Form::checkbox('hide', 1, isset($row) ? ($row->hide == true ? 0 : 1): 0) !!}
+
+                                    <i></i>Скрыть</label>
+
+                                @if ($errors->has('hide'))
+                                    <span class="text-danger">{{ $errors->first('hide') }}</span>
+                                @endif
+
+                            </section>
+
                         </fieldset>
 
                         <footer>
                             <button type="submit" class="btn btn-primary button-apply">
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
-                            <a class="btn btn-default" href="{{ URL::route('cp.settings.index') }}">
+                            <a class="btn btn-default" href="{{ route('cp.settings.index') }}">
                                 Назад
                             </a>
                         </footer>

@@ -42,7 +42,7 @@
                     <!-- widget content -->
                     <div class="widget-body">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.photoalbum.update') : URL::route('cp.photoalbum.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.photoalbum.update') : route('cp.photoalbum.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => "smart-form"]) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -188,7 +188,7 @@
                             <button type="submit" class="btn btn-primary button-apply">
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
-                            <a class="btn btn-default" href="{{ URL::route('cp.photoalbum.index') }}">
+                            <a class="btn btn-default" href="{{ route('cp.photoalbum.index') }}">
                                 Назад
                             </a>
                         </footer>
@@ -217,7 +217,7 @@
                     let name = this.value
 
                     let request = $.ajax({
-                        url: '{!! URL::route('cp.ajax.action') !!}',
+                        url: '{!! route('cp.ajax.action') !!}',
                         method: "POST",
                         data: {
                             action: "get_catalog_slug",

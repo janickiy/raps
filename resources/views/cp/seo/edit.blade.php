@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => URL::route('cp.seo.update'), 'method' => 'put', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => route('cp.seo.update'), 'method' => 'put', 'id' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -154,7 +154,7 @@
                                 <button type="submit" class="btn btn-primary button-apply">
                                     {{ isset($row) ? 'Изменить' : 'Добавить' }}
                                 </button>
-                                <a class="btn btn-default" href="{{ URL::route('cp.seo.index') }}">
+                                <a class="btn btn-default" href="{{ route('cp.seo.index') }}">
                                     Назад
                                 </a>
                             </footer>

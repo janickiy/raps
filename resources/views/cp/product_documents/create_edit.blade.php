@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.product_documents.update') : URL::route('cp.product_documents.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.product_documents.update') : route('cp.product_documents.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'id' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -102,7 +102,7 @@
                                 <button type="submit" class="btn btn-primary button-apply">
                                     {{ isset($row) ? 'Изменить' : 'Добавить' }}
                                 </button>
-                                <a class="btn btn-default" href="{{ URL::route('cp.product_documents.index', ['product_id' => $product_id]) }}">
+                                <a class="btn btn-default" href="{{ route('cp.product_documents.index', ['product_id' => $product_id]) }}">
                                     Назад
                                 </a>
                             </footer>

@@ -49,7 +49,7 @@
                         <div class="smart-form">
 
                             <header>
-                                <a href="{{ URL::route('cp.products.index') }}">
+                                <a href="{{ route('cp.products.index') }}">
                                     назад
                                 </a><br><br>
                                 *-Обязательные поля
@@ -118,7 +118,7 @@
                                 <button type="submit" class="btn btn-primary button-apply">
                                     Добавить
                                 </button>
-                                <a class="btn btn-default" href="{{ URL::route('cp.products.index') }}">
+                                <a class="btn btn-default" href="{{ route('cp.products.index') }}">
                                     Назад
                                 </a>
                             </footer>
@@ -242,7 +242,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.product_photos',['product_id' => $row->id]) }}'
+                    url: '{{ route('cp.datatable.product_photos',['product_id' => $row->id]) }}'
                 },
                 columns: [
                     {data: 'id', name: 'id', searchable: false},
@@ -269,7 +269,7 @@
                     function (isConfirm) {
                         if (!isConfirm) return;
                         $.ajax({
-                            url: '{{ URL::route('cp.product_photos.destroy') }}',
+                            url: '{{ route('cp.product_photos.destroy') }}',
                             type: "POST",
                             dataType: "html",
                             data: {id: rowid},

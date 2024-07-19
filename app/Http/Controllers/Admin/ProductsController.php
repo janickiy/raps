@@ -15,7 +15,6 @@ use Storage;
 
 class ProductsController extends Controller
 {
-
     /**
      * @return View
      */
@@ -109,7 +108,6 @@ class ProductsController extends Controller
         $row->seo_url_canonical = $request->input('seo_url_canonical');
 
         if ($request->hasFile('image')) {
-
             $image = $request->pic;
 
             if ($image != null) {
@@ -143,7 +141,6 @@ class ProductsController extends Controller
         $row->save();
 
         return redirect(URL::route('cp.products.index'))->with('success', 'Данные обновлены');
-
     }
 
     /**

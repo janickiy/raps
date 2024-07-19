@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? URL::route('cp.product_parameters.update') : URL::route('cp.product_parameters.store'), 'method' => isset($row) ? 'put' : 'post', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.product_parameters.update') : route('cp.product_parameters.store'), 'method' => isset($row) ? 'put' : 'post', 'id' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 

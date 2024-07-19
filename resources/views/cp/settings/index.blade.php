@@ -21,15 +21,15 @@
                     <div class="box-header">
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{ URL::route('cp.settings.create', ['type' => 'TEXT']) }}"
+                                <a href="{{ route('cp.settings.create', ['type' => 'TEXT']) }}"
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить Text параметр
                                 </a><br><br>
-                                <a href="{{ URL::route('cp.settings.create', ['type' => 'HTML']) }}"
+                                <a href="{{ route('cp.settings.create', ['type' => 'HTML']) }}"
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить HTML параметр
                                 </a><br><br>
-                                <a href="{{ URL::route('cp.settings.create', ['type' => 'FILE']) }}"
+                                <a href="{{ route('cp.settings.create', ['type' => 'FILE']) }}"
                                    class="btn btn-info btn-sm pull-left">
                                     <span class="fa fa-plus"> &nbsp;</span> Добавить File параметр
                                 </a>
@@ -44,9 +44,11 @@
                             <thead>
                             <tr>
                                 <th>Параметр</th>
+                                <th>Название</th>
                                 <th>Значение</th>
                                 <th>Описание</th>
                                 <th>Тип</th>
+                                <th>Скрыть</th>
                                 <th width="20px">Действия</th>
                             </tr>
                             </thead>
@@ -128,13 +130,15 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.settings') }}'
+                    url: '{{ route('cp.datatable.settings') }}'
                 },
                 columns: [
                     {data: 'key_cd', name: 'key_cd'},
+                    {data: 'name', name: 'name'},
                     {data: 'value', name: 'value'},
                     {data: 'display_value', name: 'display_value'},
                     {data: 'type', name: 'type'},
+                    {data: 'hide', name: 'hide', searchable: false},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],
             });
@@ -154,7 +158,7 @@
                     function (isConfirm) {
                         if (!isConfirm) return;
                         $.ajax({
-                            url: '{{ URL::route('cp.settings.destroy') }}',
+                            url: '{{ route('cp.settings.destroy') }}',
                             type: "POST",
                             dataType: "html",
                             data: {id: rowid},

@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => URL::route('cp.robots.update'), 'method' => 'put', 'id' => 'tmplForm']) !!}
+                        {!! Form::open(['url' => route('cp.robots.update'), 'method' => 'put', 'id' => 'tmplForm']) !!}
 
                         <div class="smart-form">
 

@@ -81,7 +81,6 @@ class ServicesController extends Controller
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.services.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
-
     }
 
     /**

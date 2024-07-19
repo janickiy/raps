@@ -109,7 +109,7 @@ Use search to find needed section.
     <div class="pull-right">
 
         <div id="fullscreen" class="btn-header transparent pull-right">
-            <span> <a href="{{ URL::route('logout') }}" data-action="userLogout" title="Выйти"><i
+            <span> <a href="{{ route('logout') }}" data-action="userLogout" title="Выйти"><i
                         class="fa fa-sign-out fa-lg"></i></a>
             </span>
         </div>
@@ -170,7 +170,7 @@ Use search to find needed section.
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
 
                 <li {!! Request::is('cp*') ? ' class="active"' : '' !!}>
-                    <a href="{{ URL::route('cp.dashbaord.index') }}"><i class="fa fa-fw fa-home"></i> <span
+                    <a href="{{ route('cp.dashbaord.index') }}"><i class="fa fa-fw fa-home"></i> <span
                             class="menu-item-parent"> Главная</span></a>
                 </li>
 
@@ -184,13 +184,13 @@ Use search to find needed section.
                 <ul class="treeview-menu">
 
                     <li {!! Request::is('cp/manage-menus*') ? ' class="active"' : '' !!}>
-                        <a href="{{ URL::route('cp.menu.index') }}">
+                        <a href="{{ route('cp.menu.index') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Меню</span>
                         </a>
                     </li>
 
                     <li {!! Request::is('cp/pages*') ? ' class="active"' : '' !!}><a
-                            href="{{ URL::route('cp.pages.index') }}"><i class="fa fa-list"></i> Страницы и
+                            href="{{ route('cp.pages.index') }}"><i class="fa fa-list"></i> Страницы и
                             разделы</a>
                     </li>
 
@@ -205,14 +205,14 @@ Use search to find needed section.
                 <ul class="treeview-menu">
 
                     <li {!! Request::is('cp/catalog*') ? ' class="active"' : '' !!}>
-                        <a href="{{ URL::route('cp.catalog.index') }}">
+                        <a href="{{ route('cp.catalog.index') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Каталог</span>
                         </a>
                     </li>
 
                     @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
                         <li {!! Request::is('cp/product-parameters-category*') ? ' class="active"' : '' !!}>
-                            <a href="{{ URL::route('cp.product_parameters_category.index') }}">
+                            <a href="{{ route('cp.product_parameters_category.index') }}">
                                 <i class="fa fa-fw fa-list"></i> <span
                                     class="menu-item-parent"> Категория характеристик</span>
                             </a>
@@ -220,7 +220,7 @@ Use search to find needed section.
                     @endif
 
                     <li {!! Request::is('cp/products*') ? ' class="active"' : '' !!}>
-                        <a href="{{ URL::route('cp.products.index') }}">
+                        <a href="{{ route('cp.products.index') }}">
                             <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Продукция</span>
                         </a>
                     </li>
@@ -229,13 +229,13 @@ Use search to find needed section.
             </li>
 
             <li {!! Request::is('cp/services*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.services.index')}}"><i class="fa fa-fw fa-plus-square-o"></i> <span
+                <a href="{{route('cp.services.index')}}"><i class="fa fa-fw fa-plus-square-o"></i> <span
                         class="menu-item-parent"> Услуги</span></a>
             </li>
 
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin|moderator'))
                 <li {!! Request::is('cp/photoalbum*') ? ' class="active"' : '' !!}>
-                    <a href="{{ URL::route('cp.photoalbum.index') }}">
+                    <a href="{{ route('cp.photoalbum.index') }}">
                         <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Фотоальбом</span>
                     </a>
                 </li>
@@ -250,19 +250,19 @@ Use search to find needed section.
                     <ul class="treeview-menu">
 
                         <li {!! Request::is('cp/robots/edit*') ? ' class="active"' : '' !!}>
-                            <a href="{{ URL::route('cp.robots.edit') }}">
+                            <a href="{{ route('cp.robots.edit') }}">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Robots.txt</span>
                             </a>
                         </li>
 
                         <li {!! Request::is('cp/sitemap*') ? ' class="active"' : '' !!}>
-                            <a href="{{ URL::route('cp.sitemap.index') }}">
+                            <a href="{{ route('cp.sitemap.index') }}">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> Sitemap.xml</span>
                             </a>
                         </li>
 
                         <li {!! Request::is('cp/seo*') ? ' class="active"' : '' !!}>
-                            <a href="{{ URL::route('cp.seo.index') }}">
+                            <a href="{{ route('cp.seo.index') }}">
                                 <i class="fa fa-fw fa-list"></i> <span class="menu-item-parent"> SEO</span>
                             </a>
                         </li>
@@ -274,26 +274,26 @@ Use search to find needed section.
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin'))
 
                 <li {!! Request::is('cp/users*') ? ' class="active"' : '' !!}>
-                    <a href="{{URL::route('cp.users.index')}}"><i class="fa fa-fw fa-users"></i> <span
+                    <a href="{{route('cp.users.index')}}"><i class="fa fa-fw fa-users"></i> <span
                             class="menu-item-parent"> Пользователи</span></a>
                 </li>
 
             @endif
 
             <li {!! Request::is('cp/feedback*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.feedback.index')}}"><i class="fa fa-fw fa-bell"></i> <span
+                <a href="{{route('cp.feedback.index')}}"><i class="fa fa-fw fa-bell"></i> <span
                         class="menu-item-parent"> Заявки</span></a>
             </li>
 
             <li {!! Request::is('cp/faq*') ? ' class="active"' : '' !!}>
-                <a href="{{URL::route('cp.faq.index')}}"><i class="fa fa-fw fa-question"></i> <span
+                <a href="{{route('cp.faq.index')}}"><i class="fa fa-fw fa-question"></i> <span
                         class="menu-item-parent"> Вопрос-ответ</span></a>
             </li>
 
             @if(PermissionsHelper::has_permission(Auth::user()->role,'admin'))
 
                 <li {!! Request::is('cp/settings*') ? ' class="active"' : '' !!}>
-                    <a href="{{URL::route('cp.settings.index')}}"><i class="fa fa-fw fa-cog txt-color-blue"></i> <span
+                    <a href="{{route('cp.settings.index')}}"><i class="fa fa-fw fa-cog txt-color-blue"></i> <span
                             class="menu-item-parent"> Настройки</span></a>
                 </li>
 

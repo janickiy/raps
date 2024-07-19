@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Catalog, Pages, Photoalbum, Products, ProductParametersCategory, Requests, Seo, Services, Faq};
 use App\Http\Request\Frontend\SendApplicationRequest;
-use Harimayco\Menu\Models\Menus;
-use App\Helpers\SettingsHelper;
 use App\Mail\Notification;
-use Illuminate\Http\Request;
+use App\Models\{Catalog, Faq, Pages, Photoalbum, ProductParametersCategory, Products, Requests, Seo, Services};
+use App\Models\SettingsHelper;
+use File;
+use Harimayco\Menu\Models\Menus;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Mail;
-use File;
 use URL;
 
 class FrontendController extends Controller

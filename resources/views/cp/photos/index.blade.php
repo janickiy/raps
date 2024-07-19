@@ -49,7 +49,7 @@
                         <div class="smart-form">
 
                             <header>
-                                <a href="{{ URL::route('cp.photoalbum.index') }}">
+                                <a href="{{ route('cp.photoalbum.index') }}">
                                     назад
                                 </a><br><br>
                                 *-Обязательные поля
@@ -134,7 +134,7 @@
                                 <button type="submit" class="btn btn-primary button-apply">
                                     Добавить
                                 </button>
-                                <a class="btn btn-default" href="{{ URL::route('cp.photoalbum.index') }}">
+                                <a class="btn btn-default" href="{{ route('cp.photoalbum.index') }}">
                                     Назад
                                 </a>
                             </footer>
@@ -258,7 +258,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '{{ URL::route('cp.datatable.photos',['photoalbum_id' => $row->id]) }}'
+                    url: '{{ route('cp.datatable.photos',['photoalbum_id' => $row->id]) }}'
                 },
                 columns: [
                     {data: 'id', name: 'id', searchable: false},
@@ -287,7 +287,7 @@
                         if (!isConfirm) return;
 
                         $.ajax({
-                            url: '{{ URL::route('cp.photos.destroy') }}',
+                            url: '{{ route('cp.photos.destroy') }}',
                             type: "POST",
                             dataType: "html",
                             data: {id: rowid},
