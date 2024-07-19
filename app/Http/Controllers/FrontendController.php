@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SettingsHelper;
 use App\Http\Request\Frontend\SendApplicationRequest;
 use App\Mail\Notification;
 use App\Models\{Catalog, Faq, Pages, Photoalbum, ProductParametersCategory, Products, Requests, Seo, Services};
-use App\Models\SettingsHelper;
 use File;
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Contracts\View\View;

@@ -44,15 +44,15 @@
                 <dd>{{ SettingsHelper::getSetting('EMAIL') }}</dd>
             </div>
             <div class="contacts__item">
-                <dt>ИНН</dt>
+                <dt>{{ SettingsHelper::getSettingName('INN') }}</dt>
                 <dd>{{ SettingsHelper::getSetting('INN') }}</dd>
             </div>
             <div class="contacts__item">
-                <dt>КПП</dt>
+                <dt>{{ SettingsHelper::getSettingName('KPP') }}</dt>
                 <dd>{{ SettingsHelper::getSetting('KPP') }}</dd>
             </div>
             <div class="contacts__item">
-                <dt>ОГРН</dt>
+                <dt>{{ SettingsHelper::getSettingName('OGRN') }}</dt>
                 <dd>{{ SettingsHelper::getSetting('OGRN') }}</dd>
             </div>
         </dl>

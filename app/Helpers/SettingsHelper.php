@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Helpers;
+
+use App\Models\Settings;
 
 class SettingsHelper
 {
@@ -10,10 +12,25 @@ class SettingsHelper
      */
     public static function getSetting(string $key = ''): string
     {
-        $setting = Settings::whereKeyCd(strtoupper($key))->where(['hide' => 1])->first();
+        $setting = Settings::whereKeyCd(strtoupper($key))->where(['hide' => 0])->first();
 
         if ($setting) {
             return $setting->value;
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * @param string $key
+     * @return string
+     */
+    public static function getSettingName(string $key = ''): string
+    {
+        $setting = Settings::whereKeyCd(strtoupper($key))->where(['hide' => 0])->first();
+
+        if ($setting) {
+            return $setting->name;
         } else {
             return '';
         }
