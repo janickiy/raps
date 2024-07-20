@@ -110,7 +110,6 @@ class CatalogController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-
         $row = Catalog::find($request->id);
 
         if (!$row) abort(404);
@@ -179,5 +178,4 @@ class CatalogController extends Controller
 
         return redirect(URL::route('cp.catalog.index'))->with('success', 'Данные удалены');
     }
-
 }

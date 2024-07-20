@@ -48,7 +48,7 @@
                                 <th>Значение</th>
                                 <th>Описание</th>
                                 <th>Тип</th>
-                                <th>Скрыть</th>
+                                <th>Публиковать</th>
                                 <th width="20px">Действия</th>
                             </tr>
                             </thead>
@@ -138,7 +138,7 @@
                     {data: 'value', name: 'value'},
                     {data: 'display_value', name: 'display_value'},
                     {data: 'type', name: 'type'},
-                    {data: 'hide', name: 'hide', searchable: false},
+                    {data: 'published', name: 'published', searchable: false},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],
             });

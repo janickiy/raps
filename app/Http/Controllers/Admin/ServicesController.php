@@ -61,8 +61,15 @@ class ServicesController extends Controller
             }
         }
 
+        $published = 0;
+
+        if ($request->input('published')) {
+            $published = 1;
+        }
+
         Services::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
+            'published' => $published,
         ]));
 
         return redirect(URL::route('cp.services.index'))->with('success', 'Информация успешно добавлена');
@@ -104,7 +111,6 @@ class ServicesController extends Controller
         $row->seo_url_canonical = $request->input('seo_url_canonical');
 
         if ($request->hasFile('image')) {
-
             $image = $request->pic;
 
             if ($image != null) {
@@ -113,7 +119,6 @@ class ServicesController extends Controller
             }
 
             if ($request->hasFile('image')) {
-
                 if (Storage::disk('public')->exists('services/' . $row->image) === true) Storage::disk('public')->delete('services/' . $row->image);
                 if (Storage::disk('public')->exists('services/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('services/' . '2x_' . $row->image);
 
@@ -149,11 +154,9 @@ class ServicesController extends Controller
         }
 
         $row->published = $published;
-
         $row->save();
 
         return redirect(URL::route('cp.services.index'))->with('success', 'Данные обновлены');
-
     }
 
     /**

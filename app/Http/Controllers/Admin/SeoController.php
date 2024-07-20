@@ -29,7 +29,6 @@ class SeoController extends Controller
         if (!$row) abort(404);
 
         return view('cp.seo.edit', compact('row'))->with('title', 'Редактирование seo');
-
     }
 
     /**
@@ -38,7 +37,6 @@ class SeoController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-
         $row = Seo::find($request->id);
 
         if (!$row) abort(404);

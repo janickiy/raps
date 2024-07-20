@@ -116,8 +116,8 @@ class DataTableController extends Controller
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
-            ->editColumn('hide', function ($row) {
-                return $row->hide == 0 ? 'да':'нет';
+            ->editColumn('published', function ($row) {
+                return $row->published === 1 ? 'да':'нет';
             })
             ->rawColumns(['actions'])->make(true);
     }
@@ -212,7 +212,6 @@ class DataTableController extends Controller
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
-
                 $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.product_photos.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
                 $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
 

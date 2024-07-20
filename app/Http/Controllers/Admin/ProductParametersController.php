@@ -13,7 +13,6 @@ use URL;
 
 class ProductParametersController extends Controller
 {
-
     /**
      * @param int $product_id
      * @return View
@@ -60,7 +59,6 @@ class ProductParametersController extends Controller
         if (!$row) abort(404);
 
         $options = ProductParametersCategory::getOption();
-
         $product_id = $row->product_id;
 
         return view('cp.product_parameters.create_edit', compact('row', 'product_id', 'options'))->with('title', 'Редактирование параметра');

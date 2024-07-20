@@ -24,7 +24,7 @@
         </div>
         <dl class="contacts__list">
             <div class="contacts__item">
-                <dt>Адрес</dt>
+                <dt>{{ SettingsHelper::getSettingName('ADRESS') }}</dt>
                 <dd>{{ SettingsHelper::getSetting('ADRESS') }}</dd>
             </div>
             <div class="contacts__item">
@@ -36,7 +36,7 @@
                 </dd>
             </div>
             <div class="contacts__item">
-                <dt>GPS координаты</dt>
+                <dt>{{ SettingsHelper::getSettingName('GPS') }}</dt>
                 <dd> {!! StringHelper::gooleMap(SettingsHelper::getSetting('GPS')) !!}</a></dd>
             </div>
             <div class="contacts__item">

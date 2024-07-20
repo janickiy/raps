@@ -16,7 +16,7 @@ class Settings extends Model
         'type',
         'display_value',
         'value',
-        'hide',
+        'published',
     ];
 
     /**
@@ -57,6 +57,15 @@ class Settings extends Model
     public function filePath()
     {
         return $this->attributes['value'];
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopePublished($query)
+    {
+        return $query->where('published', 1);
     }
 
     /**

@@ -46,15 +46,15 @@ class SettingsController extends Controller
             }
         }
 
-        $hide = 0;
+        $published = 0;
 
-        if ($request->input('hide') === null) {
-            $hide = 1;
+        if ($request->input('published')) {
+            $published = 1;
         }
 
         Settings::create(array_merge(array_merge($request->all()), [
             'value' => $filename ?? $request->input('value'),
-            'hide' => $hide,
+            'published'  => $published,
         ]));
 
         return redirect(URL::route('cp.settings.index'))->with('success', 'Информация успешно добавлена');
@@ -88,15 +88,14 @@ class SettingsController extends Controller
         $settings->key_cd = $request->input('key_cd');
         $settings->name = $request->input('name');
         $settings->display_value = $request->input('display_value');
-        $settings->hide = $request->input('hide');
 
-        $hide = 0;
+        $published = 0;
 
-        if ($request->input('hide') === null) {
-            $hide = 1;
+        if ($request->input('published')) {
+            $published = 1;
         }
 
-        $settings->hide = $hide;
+        $settings->published = $published;
 
         if ($request->hasFile('value')) {
             if (Storage::disk('public')->exists('settings/' . $settings->filePath()) === true) Storage::disk('public')->delete('settings/' . $settings->filePath());
@@ -116,6 +115,11 @@ class SettingsController extends Controller
         $settings->save();
 
         return redirect(URL::route('cp.settings.index'))->with('success', 'Данные обновлены');
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('published', 1);
     }
 
     /**

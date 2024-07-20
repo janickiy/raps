@@ -23,10 +23,10 @@ class MenuController extends Controller
      */
     public function createnewmenu(Request $request)
     {
-
         $menu = new Menus();
         $menu->name = $request->input("menuname");
         $menu->save();
+
         return json_encode(["resp" => $menu->id]);
     }
 
@@ -106,7 +106,6 @@ class MenuController extends Controller
         $menuitem->menu = $request->input("idmenu");
         $menuitem->sort = MenuItems::getNextSortRoot($request->input("idmenu"));
         $menuitem->save();
-
     }
 
     /**
@@ -134,6 +133,5 @@ class MenuController extends Controller
         }
 
         echo json_encode(["resp" => 1]);
-
     }
 }

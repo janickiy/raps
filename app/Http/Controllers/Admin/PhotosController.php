@@ -76,7 +76,6 @@ class PhotosController extends Controller
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title);
-
     }
 
     /**
@@ -126,7 +125,6 @@ class PhotosController extends Controller
         $row->save();
 
         return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id]))->with('success', 'Данные успешно обновлены');
-
     }
 
     /**

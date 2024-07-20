@@ -136,6 +136,14 @@ class ProductsController extends Controller
             }
         }
 
+        $published = 0;
+
+        if ($request->input('published')) {
+            $published = 1;
+        }
+
+        $row->published = $published;
+
         $row->image_title = $request->input('image_title');
         $row->image_alt = $request->input('image_alt');
         $row->save();

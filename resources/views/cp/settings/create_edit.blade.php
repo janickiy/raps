@@ -167,12 +167,12 @@
 
                                 <label class="checkbox">
 
-                                    {!! Form::checkbox('hide', 1, isset($row) ? ($row->hide == true ? 0 : 1): 0) !!}
+                                    {!! Form::checkbox('published', 1, isset($row) ? ($row->published == true ? 1 : 0): 1) !!}
 
-                                    <i></i>Скрыть</label>
+                                    <i></i>Публиковать</label>
 
-                                @if ($errors->has('hide'))
-                                    <span class="text-danger">{{ $errors->first('hide') }}</span>
+                                @if ($errors->has('published'))
+                                    <span class="text-danger">{{ $errors->first('published') }}</span>
                                 @endif
 
                             </section>
@@ -206,19 +206,18 @@
     {!! Html::script('/admin/js/plugin/ckeditor/ckeditor.js') !!}
 
     <script>
-        $(function() {
-        @if(isset($row) && $row->type == 'HTML' || $type == 'HTML' )
-
-            CKEDITOR.replace( 'value', {
+        $(function () {
+            @if(isset($row) && $row->type == 'HTML' || $type == 'HTML' )
+            CKEDITOR.replace('value', {
                 extraAllowedContent: 'img[title]',
                 height: 380,
                 startupFocus: true,
                 filebrowserUploadUrl: '{{ url('/upload.php') }}',
                 on: {
-                    instanceReady: function() {
-                        this.dataProcessor.htmlFilter.addRules( {
+                    instanceReady: function () {
+                        this.dataProcessor.htmlFilter.addRules({
                             elements: {
-                                img: function( el ) {
+                                img: function (el) {
                                     el.attributes.title = el.attributes.alt;
                                 }
                             }
@@ -230,8 +229,7 @@
             CKEDITOR.config.allowedContent = true;
             CKEDITOR.config.removePlugins = 'spellchecker, about, save, newpage, print, templates, scayt, flash, pagebreak, smiley,preview,find';
             CKEDITOR.config.extraAllowedContent = 'img[title]';
-
-        @endif
+            @endif
 
             if ($("#options-select").length > 0) {
                 let options = [];

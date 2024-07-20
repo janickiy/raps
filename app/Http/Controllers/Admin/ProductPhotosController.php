@@ -18,7 +18,6 @@ use URL;
 
 class ProductPhotosController extends Controller
 {
-
     /**
      * @param int $product_id
      * @return View
@@ -79,7 +78,6 @@ class ProductPhotosController extends Controller
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.product_photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title);
-
     }
 
     /**
@@ -93,7 +91,6 @@ class ProductPhotosController extends Controller
         if (!$row) abort(404);
 
         if ($request->hasFile('image')) {
-
             $image = $request->pic;
 
             if ($image != null) {
@@ -128,7 +125,6 @@ class ProductPhotosController extends Controller
         $row->save();
 
         return redirect(URL::route('cp.product_photos.index', ['product_id' => $row->product_id]))->with('success', 'Данные успешно обновлены');
-
     }
 
     /**

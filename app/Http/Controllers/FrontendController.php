@@ -6,11 +6,11 @@ use App\Helpers\SettingsHelper;
 use App\Http\Request\Frontend\SendApplicationRequest;
 use App\Mail\Notification;
 use App\Models\{Catalog, Faq, Pages, Photoalbum, ProductParametersCategory, Products, Requests, Seo, Services};
-use File;
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use File;
 use Mail;
 use URL;
 
@@ -497,5 +497,4 @@ class FrontendController extends Controller
             'services' => $menu_services->items->toArray(),
         ];
     }
-
 }

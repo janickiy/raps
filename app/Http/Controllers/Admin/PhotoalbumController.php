@@ -50,7 +50,6 @@ class PhotoalbumController extends Controller
         if (!$row) abort(404);
 
         return view('cp.photoalbum.create_edit', compact('row'))->with('title', 'Редактирование фотоальбома');
-
     }
 
     /**
@@ -74,7 +73,6 @@ class PhotoalbumController extends Controller
         $row->save();
 
         return redirect(URL::route('cp.photoalbum.index'))->with('success', 'Данные обновлены');
-
     }
 
     /**

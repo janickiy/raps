@@ -13,7 +13,6 @@ use URL;
 
 class ProductParametersCategoryController extends Controller
 {
-
     public function index(): View
     {
         return view('cp.product_parameters_category.index')->with('title', 'Категории');

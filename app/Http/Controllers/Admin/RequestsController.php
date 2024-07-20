@@ -9,5 +9,4 @@ class RequestsController extends Controller
     {
         return view('cp.requests.index')->with('title', 'Заявки');
     }
-
 }

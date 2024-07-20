@@ -67,8 +67,15 @@ class PagesController extends Controller
             }
         }
 
+        $published = 0;
+
+        if ($request->input('published')) {
+            $published = 1;
+        }
+
         Pages::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
+            'published' => $published,
         ]));
 
         return redirect(URL::route('cp.pages.index'))->with('success', 'Данные успешно добавлены');
@@ -93,7 +100,6 @@ class PagesController extends Controller
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.pages.create_edit', compact('row', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование раздела');
-
     }
 
     /**
@@ -116,7 +122,6 @@ class PagesController extends Controller
         $row->seo_url_canonical = $request->input('seo_url_canonical');
 
         if ($request->hasFile('image')) {
-
             $image = $request->pic;
 
             if ($image != null) {
@@ -125,7 +130,6 @@ class PagesController extends Controller
             }
 
             if ($request->hasFile('image')) {
-
                 if (Storage::disk('public')->exists('pages/' . $row->image) === true) Storage::disk('public')->delete('pages/' . $row->image);
                 if (Storage::disk('public')->exists('pages/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('pages/' . '2x_' . $row->image);
 
@@ -141,7 +145,6 @@ class PagesController extends Controller
                     $img->save(Storage::disk('public')->path('pages/' . '2x_' . $filename . '.' . $extension));
 
                     $small_img = Image::make(Storage::disk('public')->path('pages/' . $originName));
-
                     $small_img->resize(null, 350, function ($constraint) {
                         $constraint->aspectRatio();
                     });

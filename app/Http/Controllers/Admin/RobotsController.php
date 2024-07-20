@@ -30,5 +30,4 @@ class RobotsController extends Controller
 
         return redirect(URL::route('cp.robots.edit'))->with('success', 'Данные успешно обновлены');
     }
-
 }

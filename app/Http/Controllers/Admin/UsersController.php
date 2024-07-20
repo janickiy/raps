@@ -78,7 +78,6 @@ class UsersController extends Controller
         $row->login = $request->input('login');
 
         if (!empty($request->role)) $row->role = $request->input('role');
-
         if (!empty($request->password)) $row->password = $request->password;
 
         $row->save();

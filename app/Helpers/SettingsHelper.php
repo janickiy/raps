@@ -12,7 +12,7 @@ class SettingsHelper
      */
     public static function getSetting(string $key = ''): string
     {
-        $setting = Settings::whereKeyCd(strtoupper($key))->where(['hide' => 0])->first();
+        $setting = Settings::whereKeyCd(strtoupper($key))->published()->first();
 
         if ($setting) {
             return $setting->value;
@@ -27,7 +27,7 @@ class SettingsHelper
      */
     public static function getSettingName(string $key = ''): string
     {
-        $setting = Settings::whereKeyCd(strtoupper($key))->where(['hide' => 0])->first();
+        $setting = Settings::whereKeyCd(strtoupper($key))->published()->first();
 
         if ($setting) {
             return $setting->name;
