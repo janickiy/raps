@@ -75,8 +75,15 @@ class CatalogController extends Controller
             }
         }
 
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
         Catalog::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
+            'seo_sitemap' => $seo_sitemap,
         ]));
 
         return redirect()->route('cp.catalog.index')->with('success', 'Информация успешно добавлена');
@@ -160,6 +167,13 @@ class CatalogController extends Controller
             }
         }
 
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
+        $row->seo_sitemap = $seo_sitemap;
         $row->image_title = $request->input('image_title');
         $row->image_alt = $request->input('image_alt');
         $row->save();

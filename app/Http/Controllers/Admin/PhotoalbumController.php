@@ -33,7 +33,14 @@ class PhotoalbumController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        Photoalbum::create($request->all());
+
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
+        Photoalbum::create(array_merge($request->all(), ['seo_sitemap' => $seo_sitemap]));
 
         return redirect()->route('cp.photoalbum.index')->with('success', 'Информация успешно добавлена');
     }
@@ -69,6 +76,13 @@ class PhotoalbumController extends Controller
         $row->slug = $request->input('slug');
         $row->seo_h1 = $request->input('seo_h1');
         $row->seo_url_canonical = $request->input('seo_url_canonical');
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
+        $row->seo_sitemap = $seo_sitemap;
         $row->save();
 
         return redirect()->route('cp.photoalbum.index')->with('success', 'Данные обновлены');

@@ -72,9 +72,16 @@ class PagesController extends Controller
             $published = 1;
         }
 
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
         Pages::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
             'published' => $published,
+            'seo_sitemap' => $seo_sitemap,
         ]));
 
         return redirect()->route('cp.pages.index')->with('success', 'Данные успешно добавлены');
@@ -166,6 +173,14 @@ class PagesController extends Controller
             $main = 1;
             Pages::where('main', 1)->update(['main' => 0]);
         }
+
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
+        $row->seo_sitemap = $seo_sitemap;
 
         $row->main = $main;
         $row->save();

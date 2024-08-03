@@ -65,9 +65,16 @@ class ServicesController extends Controller
             $published = 1;
         }
 
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
         Services::create(array_merge(array_merge($request->all()), [
             'image' => $originName ?? null,
             'published' => $published,
+            'seo_sitemap' => $seo_sitemap,
         ]));
 
         return redirect()->route('cp.services.index')->with('success', 'Информация успешно добавлена');
@@ -152,6 +159,13 @@ class ServicesController extends Controller
         }
 
         $row->published = $published;
+        $seo_sitemap = 0;
+
+        if ($request->input('seo_sitemap')) {
+            $seo_sitemap = 1;
+        }
+
+        $row->seo_sitemap = $seo_sitemap;
         $row->save();
 
         return redirect()->route('cp.services.index')->with('success', 'Данные обновлены');
