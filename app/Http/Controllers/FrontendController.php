@@ -229,7 +229,7 @@ class FrontendController extends Controller
      */
     public function servicesListing(Request $request): View
     {
-        $seo = Seo::where('type', 'frontend.services')->first();
+        $seo = Seo::where('type', 'frontend.services_listing')->first();
         $title = $seo->h1 ?? 'Услуги компании';
         $meta_description = $seo->description ?? '';
         $meta_keywords = $seo->keyword ?? '';
@@ -272,7 +272,7 @@ class FrontendController extends Controller
 
         if (!$service) abort(404);
 
-        $seo = Seo::where('type', 'frontend.services')->first();
+        $seo = Seo::where('type', 'frontend.services_listing')->first();
         $title = $service->title;
         $meta_description = $service->meta_description ?? '';
         $meta_keywords = $service->meta_keywords ?? '';
