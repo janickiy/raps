@@ -46,7 +46,6 @@ class SitemapController extends Controller
      */
     public function import(ImportRequest $request): RedirectResponse
     {
-
         if ($request->isMethod('post')) {
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
@@ -54,7 +53,6 @@ class SitemapController extends Controller
             }
         }
 
-        return redirect(URL::route('cp.sitemap.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.sitemap.index')->with('success', 'Данные обновлены');
     }
-
 }

@@ -41,9 +41,7 @@
                 <!-- widget content -->
                 <div class="widget-body">
 
-                    <a class="btn btn-success" href="{{ route('cp.sitemap.export') }}" target="_blank" download="sitemap.xml">Загрузить карту sitemap.xml</a>
-
-                    <a class="btn btn-success" href="{{ route('cp.sitemap.import_form') }}">Выгрузить карту sitemap.xml</a>
+                    <a class="btn btn-success" href="{{ route('cp.sitemap.export') }}" target="_blank" download="sitemap.xml">Выгрузить карту sitemap.xml</a>
 
                 </div>
 

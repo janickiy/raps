@@ -204,7 +204,7 @@
 
                                     {!! Form::checkbox('seo_sitemap', 1, isset($row) ? ($row->seo_sitemap == true ? 1 : 0): 1) !!}
 
-                                    <i></i>Публиковать</label>
+                                    <i></i>sitemap</label>
 
                                 @if ($errors->has('seo_sitemap'))
                                     <span class="text-danger">{{ $errors->first('seo_sitemap') }}</span>

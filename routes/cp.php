@@ -191,8 +191,6 @@ Route::group(['prefix' => 'cp'], function () {
         Route::group(['prefix' => 'sitemap'], function () {
             Route::get('', [SitemapController::class, 'index'])->name('cp.sitemap.index');
             Route::get('export', [SitemapController::class, 'export'])->name('cp.sitemap.export');
-            Route::get('import', [SitemapController::class, 'importForm'])->name('cp.sitemap.import_form');
-            Route::post('import', [SitemapController::class, 'import'])->name('cp.sitemap.import');
         });
     });
 
