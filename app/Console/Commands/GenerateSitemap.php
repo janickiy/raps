@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Catalog;
+use App\Models\Pages;
 use App\Models\Seo;
 use App\Models\Products;
 use App\Models\Services;
@@ -35,12 +36,19 @@ class GenerateSitemap extends Command
     public function handle()
     {
         $sitemap = Sitemap::create()->add('/');
-
         $seoPages = Seo::where('seo_sitemap', true)->get();
 
         foreach ($seoPages as  $seoPage) {
             $sitemap->add(Url::create(route($seoPage->type))
                 ->setLastModificationDate($seoPage->updated_at));
+        }
+
+        $pages = Pages::where('seo_sitemap', true)->published()->get();
+
+        foreach ($pages as $page)
+        {
+            $sitemap->add(Url::create('/page/' . $page->slug)
+                ->setLastModificationDate($page->updated_at));
         }
 
         $albums = Photoalbum::where('seo_sitemap', true)->get();
