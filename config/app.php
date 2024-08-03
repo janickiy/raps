@@ -240,9 +240,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'PermissionsHelper' => App\Helpers\PermissionsHelper::class,
-        'SettingsHelper' => \App\Helpers\SettingsHelper::class,
+        'SettingsHelper' => App\Helpers\SettingsHelper::class,
         'StringHelper' => App\Helpers\StringHelper::class,
-
     ],
-
 ];

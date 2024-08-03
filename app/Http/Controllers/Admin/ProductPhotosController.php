@@ -14,7 +14,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
 use Image;
-use URL;
 
 class ProductPhotosController extends Controller
 {
@@ -57,12 +56,12 @@ class ProductPhotosController extends Controller
                         'origin' => $fileNameToStore ?? null,
                     ]));
 
-                    return redirect(URL::route('cp.product_photos.index', ['product_id' => $request->product_id]))->with('success', 'Данные успешно обновлены');
+                    return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('success', 'Данные успешно обновлены');
                 }
             }
         }
 
-        return redirect(URL::route('cp.product_photos.index', ['product_id' => $request->product_id]))->with('error', 'Ошибка добавления фото');
+        return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('error', 'Ошибка добавления фото');
     }
 
     /**
@@ -124,7 +123,7 @@ class ProductPhotosController extends Controller
 
         $row->save();
 
-        return redirect(URL::route('cp.product_photos.index', ['product_id' => $row->product_id]))->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.product_photos.index', ['product_id' => $row->product_id])->with('success', 'Данные успешно обновлены');
     }
 
     /**

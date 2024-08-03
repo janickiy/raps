@@ -24,6 +24,7 @@ class CreateServicesTable extends Migration
             $table->string('slug')->unique();
             $table->string('seo_url_canonical')->nullable();
             $table->string('seo_h1')->nullable();
+            $table->boolean('seo_sitemap')->default(1);
             $table->mediumText('full_description');
             $table->string('image_title')->nullable();
             $table->string('image_alt')->nullable();

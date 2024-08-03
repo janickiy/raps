@@ -18,6 +18,7 @@ class CreateSeoTable extends Migration
             $table->string('type');
             $table->string('h1')->nullable();
             $table->string('title')->nullable();
+            $table->boolean('seo_sitemap')->default(1);
             $table->text('keyword')->nullable();
             $table->text('description')->nullable();
             $table->string('url_canonical')->nullable();

@@ -9,7 +9,6 @@ use App\Http\Request\Admin\ProductParameters\EditRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 
 class ProductParametersController extends Controller
 {
@@ -45,7 +44,7 @@ class ProductParametersController extends Controller
     {
         ProductParameters::create(array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
 
-        return redirect(URL::route('cp.product_parameters.index', ['product_id' => $request->product_id]))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.product_parameters.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -79,7 +78,7 @@ class ProductParametersController extends Controller
         $row->category_id = $request->category_id ?? 0;
         $row->save();
 
-        return redirect(URL::route('cp.product_parameters.index', ['product_id' => $row->product_id]))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.product_parameters.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**

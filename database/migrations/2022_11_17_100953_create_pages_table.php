@@ -22,6 +22,7 @@ class CreatePagesTable extends Migration
             $table->string('meta_keywords')->nullable();
             $table->string('seo_h1')->nullable();
             $table->string('seo_url_canonical')->nullable();
+            $table->boolean('seo_sitemap')->default(1);
             $table->string('slug')->unique();
             $table->tinyInteger('main')->default(0);
             $table->boolean('published')->default(1);

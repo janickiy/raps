@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
 use Image;
-use URL;
 
 class PagesController extends Controller
 {
@@ -78,7 +77,7 @@ class PagesController extends Controller
             'published' => $published,
         ]));
 
-        return redirect(URL::route('cp.pages.index'))->with('success', 'Данные успешно добавлены');
+        return redirect()->route('cp.pages.index')->with('success', 'Данные успешно добавлены');
     }
 
     /**
@@ -161,7 +160,6 @@ class PagesController extends Controller
         }
 
         $row->published = $published;
-
         $main = 0;
 
         if ($request->input('main')) {
@@ -172,8 +170,7 @@ class PagesController extends Controller
         $row->main = $main;
         $row->save();
 
-        return redirect(URL::route('cp.pages.index'))->with('success', 'Данные успешно обновлены');
-
+        return redirect()->route('cp.pages.index')->with('success', 'Данные успешно обновлены');
     }
 
     /**

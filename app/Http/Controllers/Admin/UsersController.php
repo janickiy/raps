@@ -8,7 +8,6 @@ use App\Http\Request\Admin\Users\StoreRequest;
 use App\Http\Request\Admin\Users\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 
 class UsersController extends Controller
 {
@@ -82,7 +81,7 @@ class UsersController extends Controller
 
         $row->save();
 
-        return redirect(URL::route('cp.users.index'))->with('success', 'Информация успешно обновлена');
+        return redirect()->route('cp.users.index')->with('success', 'Информация успешно обновлена');
     }
 
     /**

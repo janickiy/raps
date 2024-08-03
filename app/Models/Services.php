@@ -19,6 +19,7 @@ class Services extends Model
         'slug',
         'seo_h1',
         'seo_url_canonical',
+        'seo_sitemap',
         'image',
         'image_title',
         'image_alt',

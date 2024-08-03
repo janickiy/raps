@@ -61,7 +61,7 @@ class ProductsController extends Controller
             'origin' => $fileNameToStore ?? null,
         ]));
 
-        return redirect(URL::route('cp.products.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.products.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -148,7 +148,7 @@ class ProductsController extends Controller
         $row->image_alt = $request->input('image_alt');
         $row->save();
 
-        return redirect(URL::route('cp.products.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.products.index')->with('success', 'Данные обновлены');
     }
 
     /**

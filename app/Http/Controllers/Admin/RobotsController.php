@@ -6,7 +6,6 @@ use App\Http\Request\Admin\Robots\UpdateRequest;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 
 class RobotsController extends Controller
 {
@@ -28,6 +27,6 @@ class RobotsController extends Controller
     {
         File::put(public_path('robots.txt'), $request->input('content'));
 
-        return redirect(URL::route('cp.robots.edit'))->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.robots.edit')->with('success', 'Данные успешно обновлены');
     }
 }

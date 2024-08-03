@@ -8,7 +8,6 @@ use App\Http\Request\Admin\Settings\StoreRequest;
 use App\Http\Request\Admin\Settings\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 use Storage;
 
 class SettingsController extends Controller
@@ -42,7 +41,7 @@ class SettingsController extends Controller
             $filename = time() . '.' . $extension;
 
             if ($request->file('value')->move('uploads/settings', $filename) === false) {
-                return redirect(URL::route('cp.settings.index'))->with('error', 'Не удалось сохранить файл!');
+                return redirect()->route('cp.settings.index')->with('error', 'Не удалось сохранить файл!');
             }
         }
 
@@ -57,7 +56,7 @@ class SettingsController extends Controller
             'published'  => $published,
         ]));
 
-        return redirect(URL::route('cp.settings.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.settings.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -104,7 +103,7 @@ class SettingsController extends Controller
             $filename = time() . '.' . $extension;
 
             if ($request->file('value')->move('uploads/settings', $filename) === false) {
-                return redirect(URL::route('cp.settings.index'))->with('error', 'Не удалось сохранить файл!');
+                return redirect()->route('cp.settings.index')->with('error', 'Не удалось сохранить файл!');
             } else {
                 $settings->value = $filename;
             }
@@ -114,7 +113,7 @@ class SettingsController extends Controller
 
         $settings->save();
 
-        return redirect(URL::route('cp.settings.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.settings.index')->with('success', 'Данные обновлены');
     }
 
     public function scopePublished($query)

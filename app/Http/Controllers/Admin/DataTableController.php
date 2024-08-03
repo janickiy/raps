@@ -117,7 +117,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('published', function ($row) {
-                return $row->published === 1 ? 'да':'нет';
+                return $row->published == 1 ? 'да':'нет';
             })
             ->rawColumns(['actions'])->make(true);
     }

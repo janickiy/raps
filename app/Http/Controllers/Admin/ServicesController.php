@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Image;
 use Storage;
-use URL;
 
 class ServicesController extends Controller
 {
@@ -46,7 +45,6 @@ class ServicesController extends Controller
             $originName = $filename . '.' . $extension;
 
             if ($request->file('image')->move('uploads/services', $originName)) {
-
                 $img = Image::make(Storage::disk('public')->path('services/' . $originName));
                 $img->resize(null, 700, function ($constraint) {
                     $constraint->aspectRatio();
@@ -72,7 +70,7 @@ class ServicesController extends Controller
             'published' => $published,
         ]));
 
-        return redirect(URL::route('cp.services.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.services.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -156,7 +154,7 @@ class ServicesController extends Controller
         $row->published = $published;
         $row->save();
 
-        return redirect(URL::route('cp.services.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.services.index')->with('success', 'Данные обновлены');
     }
 
     /**

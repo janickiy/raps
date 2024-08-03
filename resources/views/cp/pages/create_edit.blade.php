@@ -242,6 +242,20 @@
 
                                 <label class="checkbox">
 
+                                    {!! Form::checkbox('seo_sitemap', 1, isset($row) ? ($row->seo_sitemap == true ? 1 : 0): 1) !!}
+
+                                    <i></i>sitemap</label>
+
+                                @if ($errors->has('seo_sitemap'))
+                                    <span class="text-danger">{{ $errors->first('seo_sitemap') }}</span>
+                                @endif
+
+                            </section>
+
+                            <section>
+
+                                <label class="checkbox">
+
                                     {!! Form::checkbox('published', 1, isset($row) ? ($row->published == true ? 1 : 0): 1) !!}
 
                                     <i></i>Публиковать</label>

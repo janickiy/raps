@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
 use Image;
-use URL;
 
 class PhotosController extends Controller
 {
@@ -55,12 +54,12 @@ class PhotosController extends Controller
                         'origin' => $fileNameToStore ?? null,
                     ]));
 
-                    return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id]))->with('success', 'Данные успешно обновлены');
+                    return redirect()->route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id])->with('success', 'Данные успешно обновлены');
                 }
             }
         }
 
-        return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id]))->with('error', 'Ошибка добавления фото');
+        return redirect()->route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id])->with('error', 'Ошибка добавления фото');
     }
 
     /**
@@ -121,10 +120,9 @@ class PhotosController extends Controller
         $row->title = $request->input('title');
         $row->description = $request->input('description');
         $row->alt = $request->input('alt');
-
         $row->save();
 
-        return redirect(URL::route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id]))->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id])->with('success', 'Данные успешно обновлены');
     }
 
     /**

@@ -22,6 +22,7 @@ class CreateCatalogTable extends Migration
             $table->string('meta_keywords')->nullable();
             $table->string('seo_h1')->nullable();
             $table->string('seo_url_canonical')->nullable();
+            $table->boolean('seo_sitemap')->default(1);
             $table->string('image')->nullable();
             $table->string('slug')->unique();
             $table->string('image_title')->nullable();

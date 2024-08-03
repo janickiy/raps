@@ -23,6 +23,7 @@ class Products extends Model
         'slug',
         'seo_h1',
         'seo_url_canonical',
+        'seo_sitemap',
         'thumbnail',
         'origin',
         'published',

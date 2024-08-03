@@ -25,6 +25,7 @@ class Pages extends Model
         'published',
         'seo_h1',
         'seo_url_canonical',
+        'seo_sitemap',
     ];
 
     /**

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
-use URL;
 
 class ProductParametersCategoryController extends Controller
 {
@@ -34,7 +33,7 @@ class ProductParametersCategoryController extends Controller
     {
         ProductParametersCategory::create($request->all());
 
-        return redirect(URL::route('cp.product_parameters_category.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.product_parameters_category.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -63,7 +62,7 @@ class ProductParametersCategoryController extends Controller
         $row->name = $request->input('name');
         $row->save();
 
-        return redirect(URL::route('cp.product_parameters_category.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.product_parameters_category.index')->with('success', 'Данные обновлены');
     }
 
     /**

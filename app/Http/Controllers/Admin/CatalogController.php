@@ -79,7 +79,7 @@ class CatalogController extends Controller
             'image' => $originName ?? null,
         ]));
 
-        return redirect(URL::route('cp.catalog.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.catalog.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -162,10 +162,9 @@ class CatalogController extends Controller
 
         $row->image_title = $request->input('image_title');
         $row->image_alt = $request->input('image_alt');
-
         $row->save();
 
-        return redirect(URL::route('cp.catalog.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.catalog.index')->with('success', 'Данные обновлены');
     }
 
     /**
@@ -176,6 +175,6 @@ class CatalogController extends Controller
     {
         Catalog::removeCatalogs($request->id);
 
-        return redirect(URL::route('cp.catalog.index'))->with('success', 'Данные удалены');
+        return  redirect()->route('cp.catalog.index')->with('success', 'Данные удалены');
     }
 }

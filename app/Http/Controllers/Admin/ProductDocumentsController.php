@@ -13,7 +13,6 @@ use App\Http\Request\Admin\ProductDocuments\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
-use URL;
 
 class ProductDocumentsController extends Controller
 {
@@ -55,7 +54,7 @@ class ProductDocumentsController extends Controller
             ProductDocuments::create(array_merge($request->all(), ['path' => $filename]));
         }
 
-        return redirect(URL::route('cp.product_documents.index', ['product_id' => $request->product_id]))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.product_documents.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -95,7 +94,7 @@ class ProductDocumentsController extends Controller
         $row->description = $request->input('description');
         $row->save();
 
-        return redirect(URL::route('cp.product_documents.index', ['product_id' => $row->product_id]))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.product_documents.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**

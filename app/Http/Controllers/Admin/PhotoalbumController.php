@@ -8,7 +8,6 @@ use App\Models\Photoalbum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use URL;
 
 class PhotoalbumController extends Controller
 {
@@ -36,7 +35,7 @@ class PhotoalbumController extends Controller
     {
         Photoalbum::create($request->all());
 
-        return redirect(URL::route('cp.photoalbum.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.photoalbum.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -72,7 +71,7 @@ class PhotoalbumController extends Controller
         $row->seo_url_canonical = $request->input('seo_url_canonical');
         $row->save();
 
-        return redirect(URL::route('cp.photoalbum.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.photoalbum.index')->with('success', 'Данные обновлены');
     }
 
     /**

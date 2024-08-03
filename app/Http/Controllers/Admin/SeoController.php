@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Seo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 
 class SeoController extends Controller
 {
@@ -46,9 +45,8 @@ class SeoController extends Controller
         $row->keyword = $request->input('keyword');
         $row->description = $request->input('description');
         $row->url_canonical = $request->input('url_canonical');
-
         $row->save();
 
-        return redirect(URL::route('cp.seo.index'))->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.seo.index')->with('success', 'Данные успешно обновлены');
     }
 }

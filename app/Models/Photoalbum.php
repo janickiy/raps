@@ -18,6 +18,7 @@ class Photoalbum extends Model
         'meta_keywords',
         'seo_h1',
         'seo_url_canonical',
+        'seo_sitemap',
         'slug',
     ];
 
