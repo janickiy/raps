@@ -28,7 +28,7 @@
                 <dd>{{ SettingsHelper::getSetting('ADRESS') }}</dd>
             </div>
             <div class="contacts__item">
-                <dt>Телефон</dt>
+                <dt>{{ SettingsHelper::getSettingName('PHONE') }}</dt>
                 <dd>
                     @foreach($phones as $phone)
                         <a href="tel:{{ trim($phone) }}">{{ trim($phone) }}</a>,&nbsp;
@@ -40,7 +40,7 @@
                 <dd> {!! StringHelper::gooleMap(SettingsHelper::getSetting('GPS')) !!}</a></dd>
             </div>
             <div class="contacts__item">
-                <dt>E-mail</dt>
+                <dt>{{ SettingsHelper::getSettingName('EMAIL') }}</dt>
                 <dd>{{ SettingsHelper::getSetting('EMAIL') }}</dd>
             </div>
             <div class="contacts__item">
