@@ -35,7 +35,7 @@
                             <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                         </svg>
                     </span>
-                        <span class="request__download-title">Для заказа газоанализатора</span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_1') }}</span>
                     </a>
                     <a href="{{ SettingsHelper::getSetting('BLANK_2') }}" class="btn request__download-btn" download>
                     <span class="request__download-icon">
@@ -43,7 +43,7 @@
                             <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                         </svg>
                     </span>
-                        <span class="request__download-title">Для заказа системы жидкостного анализа</span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_2') }}</span>
                     </a>
                     <a href="{{ SettingsHelper::getSetting('BLANK_3') }}" class="btn request__download-btn" download>
                     <span class="request__download-icon">
@@ -51,7 +51,7 @@
                             <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                         </svg>
                     </span>
-                        <span class="request__download-title">Для заказа системы газового анализа</span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_3') }}</span>
                     </a>
                 </div>
             </div>

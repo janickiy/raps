@@ -36,6 +36,7 @@ class GenerateSitemap extends Command
     public function handle()
     {
         $sitemap = Sitemap::create()->add('/');
+
         $seoPages = Seo::where('seo_sitemap', true)->get();
 
         foreach ($seoPages as  $seoPage) {
@@ -72,6 +73,7 @@ class GenerateSitemap extends Command
                 ->setLastModificationDate($service->updated_at));
         }
 
+
         $products = Products::where('seo_sitemap', true)->published()->get();
 
         foreach ($products as $product) {
@@ -79,6 +81,6 @@ class GenerateSitemap extends Command
                 ->setLastModificationDate($product->updated_at));
         }
 
-        $sitemap->writeToFile(public_path('sitemap.xml'));
+        $sitemap->writeToFile('/home/rapsuz/public_html/sitemap.xml');
     }
 }

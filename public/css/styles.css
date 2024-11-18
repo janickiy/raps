@@ -2767,7 +2767,7 @@ img {
 .about-hero__img {
     display: block;
     margin-top: 1.2rem;
-    height: 20rem;
+    height: auto;
     border-radius: 1.6rem;
     overflow: hidden;
 }
@@ -2775,7 +2775,6 @@ img {
 @media (min-width: 768px) {
     .about-hero__img {
         margin-top: 4rem;
-        height: 40rem;
     }
 }
 
@@ -2954,12 +2953,12 @@ img {
 
 .about-info__img._two-columns {
     grid-column: 1/-1;
-    aspect-ratio: 343/200;
+    aspect-ratio: auto;
 }
 
 @media (min-width: 768px) {
     .about-info__img._two-columns {
-        aspect-ratio: 581/304;
+
     }
 }
 
