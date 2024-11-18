@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\{
     ProductParametersController,
     ProductDocumentsController,
     ProductParametersCategoryController,
+    DetectedGasesController,
     PhotoalbumController,
     PhotosController,
     SeoController,
@@ -146,6 +147,11 @@ Route::group(['prefix' => 'cp'], function () {
         Route::get('edit/{id}', [ProductParametersController::class, 'edit'])->name('cp.product_parameters.edit')->where('id', '[0-9]+');
         Route::put('update', [ProductParametersController::class, 'update'])->name('cp.product_parameters.update');
         Route::post('destroy', [ProductParametersController::class, 'destroy'])->name('cp.product_parameters.destroy');
+    });
+
+    Route::group(['prefix' => 'detected-gases'], function () {
+        Route::get('{product_id}', [DetectedGasesController::class, 'index'])->name('cp.detected_gases.index')->where('product_id', '[0-9]+');
+
     });
 
     Route::group(['prefix' => 'product-photos'], function () {

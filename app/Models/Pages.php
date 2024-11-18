@@ -9,7 +9,6 @@ use Storage;
 
 class Pages extends Model
 {
-
     protected $table = 'pages';
 
     protected $fillable = [
@@ -128,5 +127,4 @@ class Pages extends Model
 
         $this->delete();
     }
-
 }

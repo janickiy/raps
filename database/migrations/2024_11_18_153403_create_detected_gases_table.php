@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePhotoTable extends Migration
+class CreateDetectedGasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,13 @@ class CreatePhotoTable extends Migration
      */
     public function up()
     {
-        Schema::create('photos', function (Blueprint $table) {
+        Schema::create('detected_gases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('title')->nullable();
-            $table->text('description')->nullable();
-            $table->string('alt')->nullable();
-            $table->string('thumbnail');
-            $table->string('origin');
-            $table->integer('photoalbum_id')->index('photoalbum_id');
+            $table->string('name');
+            $table->string('formula');
+            $table->string('range')->nullable();
+            $table->string('volume_fraction')->nullable();
+            $table->integer('product_id')->index('product_id');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ class CreatePhotoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('photos');
+        Schema::dropIfExists('detected_gases');
     }
 }

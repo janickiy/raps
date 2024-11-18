@@ -44,5 +44,4 @@ class Photoalbum extends Model
         $this->photos()->delete();
         $this->delete();
     }
-
 }

@@ -12,6 +12,9 @@ use Storage;
 
 class ProductParametersCategoryController extends Controller
 {
+    /**
+     * @return View
+     */
     public function index(): View
     {
         return view('cp.product_parameters_category.index')->with('title', 'Категории');

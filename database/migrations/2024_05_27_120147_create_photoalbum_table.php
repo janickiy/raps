@@ -14,7 +14,7 @@ class CreatePhotoalbumTable extends Migration
     public function up()
     {
         Schema::create('photoalbum', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('meta_title')->nullable();

@@ -150,5 +150,4 @@ class Products extends Model
         $this->parameters()->delete();
         $this->delete();
     }
-
 }

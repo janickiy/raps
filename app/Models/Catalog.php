@@ -10,7 +10,6 @@ use URL;
 
 class Catalog extends Model
 {
-
     protected $table = 'catalog';
 
     protected $fillable = [
