@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Request\Admin\ProductParametersCategory\EditRequest;
-use App\Http\Request\Admin\ProductParametersCategory\StoreRequest;
+use App\Http\Request\Admin\DetectedGases\EditRequest;
+use App\Http\Request\Admin\DetectedGases\StoreRequest;
 use App\Models\DetectedGases;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,7 +68,9 @@ class DetectedGasesController extends Controller
         if (!$row) abort(404);
 
         $row->name = $request->input('name');
-        $row->value = $request->input('value');
+        $row->formula = $request->input('formula');
+        $row->range = $request->input('range');
+        $row->volume_fraction = $request->input('volume_fraction');
         $row->save();
 
         return redirect()->route('cp.detected_gases.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');

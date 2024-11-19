@@ -43,82 +43,78 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? route('cp.product_documents.update') : route('cp.product_documents.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.product_documents.update') : route('cp.product_documents.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'class' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
                         {!! Form::hidden('product_id', $product_id) !!}
 
-                        <div class="smart-form">
+                        <header>
+                            *-Обязательные поля
+                        </header>
 
-                            <header>
-                                *-Обязательные поля
-                            </header>
+                        <fieldset>
 
-                            <fieldset>
+                            <section>
 
-                                <section>
+                                {!! Form::label('file', 'Разрешенные файлы (doc,docx,pdf,xls,xlsx,odt,ods)', ['class' => 'label']) !!}
 
-                                    {!! Form::label('file', 'Разрешенные файлы (doc,docx,pdf,xls,xlsx,odt,ods)', ['class' => 'label']) !!}
-
-                                    <div class="input input-file">
+                                <div class="input input-file">
                                         <span class="button">
 
                                         {!! Form::file('file',  ['id' => 'file', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
 
                                         </span><input type="text" placeholder="выберите файл" readonly="">
 
-                                    </div>
+                                </div>
 
-                                    @if ($errors->has('file'))
-                                        <span class="text-danger">{{ $errors->first('file') }}</span>
-                                    @endif
+                                @if ($errors->has('file'))
+                                    <span class="text-danger">{{ $errors->first('file') }}</span>
+                                @endif
 
-                                    <div class="note">
-                                        Максимальный размер: <strong>{{ $maxUploadFileSize }}</strong>
-                                    </div>
+                                <div class="note">
+                                    Максимальный размер: <strong>{{ $maxUploadFileSize }}</strong>
+                                </div>
 
-                                </section>
+                            </section>
 
-                                <section>
+                            <section>
 
-                                    {!! Form::label('description', 'Описание*', ['class' => 'label']) !!}
+                                {!! Form::label('description', 'Описание*', ['class' => 'label']) !!}
 
-                                    <label class="input">
+                                <label class="input">
 
-                                        {!! Form::text('description', old('description', $row->description ?? null), ['class' => 'form-control', 'id' => 'description']) !!}
+                                    {!! Form::text('description', old('description', $row->description ?? null), ['class' => 'form-control', 'id' => 'description']) !!}
 
-                                    </label>
+                                </label>
 
-                                    @if ($errors->has('description'))
-                                        <p class="text-danger">{{ $errors->first('description') }}</p>
-                                    @endif
+                                @if ($errors->has('description'))
+                                    <p class="text-danger">{{ $errors->first('description') }}</p>
+                                @endif
 
-                                </section>
+                            </section>
 
-                            </fieldset>
+                        </fieldset>
 
-                            <footer>
-                                <button type="submit" class="btn btn-primary button-apply">
-                                    {{ isset($row) ? 'Изменить' : 'Добавить' }}
-                                </button>
-                                <a class="btn btn-default" href="{{ route('cp.product_documents.index', ['product_id' => $product_id]) }}">
-                                    Назад
-                                </a>
-                            </footer>
-
-                        </div>
-
-                        {!! Form::close() !!}
+                        <footer>
+                            <button type="submit" class="btn btn-primary button-apply">
+                                {{ isset($row) ? 'Изменить' : 'Добавить' }}
+                            </button>
+                            <a class="btn btn-default"
+                               href="{{ route('cp.product_documents.index', ['product_id' => $product_id]) }}">
+                                Назад
+                            </a>
+                        </footer>
 
                     </div>
-                    <!-- end widget content -->
+
+                    {!! Form::close() !!}
 
                 </div>
-                <!-- end widget div -->
+                <!-- end widget content -->
 
             </div>
-            <!-- end widget -->
+            <!-- end widget div -->
 
         </article>
         <!-- END COL -->

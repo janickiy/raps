@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\{Catalog,
+    DetectedGases,
     Pages,
     Photoalbum,
     ProductDocuments,
@@ -19,15 +20,16 @@ use App\Models\{Catalog,
     Faq
 };
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use DataTables;
 use URL;
 
 class DataTableController extends Controller
 {
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getUsers()
+    public function getUsers(): JsonResponse
     {
         $row = User::query();
 
@@ -45,11 +47,10 @@ class DataTableController extends Controller
             ->rawColumns(['actions'])->make(true);
     }
 
-
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getServices()
+    public function getServices(): JsonResponse
     {
         $row = Services::query();
 
@@ -66,11 +67,10 @@ class DataTableController extends Controller
             ->rawColumns(['actions', 'image'])->make(true);
     }
 
-
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getPages()
+    public function getPages(): JsonResponse
     {
         $row = Pages::query();
 
@@ -89,9 +89,9 @@ class DataTableController extends Controller
 
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getRequests()
+    public function getRequests(): JsonResponse
     {
         $row = Requests::query();
 
@@ -103,9 +103,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getSettings()
+    public function getSettings(): JsonResponse
     {
         $row = Settings::query();
 
@@ -117,15 +117,15 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('published', function ($row) {
-                return $row->published == 1 ? 'да':'нет';
+                return $row->published == 1 ? 'да' : 'нет';
             })
             ->rawColumns(['actions'])->make(true);
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getSeo()
+    public function getSeo(): JsonResponse
     {
         $row = Seo::query();
 
@@ -139,9 +139,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getCatalog()
+    public function getCatalog(): JsonResponse
     {
         $row = Catalog::query();
 
@@ -159,9 +159,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getProducts()
+    public function getProducts(): JsonResponse
     {
         $row = Products::selectRaw('products.id,products.title,products.price,products.published,products.catalog_id,products.slug,products.created_at,products.description,catalog.name AS catalog')
             ->leftJoin('catalog', 'catalog.id', '=', 'products.catalog_id')
@@ -188,6 +188,7 @@ class DataTableController extends Controller
                 $title .= '<br><br><a href="' . URL::route('cp.product_photos.index', ['product_id' => $row->id]) . '">Фото</a>';
                 $title .= '<br><a href="' . URL::route('cp.product_documents.index', ['product_id' => $row->id]) . '">Документы</a>';
                 $title .= '<br><a href="' . URL::route('cp.product_parameters.index', ['product_id' => $row->id]) . '">Характеристики</a>';
+                $title .= '<br><a href="' . URL::route('cp.detected_gases.index', ['product_id' => $row->id]) . '">Определяемые газы</a>';
 
                 return $title;
             })
@@ -204,9 +205,9 @@ class DataTableController extends Controller
 
     /**
      * @param int $product_id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getProductPhotos(int $product_id)
+    public function getProductPhotos(int $product_id): JsonResponse
     {
         $row = ProductPhotos::where('product_id', $product_id);
 
@@ -225,9 +226,9 @@ class DataTableController extends Controller
 
     /**
      * @param int $product_id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getProductParameters(int $product_id)
+    public function getProductParameters(int $product_id): JsonResponse
     {
         $row = ProductParameters::selectRaw('product_parameters.id, product_parameters.name, product_parameters.value, product_parameters.product_id, product_parameters.category_id, product_parameters_category.name AS category')
             ->leftJoin('product_parameters_category', 'product_parameters_category.id', '=', 'product_parameters.category_id')
@@ -247,16 +248,16 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('category', function ($row) {
-                return $row->category ? $row->category : 'Разное';
+                return $row->category ?? 'Разное';
             })
             ->rawColumns(['actions'])->make(true);
     }
 
     /**
      * @param int $product_id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getDocuments(int $product_id)
+    public function getDocuments(int $product_id): JsonResponse
     {
         $row = ProductDocuments::where('product_id', $product_id);
 
@@ -271,9 +272,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getProductParametersCategory()
+    public function getProductParametersCategory(): JsonResponse
     {
         $row = ProductParametersCategory::query();
 
@@ -288,9 +289,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getFaq()
+    public function getFaq(): JsonResponse
     {
         $row = Faq::query();
 
@@ -305,9 +306,9 @@ class DataTableController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getPhotoalbum()
+    public function getPhotoalbum(): JsonResponse
     {
         $row = Photoalbum::query();
 
@@ -324,14 +325,14 @@ class DataTableController extends Controller
 
                 return $title;
             })
-            ->rawColumns(['actions','name'])->make(true);
+            ->rawColumns(['actions', 'name'])->make(true);
     }
 
     /**
      * @param int $photoalbum_id
-     * @return mixed
+     * @return JsonResponse
      */
-    public function getPhotos(int $photoalbum_id)
+    public function getPhotos(int $photoalbum_id): JsonResponse
     {
         $row = Photos::where('photoalbum_id', $photoalbum_id);
 
@@ -347,5 +348,23 @@ class DataTableController extends Controller
                 return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="" loading="lazy">';
             })
             ->rawColumns(['actions', 'thumbnail'])->make(true);
+    }
+
+    /**
+     * @param int $product_id
+     * @return JsonResponse
+     */
+    public function getDetectedGases(int $product_id): JsonResponse
+    {
+        $row = DetectedGases::where('product_id', $product_id);
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.detected_gases.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->rawColumns(['actions'])->make(true);
     }
 }

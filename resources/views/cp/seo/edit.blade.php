@@ -43,148 +43,143 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => route('cp.seo.update'), 'method' => 'put', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => route('cp.seo.update'), 'method' => 'put', 'class' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
-                        <div class="smart-form">
+                        <fieldset>
 
-                            <fieldset>
+                            <section>
 
-                                <section>
+                                {!! Form::label('type', 'Страница', ['class' => 'label']) !!}
 
-                                    {!! Form::label('type', 'Страница', ['class' => 'label']) !!}
+                                <label class="input">
 
-                                    <label class="input">
+                                    {!! Form::text('type', old('type', isset($row) ? $row->type : null), ['class' => 'form-control', 'readonly']) !!}
 
-                                        {!! Form::text('type', old('type', isset($row) ? $row->type : null), ['class' => 'form-control', 'readonly']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('type'))
+                                    <p class="text-danger">{{ $errors->first('type') }}</p>
+                                @endif
 
-                                    @if ($errors->has('type'))
-                                        <p class="text-danger">{{ $errors->first('type') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                {!! Form::label('h1', 'h1', ['class' => 'label']) !!}
 
-                                    {!! Form::label('h1', 'h1', ['class' => 'label']) !!}
+                                <label class="input">
 
-                                    <label class="input">
+                                    {!! Form::text('h1', old('h1', isset($row) ? $row->h1 : null), ['class' => 'form-control']) !!}
 
-                                        {!! Form::text('h1', old('h1', isset($row) ? $row->h1 : null), ['class' => 'form-control']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('h1'))
+                                    <p class="text-danger">{{ $errors->first('h1') }}</p>
+                                @endif
 
-                                    @if ($errors->has('h1'))
-                                        <p class="text-danger">{{ $errors->first('h1') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                <label class="checkbox">
 
-                                    <label class="checkbox">
+                                    {!! Form::checkbox('seo_sitemap', 1, isset($row) ? ($row->seo_sitemap == true ? 1 : 0): 1) !!}
 
-                                        {!! Form::checkbox('seo_sitemap', 1, isset($row) ? ($row->seo_sitemap == true ? 1 : 0): 1) !!}
+                                    <i></i>sitemap</label>
 
-                                        <i></i>sitemap</label>
+                                @if ($errors->has('seo_sitemap'))
+                                    <span class="text-danger">{{ $errors->first('seo_sitemap') }}</span>
+                                @endif
 
-                                    @if ($errors->has('seo_sitemap'))
-                                        <span class="text-danger">{{ $errors->first('seo_sitemap') }}</span>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                {!! Form::label('title', 'title', ['class' => 'label']) !!}
 
-                                    {!! Form::label('title', 'title', ['class' => 'label']) !!}
+                                <label class="input">
 
-                                    <label class="input">
+                                    {!! Form::text('title', old('title', isset($row) ? $row->title : null), ['class' => 'form-control']) !!}
 
-                                        {!! Form::text('title', old('title', isset($row) ? $row->title : null), ['class' => 'form-control']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('title'))
+                                    <p class="text-danger">{{ $errors->first('title') }}</p>
+                                @endif
 
-                                    @if ($errors->has('title'))
-                                        <p class="text-danger">{{ $errors->first('title') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                {!! Form::label('keyword', 'Keyword', ['class' => 'label']) !!}
 
-                                    {!! Form::label('keyword', 'Keyword', ['class' => 'label']) !!}
+                                <label class="textarea textarea-resizable">
 
-                                    <label class="textarea textarea-resizable">
+                                    {!! Form::textarea('keyword', old('keyword', isset($row) ? $row->keyword : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
-                                        {!! Form::textarea('keyword', old('keyword', isset($row) ? $row->keyword : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('keyword'))
+                                    <p class="text-danger">{{ $errors->first('keyword') }}</p>
+                                @endif
 
-                                    @if ($errors->has('keyword'))
-                                        <p class="text-danger">{{ $errors->first('keyword') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                {!! Form::label('description', 'Description', ['class' => 'label']) !!}
 
-                                    {!! Form::label('description', 'Description', ['class' => 'label']) !!}
+                                <label class="textarea textarea-resizable">
 
-                                    <label class="textarea textarea-resizable">
+                                    {!! Form::textarea('description', old('description', isset($row) ? $row->description : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
 
-                                        {!! Form::textarea('description', old('description', isset($row) ? $row->description : null), ['rows' => "3", 'class' => 'custom-scroll']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('description'))
+                                    <p class="text-danger">{{ $errors->first('description') }}</p>
+                                @endif
 
-                                    @if ($errors->has('description'))
-                                        <p class="text-danger">{{ $errors->first('description') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
+                            <section>
 
-                                <section>
+                                {!! Form::label('url_canonical', 'Url canonical ', ['class' => 'label']) !!}
 
-                                    {!! Form::label('url_canonical', 'Url canonical ', ['class' => 'label']) !!}
+                                <label class="input">
 
-                                    <label class="input">
+                                    {!! Form::text('url_canonical', old('url_canonical', isset($row) ? $row->url_canonical : null), ['class' => 'form-control']) !!}
 
-                                        {!! Form::text('url_canonical', old('url_canonical', isset($row) ? $row->url_canonical : null), ['class' => 'form-control']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('url_canonical'))
+                                    <p class="text-danger">{{ $errors->first('url_canonical') }}</p>
+                                @endif
 
-                                    @if ($errors->has('url_canonical'))
-                                        <p class="text-danger">{{ $errors->first('url_canonical') }}</p>
-                                    @endif
-
-                                </section>
+                            </section>
 
 
-                            </fieldset>
+                        </fieldset>
 
-                            <footer>
-                                <button type="submit" class="btn btn-primary button-apply">
-                                    {{ isset($row) ? 'Изменить' : 'Добавить' }}
-                                </button>
-                                <a class="btn btn-default" href="{{ route('cp.seo.index') }}">
-                                    Назад
-                                </a>
-                            </footer>
-
-                        </div>
-
-                        {!! Form::close() !!}
+                        <footer>
+                            <button type="submit" class="btn btn-primary button-apply">
+                                {{ isset($row) ? 'Изменить' : 'Добавить' }}
+                            </button>
+                            <a class="btn btn-default" href="{{ route('cp.seo.index') }}">
+                                Назад
+                            </a>
+                        </footer>
 
                     </div>
-                    <!-- end widget content -->
+
+                    {!! Form::close() !!}
 
                 </div>
-                <!-- end widget div -->
+                <!-- end widget content -->
 
             </div>
-            <!-- end widget -->
+            <!-- end widget div -->
 
         </article>
         <!-- END COL -->

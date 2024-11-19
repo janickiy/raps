@@ -43,41 +43,38 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => route('cp.robots.update'), 'method' => 'put', 'id' => 'tmplForm']) !!}
+                        {!! Form::open(['url' => route('cp.robots.update'), 'method' => 'put', 'class' => 'tmplForm']) !!}
 
-                        <div class="smart-form">
 
-                            <header>
-                                *-Обязательные поля
-                            </header>
+                        <header>
+                            *-Обязательные поля
+                        </header>
 
-                            <fieldset>
+                        <fieldset>
 
-                                <section>
+                            <section>
 
-                                    {!! Form::label('content', 'Содержимое Robots.txt*', ['class' => 'label']) !!}
+                                {!! Form::label('content', 'Содержимое Robots.txt*', ['class' => 'label']) !!}
 
-                                    <label class="textarea textarea-resizable">
+                                <label class="textarea textarea-resizable">
 
-                                        {!! Form::textarea('content', old('content', $file ?? null), ['rows' => "6", 'class' => 'custom-scroll']) !!}
+                                    {!! Form::textarea('content', old('content', $file ?? null), ['rows' => "6", 'class' => 'custom-scroll']) !!}
 
-                                    </label>
+                                </label>
 
-                                    @if ($errors->has('content'))
-                                        <p class="text-danger">{{ $errors->first('content') }}</p>
-                                    @endif
+                                @if ($errors->has('content'))
+                                    <p class="text-danger">{{ $errors->first('content') }}</p>
+                                @endif
 
-                                </section>
+                            </section>
 
-                            </fieldset>
+                        </fieldset>
 
-                            <footer>
-                                <button type="submit" class="btn btn-primary button-apply">
-                                    Изменить
-                                </button>
-                            </footer>
-
-                        </div>
+                        <footer>
+                            <button type="submit" class="btn btn-primary button-apply">
+                                Изменить
+                            </button>
+                        </footer>
 
                         {!! Form::close() !!}
 

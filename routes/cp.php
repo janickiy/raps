@@ -151,7 +151,11 @@ Route::group(['prefix' => 'cp'], function () {
 
     Route::group(['prefix' => 'detected-gases'], function () {
         Route::get('{product_id}', [DetectedGasesController::class, 'index'])->name('cp.detected_gases.index')->where('product_id', '[0-9]+');
-
+        Route::get('create/{product_id}', [DetectedGasesController::class, 'create'])->name('cp.detected_gases.create')->where('product_id', '[0-9]+');
+        Route::post('store', [DetectedGasesController::class, 'store'])->name('cp.detected_gases.store');
+        Route::get('edit/{id}', [DetectedGasesController::class, 'edit'])->name('cp.detected_gases.edit')->where('id', '[0-9]+');
+        Route::put('update', [DetectedGasesController::class, 'update'])->name('cp.detected_gases.update');
+        Route::post('destroy', [DetectedGasesController::class, 'destroy'])->name('cp.detected_gases.destroy');
     });
 
     Route::group(['prefix' => 'product-photos'], function () {
@@ -226,7 +230,7 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('product-videos/{product_id}', [DataTableController::class, 'getVideos'])->name('cp.datatable.product_videos')->where('product_id', '[0-9]+');
         Route::any('product-documents/{product_id}', [DataTableController::class, 'getDocuments'])->name('cp.datatable.product_documents')->where('product_id', '[0-9]+');
         Route::any('product-parameters/{product_id}', [DataTableController::class, 'getProductParameters'])->name('cp.datatable.product_parameters')->where('product_id', '[0-9]+');
+        Route::any('detected-gases/{product_id}', [DataTableController::class, 'getDetectedGases'])->name('cp.datatable.detected_gases')->where('product_id', '[0-9]+');
         Route::any('product-parameters-category', [DataTableController::class, 'getProductParametersCategory'])->name('cp.datatable.product_parameters_category')->middleware(['permission:admin|moderator']);
     });
-
 });

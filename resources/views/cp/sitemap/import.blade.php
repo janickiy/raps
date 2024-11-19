@@ -43,51 +43,47 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => route('cp.sitemap.import'), 'files' => true, 'method' => 'post', 'id' => 'smart-form']) !!}
+                        {!! Form::open(['url' => route('cp.sitemap.import'), 'files' => true, 'method' => 'post', 'class' => 'smart-form']) !!}
 
-                        <div class="smart-form">
+                        <header>
+                            *-Обязательные поля
+                        </header>
 
-                            <header>
-                                *-Обязательные поля
-                            </header>
+                        <fieldset>
 
-                            <fieldset>
+                            <section>
+                                <label class="label">Файл sitemap.xml*</label>
+                                <div class="input input-file">
+                                    <span class="button"><input type="file" id="file" name="file"
+                                                                onchange="this.parentNode.nextSibling.value = this.value">Выбрать</span>
+                                    <input type="text" placeholder="Include some files" readonly="">
+                                </div>
 
-                                <section>
-                                    <label class="label">Файл sitemap.xml*</label>
-                                    <div class="input input-file">
-                                        <span class="button"><input type="file" id="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">Выбрать</span>
-                                        <input type="text" placeholder="Include some files" readonly="">
-                                    </div>
+                                @if ($errors->has('file'))
+                                    <p class="text-danger">{{ $errors->first('file') }}</p>
+                                @endif
+                            </section>
 
-                                    @if ($errors->has('file'))
-                                        <p class="text-danger">{{ $errors->first('file') }}</p>
-                                    @endif
-                                </section>
+                        </fieldset>
 
-                            </fieldset>
-
-                            <footer>
-                                <button type="submit" class="btn btn-primary button-apply">
-                                    Загрузить
-                                </button>
-                                <a class="btn btn-default" href="{{ route('cp.sitemap.index') }}">
-                                    Назад
-                                </a>
-                            </footer>
-
-                        </div>
-
-                        {!! Form::close() !!}
+                        <footer>
+                            <button type="submit" class="btn btn-primary button-apply">
+                                Загрузить
+                            </button>
+                            <a class="btn btn-default" href="{{ route('cp.sitemap.index') }}">
+                                Назад
+                            </a>
+                        </footer>
 
                     </div>
-                    <!-- end widget content -->
+
+                    {!! Form::close() !!}
 
                 </div>
-                <!-- end widget div -->
+                <!-- end widget content -->
 
             </div>
-            <!-- end widget -->
+            <!-- end widget div -->
 
         </article>
         <!-- END COL -->

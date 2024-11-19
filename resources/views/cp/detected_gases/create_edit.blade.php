@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? route('cp.product_parameters.update') : route('cp.product_parameters.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => 'smart-form']) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.detected_gases.update') : route('cp.detected_gases.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -57,24 +57,7 @@
 
                             <section>
 
-                                {!! Form::label('category_id',  "Категория", ['class' => 'label']) !!}
-
-                                <label class="select">
-
-                                    {!! Form::select('category_id', $options, old('category_id', $row->category_id ?? 0), ['placeholder' => 'Основные', 'class' => 'input-sm']) !!}
-                                    <i></i>
-
-                                </label>
-
-                                @if ($errors->has('category_id'))
-                                    <p class="text-danger">{{ $errors->first('category_id') }}</p>
-                                @endif
-
-                            </section>
-
-                            <section>
-
-                                {!! Form::label('name', 'Параметр*', ['class' => 'label']) !!}
+                                {!! Form::label('name', 'Наименование вещества*', ['class' => 'label']) !!}
 
                                 <label class="input">
 
@@ -90,19 +73,56 @@
 
                             <section>
 
-                                {!! Form::label('value', 'Значение*', ['class' => 'label']) !!}
+                                {!! Form::label('formula', 'Химическая формула*', ['class' => 'label']) !!}
 
                                 <label class="input">
 
-                                    {!! Form::text('value', old('value', $row->value ?? null), ['class' => 'form-control']) !!}
+                                    {!! Form::text('formula', old('formula', $row->formula ?? null), ['class' => 'form-control']) !!}
 
                                 </label>
 
-                                @if ($errors->has('value'))
-                                    <p class="text-danger">{{ $errors->first('value') }}</p>
+                                @if ($errors->has('formula'))
+                                    <p class="text-danger">{{ $errors->first('formula') }}</p>
                                 @endif
 
                             </section>
+
+                            <div class="row">
+
+                                <section class="col col-6">
+
+                                    {!! Form::label('range', 'массовая концентрация, мг/м3', ['class' => 'label']) !!}
+
+                                    <label class="input">
+
+                                        {!! Form::text('range', old('range', $row->range ?? null), ['class' => 'form-control']) !!}
+
+                                    </label>
+
+                                    @if ($errors->has('range'))
+                                        <p class="text-danger">{{ $errors->first('range') }}</p>
+                                    @endif
+
+                                </section>
+
+
+                                <section class="col col-6">
+
+                                    {!! Form::label('volume_fraction', 'объемная доля,%', ['class' => 'label']) !!}
+
+                                    <label class="input">
+
+                                        {!! Form::text('volume_fraction', old('volume_fraction', $row->volume_fraction ?? null), ['class' => 'form-control']) !!}
+
+                                    </label>
+
+                                    @if ($errors->has('volume_fraction'))
+                                        <p class="text-danger">{{ $errors->first('volume_fraction') }}</p>
+                                    @endif
+
+                                </section>
+
+                            </div>
 
                         </fieldset>
 
@@ -111,10 +131,11 @@
                                 {{ isset($row) ? 'Изменить' : 'Добавить' }}
                             </button>
                             <a class="btn btn-default"
-                               href="{{ URL::route('cp.product_parameters.index', ['product_id' => $product_id]) }}">
+                               href="{{ URL::route('cp.detected_gases.index', ['product_id' => $product_id]) }}">
                                 Назад
                             </a>
                         </footer>
+
 
                         {!! Form::close() !!}
 
@@ -137,7 +158,5 @@
 @endsection
 
 @section('js')
-
-
 
 @endsection
