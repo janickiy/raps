@@ -8,6 +8,23 @@
 
 @section('css')
 
+    <style>
+        /* Table style */
+        table,th,td {
+            border: 1px solid #eaeaea;
+            /*! border: 1px solid rgba(51,51,51,0.1); */
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-width: 1px 0 0 1px;
+            margin: 0 0 1.75em;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+    </style>
 
 @endsection
 
