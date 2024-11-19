@@ -41,6 +41,7 @@
         @endif
 
     </section>
+
     <section class="about-info container">
         <div class="about-info__content">
             <div class="section-title">

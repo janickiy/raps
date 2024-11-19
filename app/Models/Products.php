@@ -112,6 +112,14 @@ class Products extends Model
     /**
      * @return HasMany
      */
+    public function detected_gases(): HasMany
+    {
+        return $this->hasMany(DetectedGases::class, 'product_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
     public function photos(): HasMany
     {
         return $this->hasMany(ProductPhotos::class, 'product_id', 'id');
@@ -124,7 +132,6 @@ class Products extends Model
     {
         return $this->hasMany(ProductDocuments::class, 'product_id', 'id');
     }
-
 
     /**
      * @return void
@@ -148,6 +155,7 @@ class Products extends Model
 
         $this->documents()->delete();
         $this->parameters()->delete();
+        $this->detected_gases()->delete();
         $this->delete();
     }
 }

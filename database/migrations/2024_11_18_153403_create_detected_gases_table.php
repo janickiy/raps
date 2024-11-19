@@ -17,7 +17,7 @@ class CreateDetectedGasesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('formula');
-            $table->string('range')->nullable();
+            $table->string('mass_concentration')->nullable();
             $table->string('volume_fraction')->nullable();
             $table->integer('product_id')->index('product_id');
             $table->timestamps();

@@ -54,7 +54,9 @@ class DetectedGasesController extends Controller
 
         if (!$row) abort(404);
 
-        return view('cp.detected_gases.create_edit', compact('row'))->with('title', 'Редактирование параметра');
+        $product_id = $row->product_id;
+
+        return view('cp.detected_gases.create_edit', compact('row','product_id'))->with('title', 'Редактирование параметра');
     }
 
     /**
@@ -69,7 +71,7 @@ class DetectedGasesController extends Controller
 
         $row->name = $request->input('name');
         $row->formula = $request->input('formula');
-        $row->range = $request->input('range');
+        $row->mass_concentration = $request->input('mass_concentration');
         $row->volume_fraction = $request->input('volume_fraction');
         $row->save();
 

@@ -187,6 +187,16 @@
                     </div>
                     <dl class="product__table">
 
+                        <div class="product__table-row">
+                            <dt><p class="product__accordions-desc">Определяемые газы</p></dt>
+                            <dd><p class="product__accordions-desc"><a href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список измеряемых компонентов</a></p></dd>
+                        </div>
+
+                        @if (Auth::check())
+                            <a href="{{ route('cp.detected_gases.index', ['product_id' => $product->id]) }}"
+                               class="editbutton"> Редактировать</a>
+                        @endif
+
                         @foreach($product->parameterByCategoryId(0) as $row)
 
                             <div class="product__table-row">
@@ -248,15 +258,15 @@
 
                                 <a href="{{ url($document->getDocument()) }}" class="btn product__download-btn"
                                    download>
-                        <span class="product__download-icon">
-                            <svg aria-hidden="true">
-                                <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                                    <span class="product__download-icon">
+                                        <svg aria-hidden="true">
+                                            <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
                                     <span class="product__download-info">
                             <span class="product__download-title">{{ $document->path }}</span>
                             <span class="product__download-desc">{{ $document->description }}</span>
-                        </span>
+                       </span>
                                 </a>
 
                                 @if (Auth::check())
@@ -272,6 +282,7 @@
                     </div>
                 </div>
             </section>
+
             <section id="questions" class="product__section">
                 <div class="section-title">
                     <h2>Вопрос-ответ</h2>

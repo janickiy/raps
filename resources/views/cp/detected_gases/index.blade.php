@@ -130,7 +130,7 @@
                 columns: [
                     {data: 'name', name: 'name'},
                     {data: 'formula', name: 'formula'},
-                    {data: 'range', name: 'range'},
+                    {data: 'mass_concentration', name: 'mass_concentration'},
                     {data: 'volume_fraction', name: 'volume_fraction'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],

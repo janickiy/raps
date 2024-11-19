@@ -19,6 +19,7 @@ Route::get('about', [FrontendController::class, 'about'])->name('frontend.catalo
 Route::get('page/{slug}', [FrontendController::class, 'page'])->name('frontend.page');
 Route::get('catalog/{slug?}', [FrontendController::class, 'catalog'])->name('frontend.catalog');
 Route::get('product/{slug}', [FrontendController::class, 'product'])->name('frontend.product');
+Route::get('product/{slug}/detected-gases', [FrontendController::class, 'detected_gases'])->name('frontend.product.detected_gases');
 Route::get('services', [FrontendController::class,'servicesListing'])->name('frontend.services_listing');
 Route::get('service/{slug}', [FrontendController::class,'service'])->name('frontend.service');
 Route::get('contact', [FrontendController::class, 'contact'])->name('frontend.contact');

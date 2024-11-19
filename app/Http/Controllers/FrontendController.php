@@ -165,6 +165,67 @@ class FrontendController extends Controller
      * @param Request $request
      * @return View
      */
+    public function detected_gases(string $slug, Request $request): View
+    {
+        $product = Products::where('slug', $slug)->published()->first();
+
+        if (!$product) abort(404);
+
+        $menu = $this->getMenuList();
+        $catalogsList = $this->getCatalogsList();
+        $title = $product->title;
+        $meta_description = $product->meta_description ?? '';
+        $meta_keywords = $product->meta_keywords ?? '';
+        $meta_title = $product->meta_title ?? '';
+        $seo_url_canonical = $product->seo_url_canonical ?? '';
+        $h1 = $product->h1 ?? $title;
+        $catalogs = Catalog::orderBy('name')->where('parent_id', 0)->get();
+
+        $faq = Faq::all();
+
+        $pathway = '';
+        $topbar = [];
+
+        Catalog::topbarMenu($topbar, $product->catalog_id);
+
+        for ($i = 0; $i < count($topbar); $i++) {
+            if ($topbar[$i][0] != $product->catalog_id) {
+                $pathway .= '<li><a href="' . URL::route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
+            }
+        }
+
+        if ($request->session()->has('productIds')) {
+            $productIds = $request->session()->get('productIds');
+            array_push($productIds, $product->id);
+            $productIds = array_unique($productIds);
+            $request->session()->put(['productIds' => $productIds]);
+        } else {
+            $productIds = [$product->id];
+            $request->session()->put(['productIds' => $productIds]);
+        }
+
+        return view('frontend.detected_gases', compact(
+                'product',
+                'slug',
+                'faq',
+                'productIds',
+                'catalogs',
+                'catalogsList',
+                'pathway',
+                'meta_description',
+                'meta_keywords',
+                'meta_title',
+                'h1',
+                'seo_url_canonical',
+                'menu')
+        )->with('title', $title);
+    }
+
+    /**
+     * @param string $slug
+     * @param Request $request
+     * @return View
+     */
     public function product(string $slug, Request $request): View
     {
         $product = Products::where('slug', $slug)->published()->first();
