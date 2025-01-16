@@ -14,7 +14,7 @@ class CreateSeoTable extends Migration
     public function up()
     {
         Schema::create('seo', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('type');
             $table->string('h1')->nullable();
             $table->string('title')->nullable();

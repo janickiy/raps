@@ -87,42 +87,22 @@
 
                             </section>
 
-                            <div class="row">
+                            <section>
 
-                                <section class="col col-6">
+                                {!! Form::label('volume_fraction', 'Диапазон измерения', ['class' => 'label']) !!}
 
-                                    {!! Form::label('range', 'массовая концентрация, мг/м3', ['class' => 'label']) !!}
+                                <label class="input">
 
-                                    <label class="input">
+                                    {!! Form::text('volume_fraction', old('volume_fraction', $row->volume_fraction ?? null), ['class' => 'form-control']) !!}
 
-                                        {!! Form::text('range', old('range', $row->range ?? null), ['class' => 'form-control']) !!}
+                                </label>
 
-                                    </label>
+                                @if ($errors->has('volume_fraction'))
+                                    <p class="text-danger">{{ $errors->first('volume_fraction') }}</p>
+                                @endif
 
-                                    @if ($errors->has('range'))
-                                        <p class="text-danger">{{ $errors->first('range') }}</p>
-                                    @endif
+                            </section>
 
-                                </section>
-
-
-                                <section class="col col-6">
-
-                                    {!! Form::label('volume_fraction', 'объемная доля,%', ['class' => 'label']) !!}
-
-                                    <label class="input">
-
-                                        {!! Form::text('volume_fraction', old('volume_fraction', $row->volume_fraction ?? null), ['class' => 'form-control']) !!}
-
-                                    </label>
-
-                                    @if ($errors->has('volume_fraction'))
-                                        <p class="text-danger">{{ $errors->first('volume_fraction') }}</p>
-                                    @endif
-
-                                </section>
-
-                            </div>
 
                         </fieldset>
 

@@ -42,8 +42,7 @@
                             <tr>
                                 <th>Наименование вещества</th>
                                 <th>Химическая формула</th>
-                                <th>Диапазон измерения (массовая концентрация,мг/м3)</th>
-                                <th>Диапазон измерения (объемная доля,%)</th>
+                                <th>Диапазон измерения</th>
                                 <th width="20px">Действия</th>
                             </tr>
                             </thead>
@@ -130,7 +129,6 @@
                 columns: [
                     {data: 'name', name: 'name'},
                     {data: 'formula', name: 'formula'},
-                    {data: 'mass_concentration', name: 'mass_concentration'},
                     {data: 'volume_fraction', name: 'volume_fraction'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],

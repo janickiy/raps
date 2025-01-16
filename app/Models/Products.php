@@ -114,7 +114,7 @@ class Products extends Model
      */
     public function detected_gases(): HasMany
     {
-        return $this->hasMany(DetectedGases::class, 'product_id', 'id');
+        return $this->hasMany(DetectedGases::class, 'product_id', 'id')->orderBy('name');
     }
 
     /**

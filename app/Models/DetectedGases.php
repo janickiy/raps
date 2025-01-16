@@ -12,7 +12,6 @@ class DetectedGases extends Model
     protected $fillable = [
         'name',
         'formula',
-        'mass_concentration',
         'volume_fraction',
         'product_id'
     ];

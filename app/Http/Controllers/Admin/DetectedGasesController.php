@@ -71,7 +71,6 @@ class DetectedGasesController extends Controller
 
         $row->name = $request->input('name');
         $row->formula = $request->input('formula');
-        $row->mass_concentration = $request->input('mass_concentration');
         $row->volume_fraction = $request->input('volume_fraction');
         $row->save();
 

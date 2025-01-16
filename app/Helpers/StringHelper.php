@@ -30,6 +30,15 @@ class StringHelper
     }
 
     /**
+     * @param string $str
+     * @return string
+     */
+    public static function subFormula(string $str): string
+    {
+        return preg_replace('/(\d{1,2})/i', '<span class="sub">$1</span>',  $str);
+    }
+
+    /**
      * @param $el
      * @param bool $first
      * @return string

@@ -24,6 +24,13 @@
             width: 100%;
         }
 
+        .sub {
+            font-style: normal; /* Нормальное начертание */
+            font-size: 0.6em; /* Размер индекса */
+            vertical-align: -0.5em;
+
+        }
+
     </style>
 
 @endsection
@@ -45,26 +52,21 @@
 
         <div class="container">
 
-            <table width="691">
+            <table width="100%" style="margin-top:0.3cm;">
                 <tbody>
                 <tr>
-                    <td rowspan="2"><strong>Наименование вещества</strong></td>
-                    <td rowspan="2"><strong>Химическая формула</strong></td>
-                    <td colspan="2"><strong>Диапазон измерения</strong></td>
-                </tr>
-                <tr>
-                    <td><strong>массовая концентрация,</strong></p><p><strong>мг/м3</strong></td>
-                    <td><strong>объемная доля,</strong></p><p><strong>%</strong></td>
+                    <td style="padding: 35px"><strong>Наименование вещества</strong></td>
+                    <td style="padding: 35px"><strong>Химическая формула</strong></td>
+                    <td style="padding: 35px"><strong>Диапазон измерения</strong></td>
                 </tr>
 
                 @if($product->detected_gases)
 
                     @foreach($product->detected_gases as $detected_gases)
                         <tr>
-                            <td><strong>{{ $detected_gases->name }}</strong></td>
-                            <td>{{ $detected_gases->formula }}</td>
-                            <td>{{ $detected_gases->mass_concentration }}</td>
-                            <td>{{ $detected_gases->volume_fraction }}</td>
+                            <td style="padding: 10px"><strong>{{ $detected_gases->name }}</strong></td>
+                            <td style="padding: 10px">{!! StringHelper::subFormula($detected_gases->formula) !!}</td>
+                            <td  style="padding: 10px">{{ $detected_gases->volume_fraction }}</td>
                         </tr>
                     @endforeach
 

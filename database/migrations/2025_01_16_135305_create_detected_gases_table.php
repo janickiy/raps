@@ -14,11 +14,10 @@ class CreateDetectedGasesTable extends Migration
     public function up()
     {
         Schema::create('detected_gases', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->string('formula');
-            $table->string('mass_concentration')->nullable();
-            $table->string('volume_fraction')->nullable();
+            $table->string('volume_fraction');
             $table->integer('product_id')->index('product_id');
             $table->timestamps();
         });
