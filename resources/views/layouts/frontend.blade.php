@@ -204,13 +204,14 @@
                         </label>
                         <div class="header__mobile-submenu-body">
                             <ul class="header__mobile-submenu-list">
-
+                                <?php $i=0; ?>
                                 @foreach($catalogs as $row)
+                                    <?php $i++; ?>
                                     @if($row->parent_id == 0)
 
                                         <li class="header__mobile-submenu-item">
-                                            <input id="mobile-submenu-category-1" name="mobile-menu" type="checkbox">
-                                            <label for="mobile-submenu-category-1">
+                                            <input id="mobile-submenu-category-{{ $i  }}" name="mobile-menu" type="checkbox">
+                                            <label for="mobile-submenu-category-{{ $i  }}">
                                                 {{ $row->name }}
                                                 <svg aria-hidden="true">
                                                     <use xlink:href="{{ url('/images/sprite.svg#chevron-down') }}"/>
