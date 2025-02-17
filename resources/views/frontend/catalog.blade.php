@@ -34,7 +34,9 @@
                 @endif
 
                 @if(!empty($catalog->description))
-                    <p style="margin-top: 1.6rem">{{ $catalog->description }}</p>
+                    <div class="content_text">
+                        <p style="margin-top: 1.6rem">{{ $catalog->description }}</p>
+                    </div>
                 @endif
 
             </div>
