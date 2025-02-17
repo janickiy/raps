@@ -1,2 +1,16 @@
+User-agent: Yandex
+Disallow: /bin/
+Disallow: /search/
+Disallow: /admin/
+
+User-agent: Googlebot
+Disallow: /bin/
+Disallow: /search/
+Disallow: /admin/
+
 User-agent: *
-Disallow:
+Disallow: /bin/
+Disallow: /search/
+Disallow: /admin/
+
+Sitemap: https://raps.uz/sitemap.xml

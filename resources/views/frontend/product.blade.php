@@ -198,7 +198,6 @@
                         @endif
 
                         @foreach($product->parameterByCategoryId(0) as $row)
-
                             <div class="product__table-row">
                                 <dt>{{ $row->name }}</dt>
                                 <dd>{{ $row->value }}</dd>

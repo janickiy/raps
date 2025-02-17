@@ -20,7 +20,6 @@
             border-spacing: 0;
             border-width: 1px 0 0 1px;
             margin: 0 0 1.75em;
-            table-layout: fixed;
             width: 100%;
         }
 
