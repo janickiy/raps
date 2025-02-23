@@ -46,7 +46,7 @@ class Products extends Model
     /**
      * @return string
      */
-    public function getPublishedAttribute()
+    public function getPublishedAttribute(): string
     {
         return $this->attributes['published'] ? 'публикован' : 'не опубликован';
     }
@@ -87,7 +87,7 @@ class Products extends Model
      * @param int $category_id
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function parameterByCategoryId(int $category_id)
+    public function parameterByCategoryId(int $category_id): HasMany
     {
         return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->orderBy('name')->get();
     }
@@ -98,7 +98,7 @@ class Products extends Model
      */
     public static function productsListByIds(array $productIds)
     {
-        return self::whereIn('id', $productIds)->orderBy('name')->get();
+        return self::whereIn('id', $productIds)->orderBy('title')->get();
     }
 
     /**
