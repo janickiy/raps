@@ -89,7 +89,7 @@ class Products extends Model
      */
     public function parameterByCategoryId(int $category_id)
     {
-        return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->get();
+        return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->orderBy('name')->get();
     }
 
     /**
@@ -98,7 +98,7 @@ class Products extends Model
      */
     public static function productsListByIds(array $productIds)
     {
-        return self::whereIn('id', $productIds)->get();
+        return self::whereIn('id', $productIds)->orderBy('name')->get();
     }
 
     /**
