@@ -34,6 +34,38 @@
                         </div>
                     </div>
 
+                    <form class="smart-form">
+
+                        {!! Form::hidden('product_id', $product_id) !!}
+
+                        <fieldset>
+
+                            <section>
+                                <label class="label">Выберети продукцию</label>
+                                <label class="input">
+                                    <input type="text" list="list">
+                                    <datalist id="list">
+
+                                        @foreach($rows as $row)
+                                            <option data-id="{ $row->id }}" value="{{ $row->title }}">{{ $row->title }}</option>
+                                        @endforeach
+
+                                    </datalist>
+
+
+                                </label>
+
+                            </section>
+
+                        </fieldset>
+
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                Перенести характеристики
+                            </button>
+                        </footer>
+
+                    </form>
                     <br>
 
                     <div class="table-responsive">
@@ -67,7 +99,7 @@
 @section('js')
 
     <script>
-        $(function() {
+        $(function () {
             pageSetUp();
             /* // DOM Position key index //
             l - Length changing (dropdown)

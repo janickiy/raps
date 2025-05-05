@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Models\{Catalog, Pages, Products, Services};
+use App\Models\{Catalog, Pages, Products, Services, ProductParameters};
 use App\Helpers\StringHelper;
+use Illuminate\Support\Facades\DB;
 use URL;
 
 class AjaxController extends Controller
@@ -46,6 +47,32 @@ class AjaxController extends Controller
 
                     return response()->json(['slug' => $slug]);
 
+                case 'add_product_parameters':
+
+                    DB::beginTransaction();
+
+                    try {
+                        ProductParameters::where('product_id', $request->input('id'))->delete();
+
+                        $rows = ProductParameters::query()->where('product_id', $request->input('product_id'))->get();
+
+                        foreach ($rows as $row) {
+                            ProductParameters::create([
+                                'product_id' => $request->input('id'),
+                                'name' => $row->name,
+                                'value' => $row->value,
+                                'category_id' => $row->category_id
+                            ]);
+                        }
+
+                        DB::commit();
+
+                        return response()->json(['success' => true]);
+                    } catch (\Exception $e) {
+                        DB::rollback();
+
+                        return response()->json(['success' => false]);
+                    }
             }
         }
     }

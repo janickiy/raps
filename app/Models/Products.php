@@ -87,7 +87,7 @@ class Products extends Model
      * @param int $category_id
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function parameterByCategoryId(int $category_id): HasMany
+    public function parameterByCategoryId(int $category_id)
     {
         return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->orderBy('name')->get();
     }
@@ -157,5 +157,13 @@ class Products extends Model
         $this->parameters()->delete();
         $this->detected_gases()->delete();
         $this->delete();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOption(): array
+    {
+        return self::orderBy('title')->get()->pluck('title', 'id')->toArray();
     }
 }

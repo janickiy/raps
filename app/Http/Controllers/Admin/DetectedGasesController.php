@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Request\Admin\DetectedGases\EditRequest;
 use App\Http\Request\Admin\DetectedGases\StoreRequest;
+use App\Models\Products;
 use App\Models\DetectedGases;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,9 @@ class DetectedGasesController extends Controller
 
         if (!$parameters) abort(404);
 
-        return view('cp.detected_gases.index', compact('parameters', 'product_id'))->with('title', 'Технические характеристики');
+        $rows = Products::query()->where('published', 1)->orderBy('title')->get();
+
+        return view('cp.detected_gases.index', compact('parameters', 'product_id', 'rows'))->with('title', 'Технические характеристики');
     }
 
     /**
@@ -56,7 +59,7 @@ class DetectedGasesController extends Controller
 
         $product_id = $row->product_id;
 
-        return view('cp.detected_gases.create_edit', compact('row','product_id'))->with('title', 'Редактирование параметра');
+        return view('cp.detected_gases.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование параметра');
     }
 
     /**
