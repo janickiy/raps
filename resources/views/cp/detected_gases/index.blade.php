@@ -34,25 +34,20 @@
                         </div>
                     </div>
 
-                    <form class="smart-form">
+                    <form id="form" class="smart-form">
 
                         {!! Form::hidden('product_id', $product_id) !!}
 
                         <fieldset>
 
                             <section>
-                                <label class="label">Выберети продукцию</label>
+                                <label class="label">Выберите продукцию</label>
                                 <label class="input">
-                                    <input type="text" list="list">
-                                    <datalist id="list">
-
+                                    <select class="js-select2" name="select_product_id" placeholder="Выберите продукцию">
                                         @foreach($rows as $row)
-                                            <option data-id="{ $row->id }}" value="{{ $row->title }}">{{ $row->title }}</option>
+                                            <option value="{{ $row->id }}">{{ $row->title }}</option>
                                         @endforeach
-
-                                    </datalist>
-
-
+                                    </select>
                                 </label>
 
                             </section>
@@ -100,6 +95,39 @@
 
     <script>
         $(function () {
+            $('.js-select2').select2({
+                placeholder: "Выберите продукцию",
+                maximumSelectionLength: 2,
+                language: "ru"
+            });
+
+            $("#form").on("submit", function(){
+
+                let productId = $("input[name=product_id]").val();
+                let Id =  $('#form option:selected').val();
+
+                let request = $.ajax({
+                    url: '{!! route('cp.ajax.action') !!}',
+                    method: "POST",
+                    data: {
+                        action: "add_product_parameters",
+                        product_id: productId,
+                        id: Id
+                    },
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    dataType: "json"
+                });
+                request.done(function (data) {
+                    if (data.result != null && data.result == true) {
+                        location.reload(true);
+                    } else {
+                        swal("Ошибка при переносе!", "Попробуйте еще раз", "error");
+                    }
+                });
+
+                return false;
+            });
+
             pageSetUp();
             /* // DOM Position key index //
             l - Length changing (dropdown)

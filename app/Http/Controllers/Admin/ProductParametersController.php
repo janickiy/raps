@@ -6,6 +6,7 @@ use App\Models\ProductParametersCategory;
 use App\Models\ProductParameters;
 use App\Http\Request\Admin\ProductParameters\StoreRequest;
 use App\Http\Request\Admin\ProductParameters\EditRequest;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -18,11 +19,11 @@ class ProductParametersController extends Controller
      */
     public function index(int $product_id): View
     {
-        $parameters = ProductParameters::where('product_id', $product_id)->get();
+        $product = Products::find($product_id);
 
-        if (!$parameters) abort(404);
+        if (!$product) abort(404);
 
-        return view('cp.product_parameters.index', compact('parameters', 'product_id'))->with('title', 'Технические характеристики');
+        return view('cp.product_parameters.index', compact( 'product_id'))->with('title', 'Технические характеристики: ' . $product->title);
     }
 
     /**

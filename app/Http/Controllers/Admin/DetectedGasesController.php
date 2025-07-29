@@ -18,13 +18,17 @@ class DetectedGasesController extends Controller
      */
     public function index(int $product_id): View
     {
-        $parameters = DetectedGases::where('product_id', $product_id)->get();
+        $product = Products::find($product_id);
 
-        if (!$parameters) abort(404);
+        if (!$product) abort(404);
 
-        $rows = Products::query()->where('published', 1)->orderBy('title')->get();
+        $rows = Products::query()
+            ->where('published', 1)
+            ->where('id', '!=', $product_id)
+            ->orderBy('title')
+            ->get();
 
-        return view('cp.detected_gases.index', compact('parameters', 'product_id', 'rows'))->with('title', 'Технические характеристики');
+        return view('cp.detected_gases.index', compact( 'product_id', 'rows', 'product'))->with('title', 'Определяемые газы: ' . $product->title);
     }
 
     /**
@@ -33,7 +37,7 @@ class DetectedGasesController extends Controller
      */
     public function create(int $product_id): View
     {
-        return view('cp.detected_gases.create_edit', compact('product_id'))->with('title', 'Добавление параметра');
+        return view('cp.detected_gases.create_edit', compact('product_id'))->with('title', 'Добавление определяемого газа');
     }
 
     /**
@@ -59,7 +63,7 @@ class DetectedGasesController extends Controller
 
         $product_id = $row->product_id;
 
-        return view('cp.detected_gases.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование параметра');
+        return view('cp.detected_gases.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование определяемого газа');
     }
 
     /**

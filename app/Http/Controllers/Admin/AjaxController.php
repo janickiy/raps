@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Models\{Catalog, Pages, Products, Services, ProductParameters};
+use App\Models\{Catalog, DetectedGases, Pages, Products, Services};
 use App\Helpers\StringHelper;
 use Illuminate\Support\Facades\DB;
 use URL;
@@ -52,26 +52,26 @@ class AjaxController extends Controller
                     DB::beginTransaction();
 
                     try {
-                        ProductParameters::where('product_id', $request->input('id'))->delete();
+                        DetectedGases::where('product_id', $request->input('product_id'))->delete();
 
-                        $rows = ProductParameters::query()->where('product_id', $request->input('product_id'))->get();
+                        $rows = DetectedGases::query()->where('product_id', $request->input('id'))->get();
 
                         foreach ($rows as $row) {
-                            ProductParameters::create([
-                                'product_id' => $request->input('id'),
+                            DetectedGases::create([
+                                'product_id' => (int)$request->input('product_id'),
                                 'name' => $row->name,
-                                'value' => $row->value,
-                                'category_id' => $row->category_id
+                                'formula' => $row->formula,
+                                'volume_fraction' => $row->volume_fraction,
                             ]);
                         }
 
                         DB::commit();
 
-                        return response()->json(['success' => true]);
+                        return response()->json(['result' => true]);
                     } catch (\Exception $e) {
                         DB::rollback();
 
-                        return response()->json(['success' => false]);
+                        return response()->json(['result' => false]);
                     }
             }
         }
