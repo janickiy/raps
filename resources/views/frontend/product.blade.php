@@ -310,7 +310,7 @@
                                 </a>
 
                                 @if (Auth::check())
-                                    <a href="{{ URL::route('cp.product_documents.edit', ['id' => $soft->id]) }}"
+                                    <a href="{{ URL::route('cp.product_soft.edit', ['id' => $soft->id]) }}"
                                        class="editbutton"> Редактировать</a>
                                 @endif
 
