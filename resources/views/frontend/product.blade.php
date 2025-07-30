@@ -255,7 +255,7 @@
 
                     <div class="product__download-btns">
 
-                        @if($product->documents)
+                        @if(count($product->documents) > 0)
 
                             @foreach($product->documents as $document)
 
@@ -292,7 +292,7 @@
 
                     <div class="product__download-btns">
 
-                        @if($product->soft)
+                        @if(count($product->soft) > 0)
 
                             @foreach($product->soft as $soft)
 
