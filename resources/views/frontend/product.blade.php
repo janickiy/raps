@@ -187,10 +187,14 @@
                     </div>
                     <dl class="product__table">
 
+                        @if(count($product->detected_gases) > 0)
+
                         <div class="product__table-row">
                             <dt><p class="product__accordions-desc">Определяемые газы</p></dt>
                             <dd><p class="product__accordions-desc"><a href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список измеряемых компонентов</a></p></dd>
                         </div>
+
+                        @endif
 
                         @if (Auth::check())
                             <a href="{{ route('cp.detected_gases.index', ['product_id' => $product->id]) }}"
