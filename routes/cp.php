@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\{
     ProductPhotosController,
     ProductParametersController,
     ProductDocumentsController,
+    ProductSoftController,
     ProductParametersCategoryController,
     DetectedGasesController,
     PhotoalbumController,
@@ -175,6 +176,15 @@ Route::group(['prefix' => 'cp'], function () {
         Route::post('destroy', [ProductDocumentsController::class, 'destroy'])->name('cp.product_documents.destroy');
     });
 
+    Route::group(['prefix' => 'product-soft'], function () {
+        Route::get('{product_id}', [ProductSoftController::class, 'index'])->name('cp.product_soft.index')->where('product_id', '[0-9]+');
+        Route::get('create/{product_id}', [ProductSoftController::class, 'create'])->name('cp.product_soft.create')->where('product_id', '[0-9]+');
+        Route::post('store', [ProductSoftController::class, 'store'])->name('cp.product_soft.store');
+        Route::get('edit/{id}', [ProductSoftController::class, 'edit'])->name('cp.product_soft.edit')->where('id', '[0-9]+');
+        Route::put('update', [ProductSoftController::class, 'update'])->name('cp.product_soft.update');
+        Route::post('destroy', [ProductSoftController::class, 'destroy'])->name('cp.product_soft.destroy');
+    });
+
     Route::middleware(['permission:admin'])->group(function () {
         Route::group(['prefix' => 'settings'], function () {
             Route::get('', [SettingsController::class, 'index'])->name('cp.settings.index');
@@ -229,6 +239,7 @@ Route::group(['prefix' => 'cp'], function () {
         Route::any('product-photos/{product_id}', [DataTableController::class, 'getProductPhotos'])->name('cp.datatable.product_photos')->where('product_id', '[0-9]+');
         Route::any('product-videos/{product_id}', [DataTableController::class, 'getVideos'])->name('cp.datatable.product_videos')->where('product_id', '[0-9]+');
         Route::any('product-documents/{product_id}', [DataTableController::class, 'getDocuments'])->name('cp.datatable.product_documents')->where('product_id', '[0-9]+');
+        Route::any('product-soft/{product_id}', [DataTableController::class, 'getSoft'])->name('cp.datatable.product_soft')->where('product_id', '[0-9]+');
         Route::any('product-parameters/{product_id}', [DataTableController::class, 'getProductParameters'])->name('cp.datatable.product_parameters')->where('product_id', '[0-9]+');
         Route::any('detected-gases/{product_id}', [DataTableController::class, 'getDetectedGases'])->name('cp.datatable.detected_gases')->where('product_id', '[0-9]+');
         Route::any('product-parameters-category', [DataTableController::class, 'getProductParametersCategory'])->name('cp.datatable.product_parameters_category')->middleware(['permission:admin|moderator']);

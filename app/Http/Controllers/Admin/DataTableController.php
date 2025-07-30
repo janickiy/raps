@@ -7,6 +7,7 @@ use App\Models\{Catalog,
     Pages,
     Photoalbum,
     ProductDocuments,
+    ProductSoft,
     ProductParameters,
     ProductParametersCategory,
     ProductPhotos,
@@ -185,9 +186,10 @@ class DataTableController extends Controller
             })
             ->editColumn('title', function ($row) {
                 $title = $row->title;
-                $title .= '<br><br><a href="' . URL::route('cp.product_photos.index', ['product_id' => $row->id]) . '">Фото</a>';
-                $title .= '<br><a href="' . URL::route('cp.product_documents.index', ['product_id' => $row->id]) . '">Документы</a>';
-                $title .= '<br><a href="' . URL::route('cp.product_parameters.index', ['product_id' => $row->id]) . '">Характеристики</a>';
+                $title .= '<br><br><a href="' . URL::route('cp.product_photos.index', ['product_id' => $row->id]) . '">Фото</a><br>';
+                $title .= '<br><a href="' . URL::route('cp.product_documents.index', ['product_id' => $row->id]) . '">Документы</a><br>';
+                $title .= '<br><a href="' . URL::route('cp.product_soft.index', ['product_id' => $row->id]) . '">Программное обеспечение</a><br>';
+                $title .= '<br><a href="' . URL::route('cp.product_parameters.index', ['product_id' => $row->id]) . '">Характеристики</a><br>';
                 $title .= '<br><a href="' . URL::route('cp.detected_gases.index', ['product_id' => $row->id]) . '">Определяемые газы</a>';
 
                 return $title;
@@ -264,6 +266,24 @@ class DataTableController extends Controller
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {
                 $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.product_documents.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
+                $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
+
+                return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
+            })
+            ->rawColumns(['actions'])->make(true);
+    }
+
+    /**
+     * @param int $product_id
+     * @return JsonResponse
+     */
+    public function getSoft(int $product_id): JsonResponse
+    {
+        $row = ProductSoft::where('product_id', $product_id);
+
+        return Datatables::of($row)
+            ->addColumn('actions', function ($row) {
+                $editBtn = '<a title="редактировать" class="btn btn-xs btn-primary"  href="' . URL::route('cp.product_soft.edit', ['id' => $row->id]) . '"><span  class="fa fa-edit"></span></a> &nbsp;';
                 $deleteBtn = '<a title="удалить" class="btn btn-xs btn-danger deleteRow" id="' . $row->id . '"><span class="fa fa-remove"></span></a>';
 
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
