@@ -282,6 +282,43 @@
                 </div>
             </section>
 
+            <section id="documents" class="product__section _part">
+                <div class="section-title">
+                    <h2>Программное обеспечение для скачивания</h2>
+
+                    <div class="product__download-btns">
+
+                        @if($product->soft)
+
+                            @foreach($product->soft as $soft)
+
+                                <a href="{{ url($soft->getSoft()) }}" class="btn product__download-btn"
+                                   download>
+                                    <span class="product__download-icon">
+                                        <svg aria-hidden="true">
+                                            <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                            </svg>
+                        </span>
+                                    <span class="product__download-info">
+                            <span class="product__download-title">{{ $soft->path }}</span>
+                            <span class="product__download-desc">{{ $soft->description }}</span>
+                       </span>
+                                </a>
+
+                                @if (Auth::check())
+                                    <a href="{{ URL::route('cp.product_documents.edit', ['id' => $soft->id]) }}"
+                                       class="editbutton"> Редактировать</a>
+                                @endif
+
+                            @endforeach
+                        @else
+                            <p>нет файлов для скачивания</p>
+                        @endif
+
+                    </div>
+                </div>
+            </section>
+
             <section id="questions" class="product__section">
                 <div class="section-title">
                     <h2>Вопрос-ответ</h2>

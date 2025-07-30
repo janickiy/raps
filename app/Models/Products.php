@@ -134,6 +134,14 @@ class Products extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function soft(): HasMany
+    {
+        return $this->hasMany(ProductSoft::class, 'product_id', 'id');
+    }
+
+    /**
      * @return void
      * @throws \Exception
      */
@@ -153,7 +161,12 @@ class Products extends Model
             if (Storage::disk('public')->exists('documents/' . $document->path) === true) Storage::disk('public')->delete('documents/' . $document->path);
         }
 
+        foreach ($this->soft as $soft) {
+            if (Storage::disk('public')->exists('soft/' . $soft->path) === true) Storage::disk('public')->delete('soft/' . $soft->path);
+        }
+
         $this->documents()->delete();
+        $this->soft()->delete();
         $this->parameters()->delete();
         $this->detected_gases()->delete();
         $this->delete();
