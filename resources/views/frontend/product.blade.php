@@ -189,10 +189,12 @@
 
                         @if(count($product->detected_gases) > 0)
 
-                        <div class="product__table-row">
-                            <dt><p class="product__accordions-desc">Определяемые газы</p></dt>
-                            <dd><p class="product__accordions-desc"><a href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список измеряемых компонентов</a></p></dd>
-                        </div>
+                            <div class="product__table-row">
+                                <dt><p class="product__accordions-desc">Определяемые газы</p></dt>
+                                <dd><p class="product__accordions-desc"><a
+                                            href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список
+                                            измеряемых компонентов</a></p></dd>
+                            </div>
 
                         @endif
 
@@ -249,13 +251,13 @@
 
             </section>
 
-            <section id="documents" class="product__section _part">
-                <div class="section-title">
-                    <h2>Документы</h2>
+            @if(count($product->documents) > 0)
 
-                    <div class="product__download-btns">
+                <section id="documents" class="product__section _part">
+                    <div class="section-title">
+                        <h2>Документы</h2>
 
-                        @if(count($product->documents) > 0)
+                        <div class="product__download-btns">
 
                             @foreach($product->documents as $document)
 
@@ -266,7 +268,7 @@
                                             <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
-                                    <span class="product__download-info">
+                        <span class="product__download-info">
                             <span class="product__download-title">{{ $document->path }}</span>
                             <span class="product__download-desc">{{ $document->description }}</span>
                        </span>
@@ -278,21 +280,20 @@
                                 @endif
 
                             @endforeach
-                        @else
-                            <p>нет документов</p>
-                        @endif
 
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section id="documents" class="product__section _part">
-                <div class="section-title">
-                    <h2>Программное обеспечение для скачивания</h2>
+            @endif
 
-                    <div class="product__download-btns">
+            @if(count($product->soft) > 0)
 
-                        @if(count($product->soft) > 0)
+                <section id="documents" class="product__section _part">
+                    <div class="section-title">
+                        <h2>Программное обеспечение для скачивания</h2>
+
+                        <div class="product__download-btns">
 
                             @foreach($product->soft as $soft)
 
@@ -315,13 +316,11 @@
                                 @endif
 
                             @endforeach
-                        @else
-                            <p>нет файлов для скачивания</p>
-                        @endif
 
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            @endif
 
             <section id="questions" class="product__section">
                 <div class="section-title">
