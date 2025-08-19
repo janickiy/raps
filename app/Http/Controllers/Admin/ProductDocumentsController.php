@@ -89,7 +89,7 @@ class ProductDocumentsController extends Controller
             $extension = $request->file('file')->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $request->file('file')->move('uploads/documents', $filename);
-            $request->path = $filename;
+            $row->path = $filename;
         }
 
         $row->description = $request->input('description');
