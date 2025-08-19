@@ -15,7 +15,7 @@ class CreateProductSoftTable extends Migration
     {
         Schema::create('product_soft', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
+            $table->string('url');
             $table->string('description');
             $table->integer('product_id')->index('product_id');
             $table->timestamps();

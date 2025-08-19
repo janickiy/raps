@@ -297,7 +297,7 @@
 
                             @foreach($product->soft as $soft)
 
-                                <a href="{{ url($soft->getSoft()) }}" class="btn product__download-btn"
+                                <a href="{{ $soft->url }}" class="btn product__download-btn"
                                    download>
                                     <span class="product__download-icon">
                                         <svg aria-hidden="true">
@@ -305,8 +305,7 @@
                             </svg>
                         </span>
                                     <span class="product__download-info">
-                            <span class="product__download-title">{{ $soft->path }}</span>
-                            <span class="product__download-desc">{{ $soft->description }}</span>
+                                       <span class="product__download-desc">{{ $soft->description }}</span>
                        </span>
                                 </a>
 

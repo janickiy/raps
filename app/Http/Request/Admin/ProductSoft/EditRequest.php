@@ -22,7 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => 'nullable|file|mimes:zip,rar,7z,tar,gz,bz2',
+            'url' => 'required',
             'description' => 'required',
         ];
     }

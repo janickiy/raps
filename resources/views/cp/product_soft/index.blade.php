@@ -127,7 +127,7 @@
                 },
                 columns: [
 
-                    {data: 'path', name: 'path'},
+                    {data: 'url', name: 'url'},
                     {data: 'description', name: 'description'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],

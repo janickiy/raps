@@ -12,7 +12,6 @@ use App\Http\Request\Admin\ProductSoft\StoreRequest;
 use App\Http\Request\Admin\ProductSoft\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Storage;
 
 class ProductSoftController extends Controller
 {
@@ -35,9 +34,7 @@ class ProductSoftController extends Controller
      */
     public function create(int $product_id): View
     {
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.product_soft.create_edit', compact('product_id', 'maxUploadFileSize'))->with('title', 'Добавление программного обеспечения');
+        return view('cp.product_soft.create_edit', compact('product_id'))->with('title', 'Добавление программного обеспечения');
     }
 
     /**
@@ -46,13 +43,7 @@ class ProductSoftController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        if ($request->hasFile('file')) {
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $request->file('file')->move('uploads/soft', $filename);
-
-            ProductSoft::create(array_merge($request->all(), ['path' => $filename]));
-        }
+        ProductSoft::create($request->all());
 
         return redirect()->route('cp.product_soft.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
@@ -68,9 +59,8 @@ class ProductSoftController extends Controller
         if (!$row) abort(404);
 
         $product_id = $row->product_id;
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.product_soft.create_edit', compact('row', 'product_id', 'maxUploadFileSize'))->with('title', 'Редактирование списка программного обеспечения');
+        return view('cp.product_soft.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование списка программного обеспечения');
     }
 
     /**
@@ -83,14 +73,7 @@ class ProductSoftController extends Controller
 
         if (!$row) abort(404);
 
-        if ($request->hasFile('file')) {
-            if (Storage::disk('public')->exists('soft/' . $row->path) === true) Storage::disk('public')->delete('soft/' . $row->path);
-
-            $extension = $request->file('file')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $request->file('file')->move('uploads/soft', $filename);
-        }
-
+        $row->url =  $request->input('url');
         $row->description = $request->input('description');
         $row->save();
 

@@ -43,7 +43,7 @@
                     <!-- widget content -->
                     <div class="widget-body no-padding">
 
-                        {!! Form::open(['url' => isset($row) ? route('cp.product_soft.update') : route('cp.product_soft.store'), 'files' => true, 'method' => isset($row) ? 'put' : 'post', 'class' => 'smart-form']) !!}
+                        {!! Form::open(['url' => isset($row) ? route('cp.product_soft.update') : route('cp.product_soft.store'), 'method' => isset($row) ? 'put' : 'post', 'class' => 'smart-form']) !!}
 
                         {!! isset($row) ? Form::hidden('id', $row->id) : '' !!}
 
@@ -57,24 +57,17 @@
 
                             <section>
 
-                                {!! Form::label('file', 'Разрешенные файлы (zip,rar,7z,tar,gz,bz2)', ['class' => 'label']) !!}
+                                {!! Form::label('url', 'URL*', ['class' => 'label']) !!}
 
-                                <div class="input input-file">
-                                        <span class="button">
+                                <label class="input">
 
-                                        {!! Form::file('file',  ['id' => 'file', 'onchange' => "this.parentNode.nextSibling.value = this.value"]) !!} Обзор...
+                                    {!! Form::text('url', old('url', $row->url ?? ''), ['class' => 'form-control', 'autocomplete' => 'off']) !!}
 
-                                        </span><input type="text" placeholder="выберите файл" readonly="">
+                                </label>
 
-                                </div>
-
-                                @if ($errors->has('file'))
-                                    <span class="text-danger">{{ $errors->first('file') }}</span>
+                                @if ($errors->has('url'))
+                                    <p class="text-danger">{{ $errors->first('url') }}</p>
                                 @endif
-
-                                <div class="note">
-                                    Максимальный размер: <strong>{{ $maxUploadFileSize }}</strong>
-                                </div>
 
                             </section>
 
