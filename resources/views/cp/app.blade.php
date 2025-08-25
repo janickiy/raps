@@ -143,7 +143,10 @@ Use search to find needed section.
 
     <!-- User info -->
     <div class="login-info">
+
         <span> <!-- User image size is adjusted inside CSS, it should stay as is -->
+
+             {{ Auth::user()->login }}
 
             <a id="show-shortcut" data-action="toggleShortcut">
                 <span>
