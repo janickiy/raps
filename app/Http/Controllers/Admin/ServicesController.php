@@ -20,7 +20,7 @@ class ServicesController extends Controller
      */
     public function index(): View
     {
-        return view('cp.services.index')->with('title', 'Продукция');
+        return view('cp.services.index')->with('title', 'Услуги');
     }
 
     /**
@@ -30,7 +30,7 @@ class ServicesController extends Controller
     {
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.services.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление продукции');
+        return view('cp.services.create_edit', compact('maxUploadFileSize'))->with('title', 'Добавление услугу');
     }
 
     /**
@@ -92,7 +92,7 @@ class ServicesController extends Controller
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.services.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
+        return view('cp.services.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование услуги');
     }
 
     /**
