@@ -37,6 +37,7 @@
                             <tr>
                                 <th>Имя</th>
                                 <th>Логин</th>
+                                <th>Роль</th>
                                 <th>Добавлен</th>
                                 <th width="20px">Действия</th>
                             </tr>
@@ -124,6 +125,7 @@
                 columns: [
                     {data: 'name', name: 'name'},
                     {data: 'login', name: 'login'},
+                    {data: 'role', name: 'role'},
                     {data: 'created_at', name: 'created_at'},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false},
                 ],
