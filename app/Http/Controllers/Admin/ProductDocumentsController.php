@@ -8,8 +8,8 @@ use App\Models\{
 };
 use Illuminate\Http\Request;
 use App\Helpers\StringHelper;
-use App\Http\Request\Admin\ProductDocuments\StoreRequest;
-use App\Http\Request\Admin\ProductDocuments\EditRequest;
+use App\Http\Requests\Admin\ProductDocuments\StoreRequest;
+use App\Http\Requests\Admin\ProductDocuments\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;

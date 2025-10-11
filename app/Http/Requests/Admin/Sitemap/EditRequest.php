@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Request\Admin\Sitemap;
+namespace App\Http\Requests\Admin\Sitemap;
 
 use Illuminate\Foundation\Http\FormRequest;
 

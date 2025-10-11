@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Faq;
 use Illuminate\Http\Request;
-use App\Http\Request\Admin\Faq\StoreRequest;
-use App\Http\Request\Admin\Faq\EditRequest;
+use App\Http\Requests\Admin\Faq\StoreRequest;
+use App\Http\Requests\Admin\Faq\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use URL;
 
 class FaqController extends Controller
 {
@@ -37,7 +36,7 @@ class FaqController extends Controller
     {
         Faq::create($request->all());
 
-        return redirect(URL::route('cp.faq.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.faq.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -67,7 +66,7 @@ class FaqController extends Controller
         $row->answer = $request->input('answer');
         $row->save();
 
-        return redirect(URL::route('cp.faq.index'))->with('success', 'Данные обновлены');
+        return redirect()->route('cp.faq.index')->with('success', 'Данные обновлены');
     }
 
     /**

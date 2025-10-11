@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Request\Admin\Sitemap\ImportRequest;
+use App\Http\Requests\Admin\Sitemap\ImportRequest;
 use Illuminate\View\View;
-use URL;
 
 class SitemapController extends Controller
 {

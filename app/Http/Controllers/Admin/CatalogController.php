@@ -6,14 +6,13 @@ use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Models\Catalog;
-use App\Http\Request\Admin\Catalog\{
+use App\Http\Requests\Admin\Catalog\{
     StoreRequest,
     EditRequest,
     DeleteRequest,
 };
 use Storage;
 use Image;
-use URL;
 
 class CatalogController extends Controller
 {
@@ -25,10 +24,8 @@ class CatalogController extends Controller
         $catalogs = Catalog::query()->orderBy('name')->get();
         $catalogsList = [];
 
-        if ($catalogs) {
-            foreach ($catalogs->toArray() as $catalog) {
-                $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
-            }
+        foreach ($catalogs?->toArray() ?? [] as $catalog) {
+            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
         }
 
         return view('cp.catalog.index', compact('catalogsList'))->with('title', 'Категории');
@@ -189,6 +186,6 @@ class CatalogController extends Controller
     {
         Catalog::removeCatalogs($request->id);
 
-        return  redirect()->route('cp.catalog.index')->with('success', 'Данные удалены');
+        return redirect()->route('cp.catalog.index')->with('success', 'Данные удалены');
     }
 }

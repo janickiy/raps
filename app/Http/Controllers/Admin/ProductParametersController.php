@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ProductParametersCategory;
 use App\Models\ProductParameters;
-use App\Http\Request\Admin\ProductParameters\StoreRequest;
-use App\Http\Request\Admin\ProductParameters\EditRequest;
+use App\Http\Requests\Admin\ProductParameters\StoreRequest;
+use App\Http\Requests\Admin\ProductParameters\EditRequest;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\Settings;
-use App\Http\Request\Admin\Settings\StoreRequest;
-use App\Http\Request\Admin\Settings\EditRequest;
+use App\Http\Requests\Admin\Settings\StoreRequest;
+use App\Http\Requests\Admin\Settings\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;

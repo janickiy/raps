@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use URL;
 
 class AuthController extends Controller
 {
@@ -40,7 +39,7 @@ class AuthController extends Controller
             return redirect()->intended(route('cp.dashbaord.index'));
         }
         // if unsuccessful, then redirect back to the login with the form data
-        return redirect(URL::route('login'))->with('error', "Неверный логин или пароль!");
+        return  redirect()->route('login')->with('error', "Неверный логин или пароль!");
     }
 
     /**
@@ -50,9 +49,7 @@ class AuthController extends Controller
      */
     protected function authenticated($request, $user)
     {
-        $redirect = redirect(URL::route('cp.dashbaord.index'));
-
-        return $redirect;
+        return redirect()->route('cp.dashbaord.index');
     }
 
     /**

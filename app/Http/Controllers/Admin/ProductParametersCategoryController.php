@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ProductParametersCategory;
-use App\Http\Request\Admin\ProductParametersCategory\StoreRequest;
-use App\Http\Request\Admin\ProductParametersCategory\EditRequest;
+use App\Http\Requests\Admin\ProductParametersCategory\StoreRequest;
+use App\Http\Requests\Admin\ProductParametersCategory\EditRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -21,7 +21,7 @@ class ProductParametersCategoryController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
     public function create(): View
     {

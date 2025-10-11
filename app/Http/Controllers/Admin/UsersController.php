@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Http\Request\Admin\Users\StoreRequest;
-use App\Http\Request\Admin\Users\EditRequest;
+use App\Http\Requests\Admin\Users\StoreRequest;
+use App\Http\Requests\Admin\Users\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -41,7 +41,7 @@ class UsersController extends Controller
     {
         User::create($request->all());
 
-        return redirect(URL::route('cp.users.index'))->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.users.index')->with('success', 'Информация успешно добавлена');
     }
 
     /**

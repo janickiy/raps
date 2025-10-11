@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Request\Admin\Photoalbum\EditRequest;
-use App\Http\Request\Admin\Photoalbum\StoreRequest;
+use App\Http\Requests\Admin\Photoalbum\EditRequest;
+use App\Http\Requests\Admin\Photoalbum\StoreRequest;
 use App\Models\Photoalbum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

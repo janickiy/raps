@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Models\{Catalog, Products};
 use App\Helpers\StringHelper;
-use App\Http\Request\Admin\Products\StoreRequest;
-use App\Http\Request\Admin\Products\EditRequest;
+use App\Http\Requests\Admin\Products\StoreRequest;
+use App\Http\Requests\Admin\Products\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use URL;
 use Image;
 use Storage;

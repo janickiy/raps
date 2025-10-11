@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Request\Admin\Photoalbum;
+namespace App\Http\Requests\Admin\Photoalbum;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -17,7 +17,7 @@ class StoreRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {

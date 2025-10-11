@@ -7,9 +7,8 @@ use App\Models\{
     Products,
 };
 use Illuminate\Http\Request;
-use App\Helpers\StringHelper;
-use App\Http\Request\Admin\ProductSoft\StoreRequest;
-use App\Http\Request\Admin\ProductSoft\EditRequest;
+use App\Http\Requests\Admin\ProductSoft\StoreRequest;
+use App\Http\Requests\Admin\ProductSoft\EditRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 

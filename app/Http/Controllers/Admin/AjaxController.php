@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use App\Models\{Catalog, DetectedGases, Pages, Products, Services};
 use App\Helpers\StringHelper;
 use Illuminate\Support\Facades\DB;
-use URL;
 
 class AjaxController extends Controller
 {

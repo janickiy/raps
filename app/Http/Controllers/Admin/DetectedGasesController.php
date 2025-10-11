@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Request\Admin\DetectedGases\EditRequest;
-use App\Http\Request\Admin\DetectedGases\StoreRequest;
+use App\Http\Requests\Admin\DetectedGases\EditRequest;
+use App\Http\Requests\Admin\DetectedGases\StoreRequest;
 use App\Models\Products;
 use App\Models\DetectedGases;
 use Illuminate\Http\RedirectResponse;
@@ -40,8 +40,9 @@ class DetectedGasesController extends Controller
         return view('cp.detected_gases.create_edit', compact('product_id'))->with('title', 'Добавление определяемого газа');
     }
 
+
     /**
-     * @param \App\Http\Request\Admin\ProductParameters\StoreRequest $request
+     * @param StoreRequest $request
      * @return RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
@@ -67,7 +68,7 @@ class DetectedGasesController extends Controller
     }
 
     /**
-     * @param \App\Http\Request\Admin\ProductParameters\EditRequest $request
+     * @param EditRequest $request
      * @return RedirectResponse
      */
     public function update(EditRequest $request): RedirectResponse

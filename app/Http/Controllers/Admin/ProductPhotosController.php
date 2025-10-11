@@ -8,8 +8,8 @@ use App\Models\{
 };
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
-use App\Http\Request\Admin\ProductPhotos\EditRequest;
-use App\Http\Request\Admin\ProductPhotos\UploadRequest;
+use App\Http\Requests\Admin\ProductPhotos\EditRequest;
+use App\Http\Requests\Admin\ProductPhotos\UploadRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Storage;
