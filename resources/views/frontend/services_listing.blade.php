@@ -29,7 +29,7 @@
             и параметров, мониторинга промышленных выбросов, контроля пространства воздуха рабочей зоны с проведением
             пусконаладочных работ.</p>
         <div class="services__cards">
-            @foreach($services as $service)
+            @foreach($services ?? [] as $service)
 
                 <article class="card">
                     <picture class="card__img ">

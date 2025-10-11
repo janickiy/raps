@@ -63,7 +63,7 @@
                 <div class="swiper product__main-slider">
                     <div class="swiper-wrapper">
 
-                        @foreach($product->photos as $photo)
+                        @foreach($product->photos ?? [] as $photo)
                             <div class="swiper-slide">
                                 <picture class="product__img-main">
                                     <img src="{{ url($photo->getOriginUrl()) }}"
@@ -78,7 +78,7 @@
                 <div class="swiper product__thumbs-slider">
                     <div class="swiper-wrapper">
 
-                        @foreach($product->photos as $photo)
+                        @foreach($product->photos ?? [] as $photo)
                             <div class="swiper-slide">
                                 <picture class="product__img-thumb">
                                     <img
@@ -203,7 +203,7 @@
                                class="editbutton"> Редактировать</a>
                         @endif
 
-                        @foreach($product->parameterByCategoryId(0) as $row)
+                        @foreach($product->parameterByCategoryId(0) ?? [] as $row)
                             <div class="product__table-row">
                                 <dt>{{ $row->name }}</dt>
                                 <dd>{{ $row->value }}</dd>
@@ -220,7 +220,7 @@
 
                 @endif
 
-                @foreach($productParametersCategory as $categoryRow)
+                @foreach($productParametersCategory ?? [] as $categoryRow)
 
                     @if($product->parameterByCategoryId($categoryRow->id))
 
@@ -229,7 +229,7 @@
                         </div>
                         <dl class="product__table">
 
-                            @foreach($product->parameterByCategoryId($categoryRow->id) as $row)
+                            @foreach($product->parameterByCategoryId($categoryRow->id) ?? [] as $row)
 
                                 <div class="product__table-row">
                                     <dt>{{ $row->name }}</dt>
@@ -259,7 +259,7 @@
 
                         <div class="product__download-btns">
 
-                            @foreach($product->documents as $document)
+                            @foreach($product->documents ?? [] as $document)
 
                                 <a href="{{ url($document->getDocument()) }}" class="btn product__download-btn"
                                    download>
@@ -295,7 +295,7 @@
 
                         <div class="product__download-btns">
 
-                            @foreach($product->soft as $soft)
+                            @foreach($product->soft  ?? [] as $soft)
 
                                 <a href="{{ $soft->url }}" class="btn product__download-btn"
                                    download>

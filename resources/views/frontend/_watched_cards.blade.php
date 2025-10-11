@@ -6,7 +6,7 @@
     </div>
     <div class="watched__cards container">
 
-        @foreach(\App\Models\Products::productsListByIds($productIds) as $product)
+        @foreach(\App\Models\Products::productsListByIds($productIds) ?? [] as $product)
 
             <article class="card">
                 <picture class="card__img ">

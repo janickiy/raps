@@ -10,7 +10,7 @@
 
     <style>
         /* Table style */
-        table,th,td {
+        table, th, td {
             border: 1px solid #eaeaea;
             /*! border: 1px solid rgba(51,51,51,0.1); */
         }
@@ -59,17 +59,13 @@
                     <td style="padding: 35px"><strong>Диапазон измерения</strong></td>
                 </tr>
 
-                @if($product->detected_gases)
-
-                    @foreach($product->detected_gases as $detected_gases)
-                        <tr>
-                            <td style="padding: 10px"><strong>{{ $detected_gases->name }}</strong></td>
-                            <td style="padding: 10px">{!! StringHelper::subFormula($detected_gases->formula) !!}</td>
-                            <td  style="padding: 10px">{{ $detected_gases->volume_fraction }}</td>
-                        </tr>
-                    @endforeach
-
-                @endif
+                @foreach($product->detected_gases ?? [] as $detected_gases)
+                    <tr>
+                        <td style="padding: 10px"><strong>{{ $detected_gases->name }}</strong></td>
+                        <td style="padding: 10px">{!! StringHelper::subFormula($detected_gases->formula) !!}</td>
+                        <td style="padding: 10px">{{ $detected_gases->volume_fraction }}</td>
+                    </tr>
+                @endforeach
 
                 </tbody>
             </table>
@@ -82,7 +78,7 @@
                         href="{{ URL::route('frontend.contact') }}">связаться с нами</a> удобным для вас способом.</p>
                 <div class="product__accordions">
 
-                    @foreach($faq as $row)
+                    @foreach($faq ?? [] as $row)
                         <div class="product__accordions-item">
                             <input id="ac-{{ $row->id }}" name="accordion-{{ $row->id }}" type="checkbox">
                             <label for="ac-{{ $row->id }}">

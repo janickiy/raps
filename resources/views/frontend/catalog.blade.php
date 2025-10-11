@@ -43,7 +43,7 @@
 
             <ul class="products__badges container">
 
-                @foreach(\App\Models\Catalog::orderBy('name')->where('parent_id', $catalog->id)->get() as $row)
+                @foreach(\App\Models\Catalog::orderBy('name')->where('parent_id', $catalog->id)->get() ?? [] as $row)
 
                     <li class="products__badges-item" style="margin-top: 1.6rem">
                         <a href="{{ URL::route('frontend.catalog',['slug' => $row->slug]) }}">
@@ -67,7 +67,7 @@
                     <p>нет товаров</p>
                 @endif
 
-                @foreach($products as $product)
+                @foreach($products ?? [] as $product)
 
                     <article class="product-card">
 
@@ -132,7 +132,7 @@
             </div>
             <div class="catalog__cards">
 
-                @foreach($catalogs as $row)
+                @foreach($catalogs ?? [] as $row)
 
                     <article class="card">
                         <picture class="card__img ">

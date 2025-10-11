@@ -46,29 +46,29 @@
 
                 @foreach($catalogs as $catalog)
 
-                        <article class="card">
-                            <picture class="card__img ">
-                                <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }} 2x"
-                                     alt="{{ $catalog->image_alt }}"
-                                     title="{{ $catalog->image_title ?? $catalog->name }}" loading="lazy">
-                            </picture>
-                            <div class="card__info">
+                    <article class="card">
+                        <picture class="card__img ">
+                            <img src="{{ url($catalog->getImage()) }}" srcset="{{ url($catalog->getImage('2x_')) }} 2x"
+                                 alt="{{ $catalog->image_alt }}"
+                                 title="{{ $catalog->image_title ?? $catalog->name }}" loading="lazy">
+                        </picture>
+                        <div class="card__info">
+                            <div>
                                 <div>
-                                    <div>
-                                        <h3>{{ $catalog->name }}</h3>
-                                        <span class="card__count">{{ $catalog->getTotalProductCount() }}</span>
-                                    </div>
-                                    <p class="card__desc">{{ $catalog->description }}</p>
+                                    <h3>{{ $catalog->name }}</h3>
+                                    <span class="card__count">{{ $catalog->getTotalProductCount() }}</span>
                                 </div>
-                                <a href="{{ URL::route('frontend.catalog',['slug' => $catalog->slug]) }}"
-                                   class="btn btn-primary card__btn">
-                                    К товарам
-                                    <svg aria-hidden="true">
-                                        <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
-                                    </svg>
-                                </a>
+                                <p class="card__desc">{{ $catalog->description }}</p>
                             </div>
-                        </article>
+                            <a href="{{ URL::route('frontend.catalog',['slug' => $catalog->slug]) }}"
+                               class="btn btn-primary card__btn">
+                                К товарам
+                                <svg aria-hidden="true">
+                                    <use xlink:href="{{ url('/images/sprite.svg#arrow-right') }}"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </article>
 
                 @endforeach
 

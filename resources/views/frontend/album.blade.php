@@ -41,7 +41,7 @@
         <p class="section-desc certificates__desc">{{ $album->description }}</p>
         <div class="certificates__list">
 
-            @foreach($album->photos as $photo)
+            @foreach($album->photos ?? [] as $photo)
 
                 <article class="certificate">
                     <picture class="certificate__img">
