@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Models\Catalog;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Harimayco\Menu\Models\Menus;
@@ -49,14 +50,42 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, $exception)
+    /**
+     * @param $request
+     * @param Throwable $exception
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @throws Throwable
+     */
+    public function render($request, Throwable $exception)
     {
         if ($this->isHttpException($exception)) {
             if ($exception->getStatusCode() == 404) {
-                   $menu = Menus::where('name', 'top')->with('items')->first();
-                          $top_menu = $menu->items->toArray();
 
-                return response()->view('errors.404', ['top_menu' => $top_menu], 404);
+                $menu_services = Menus::where('name', 'services')->with('items')->first();
+                $menu_about = Menus::where('name', 'about')->with('items')->first();
+
+                $menu = [
+                    'about' => isset($menu_about->items) ? $menu_about->items->toArray() : [],
+                    'services' => isset($menu_services->items) ? $menu_services->items->toArray() : [],
+                ];
+
+                $catalogs = Catalog::query()->orderBy('name')->get();
+
+                $catalogsList = [];
+
+                if ($catalogs) {
+                    foreach ($catalogs->toArray() as $catalog) {
+                        $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+                    }
+                }
+
+                $catalogs = Catalog::orderBy('name')->get();
+
+                return response()->view('errors.404', [
+                    'menu' => $menu,
+                    'catalogsList' => $catalogsList,
+                    'catalogs' => $catalogs
+                ], 404);
             }
         }
         return parent::render($request, $exception);
