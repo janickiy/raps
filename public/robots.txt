@@ -1,16 +1,10 @@
 User-agent: Yandex
-Disallow: /bin/
-Disallow: /search/
-Disallow: /admin/
+Disallow: /
 
 User-agent: Googlebot
-Disallow: /bin/
-Disallow: /search/
-Disallow: /admin/
+Disallow: /
 
 User-agent: *
-Disallow: /bin/
-Disallow: /search/
-Disallow: /admin/
+Disallow: /
 
-Sitemap: https://raps.uz/sitemap.xml
+Sitemap: https://riastech.ru/sitemap.xml
