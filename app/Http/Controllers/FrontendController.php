@@ -494,6 +494,10 @@ class FrontendController extends Controller
         return redirect()->back()->with('success', 'Спасибо, что обратились в компанию RAPS!<br>Ваш файл отправлен.<br>Менеджер свяжется с Вами в ближайшее время.');
     }
 
+    public function test()
+    {
+        dd(public_path());
+    }
 
     /**
      * @param string $slug
@@ -537,8 +541,10 @@ class FrontendController extends Controller
 
         $catalogsList = [];
 
-        foreach ($catalogs?->toArray() ?? [] as $catalog) {
-            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+        if ($catalogs) {
+            foreach ($catalogs->toArray() as $catalog) {
+                $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+            }
         }
 
         return $catalogsList;
@@ -553,8 +559,8 @@ class FrontendController extends Controller
         $menu_about = Menus::where('name', 'about')->with('items')->first();
 
         return [
-            'about' => $menu_about?->items?->toArray() ?? [],
-            'services' => $menu_services?->items?->toArray() ?? [],
+            'about' => $menu_about?->items->toArray(),
+            'services' => $menu_services?->items->toArray(),
         ];
     }
 }

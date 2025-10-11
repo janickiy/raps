@@ -34,7 +34,7 @@
                 <p>нет товаров</p>
             @endif
 
-            @foreach($products ?? [] as $product)
+            @foreach($products as $product)
 
                 <article class="product-card">
                     <picture class="product-card__img">

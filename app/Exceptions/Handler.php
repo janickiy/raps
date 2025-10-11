@@ -65,8 +65,8 @@ class Handler extends ExceptionHandler
                 $menu_about = Menus::where('name', 'about')->with('items')->first();
 
                 $menu = [
-                    'about' => isset($menu_about->items) ? $menu_about->items->toArray() : [],
-                    'services' => isset($menu_services->items) ? $menu_services->items->toArray() : [],
+                    'about' => $menu_about?->items->toArray(),
+                    'services' => $menu_services?->items->toArray(),
                 ];
 
                 $catalogs = Catalog::query()->orderBy('name')->get();

@@ -156,7 +156,7 @@
                 <div class="header__input-hints js-header-input-hints">
                     <ul>
 
-                        @foreach($catalogs ?? [] as $row)
+                        @foreach($catalogs as $row)
 
                             <li class="header__input-hint">
                                 <a href="{{ route('frontend.catalog',['slug' => $row->slug]) }}">
@@ -205,7 +205,7 @@
                         <div class="header__mobile-submenu-body">
                             <ul class="header__mobile-submenu-list">
                                 <?php $i=0; ?>
-                                @foreach($catalogs ?? [] as $row)
+                                @foreach($catalogs as $row)
                                     <?php $i++; ?>
                                     @if($row->parent_id == 0)
 
@@ -295,7 +295,7 @@
             <div class="container">
                 <ul class="header__product-menu-items">
 
-                    @foreach($catalog ?? [] as $row)
+                    @foreach($catalogs as $row)
 
                         @if($row->parent_id == 0)
 

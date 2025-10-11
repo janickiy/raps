@@ -82,11 +82,11 @@
                             <div class="swiper-slide">
                                 <picture class="product__img-thumb">
                                     <img
-                                        src="{{ url($photo->getOriginUrl()) }}"
-                                        srcset="{{ url($photo->getOriginUrl()) }} 2x"
-                                        alt="{{ $photo->alt }}"
-                                        title="{{ $photo->title ?? $product->title }}"
-                                        loading="lazy"
+                                            src="{{ url($photo->getOriginUrl()) }}"
+                                            srcset="{{ url($photo->getOriginUrl()) }} 2x"
+                                            alt="{{ $photo->alt }}"
+                                            title="{{ $photo->title ?? $product->title }}"
+                                            loading="lazy"
                                     >
                                 </picture>
                             </div>
@@ -164,7 +164,7 @@
                     <h2>Описание</h2>
                 </div>
                 <div class="content_text">
-                    {!!  $product->full_description !!}
+                    {!! $product->full_description !!}
 
                     @if (Auth::check())
                         <br>
@@ -192,7 +192,7 @@
                             <div class="product__table-row">
                                 <dt><p class="product__accordions-desc">Определяемые газы</p></dt>
                                 <dd><p class="product__accordions-desc"><a
-                                            href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список
+                                                href="{{ route('frontend.product.detected_gases',['slug' => $product->slug]) }}">Список
                                             измеряемых компонентов</a></p></dd>
                             </div>
 
@@ -268,7 +268,7 @@
                                             <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
                             </svg>
                         </span>
-                        <span class="product__download-info">
+                                    <span class="product__download-info">
                             <span class="product__download-title">{{ $document->path }}</span>
                             <span class="product__download-desc">{{ $document->description }}</span>
                        </span>
@@ -295,7 +295,7 @@
 
                         <div class="product__download-btns">
 
-                            @foreach($product->soft  ?? [] as $soft)
+                            @foreach($product->soft ?? [] as $soft)
 
                                 <a href="{{ $soft->url }}" class="btn product__download-btn"
                                    download>
@@ -326,10 +326,11 @@
                     <h2>Вопрос-ответ</h2>
                 </div>
                 <p class="product__accordions-desc">Если вы не нашли ответа на свой вопрос, вы можете <a
-                        href="{{ URL::route('frontend.contact') }}">связаться с нами</a> удобным для вас способом.</p>
+                            href="{{ URL::route('frontend.contact') }}">связаться с нами</a> удобным для вас способом.
+                </p>
                 <div class="product__accordions">
 
-                    @foreach($faq as $row)
+                    @foreach($faq ?? [] as $row)
                         <div class="product__accordions-item">
                             <input id="ac-{{ $row->id }}" name="accordion-{{ $row->id }}" type="checkbox">
                             <label for="ac-{{ $row->id }}">

@@ -3,10 +3,10 @@
 namespace App\Mail;
 
 
+use App\Helpers\SettingsHelper;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use App\Helpers\SettingsHelper;
 
 class Notification extends Mailable implements ShouldQueue
 {
