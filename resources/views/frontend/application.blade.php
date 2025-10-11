@@ -15,61 +15,72 @@
 
 @section('content')
 
-    <section class="app">
-        <div class="container container--xl">
-            <div class="app__content">
-                <div class="app__main">
-                    <div class="breadcrumbs">
-                        <div class="breadcrumbs__list">
-                            <div class="breadcrumbs__item">
-                                <span class="breadcrumbs__current">{{ $title }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="title1 app__title">
-                        <h1>{!! $h1 !!}</h1>
-                    </div>
-                    <div class="app__links">
-                        <a class="app__link" href="{{ SettingsHelper::getSetting('BLANK_1') }}">Для заказа газоанализатора</a>
-                        <a class="app__link" href="{{ SettingsHelper::getSetting('BLANK_2') }}">Для заказа системы жидкостного анализа</a>
-                        <a class="app__link" href="{{ SettingsHelper::getSetting('BLANK_3') }}">Для заказа системы газового анализа</a>
-                    </div>
+    <ul class="container breadcrumbs">
+        <li><a href="{{ route('frontend.index') }}">Главная</a></li>
+        <li><span>{{ $title }}</span></li>
+    </ul>
+
+    <section class="request container">
+        <div class="main-title">
+            <h1>{{ $h1 }}</h1>
+        </div>
+        <div class="request__content">
+            <div class="request__content-item">
+                <p>1. Скачайте и заполните нужный вам опросный лист, чтобы помочь нам подобрать оборудование для вашего
+                    производства</p>
+                <div class="request__download-btns">
+                    <a href="{{ SettingsHelper::getSetting('BLANK_1') }}" class="btn request__download-btn" download>
+                    <span class="request__download-icon">
+                        <svg aria-hidden="true">
+                            <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                        </svg>
+                    </span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_1') }}</span>
+                    </a>
+                    <a href="{{ SettingsHelper::getSetting('BLANK_2') }}" class="btn request__download-btn" download>
+                    <span class="request__download-icon">
+                        <svg aria-hidden="true">
+                            <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                        </svg>
+                    </span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_2') }}</span>
+                    </a>
+                    <a href="{{ SettingsHelper::getSetting('BLANK_3') }}" class="btn request__download-btn" download>
+                    <span class="request__download-icon">
+                        <svg aria-hidden="true">
+                            <use xlink:href="{{ url('/images/sprite.svg#download') }}"/>
+                        </svg>
+                    </span>
+                        <span class="request__download-title">{{ SettingsHelper::getSettingName('BLANK_3') }}</span>
+                    </a>
                 </div>
-                <br>
+            </div>
+            <div class="request__content-item">
+                <p>2. После заполнения опросного листа, вам необходимо загрузить его и отправить нам. Мы изучим его и
+                    свяжемся с вами в ближайшее время с ответом</p>
+                <h2 class="sr-only">Форма загрузки опросного листа</h2>
 
-                @include('layouts.notifications')
+                {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'id' => "requestForm", 'class' => "request-form", "autocomplete" => "off"]) !!}
 
-                {!! Form::open(['method' => 'post', 'url' => route('frontend.send.application'), 'files' => true, 'class' => "app-form app__form", "autocomplete" => "off"]) !!}
+                {!! Form::hidden('type', 1) !!}
 
-                    <div class="breadcrumbs app-form__breadcrumbs">
-                        <div class="breadcrumbs__list">
-                            <div class="breadcrumbs__item">
-                                <span class="breadcrumbs__current">Форма отправки</span>
-                            </div>
-                        </div>
+                    <div class="request-form__input-file">
+                        <input id="requestFile" type="file" name="attachment">
+                        <label for="requestFile">
+                            <span
+                                class="request-form__label-title js-request-label-title">Загрузить опросный лист</span>
+                            <span
+                                class="request-form__label-desc">Перетащите документ сюда, либо выберите вручную</span>
+                        </label>
                     </div>
-                    <div class="app-form__body">
-                        <div class="app-form__main">
-                            <p class="text app-form__text">После заполнения опросного листа, вам необходимо загрузить его и
-                                отправить нам</p>
-                            <label class="file-field app-form__field">
-                                <input type="file" name="attachment" class="file-field__input js-file-input" data-file-output="app-file">
-                                <span class="file-field__name js-file-value" data-file-output="app-file">Выберите файл</span>
-                                <span class="btn btn--black-white file-field__label">Выбрать</span>
-                            </label>
-                        </div>
-                        <img class="app-form__img" src="{{ url('img/arrows.svg') }}" width="309" height="193" alt="">
-                    </div>
-                    <div class="app-form__footer">
-                        <button type="submit" class="btn app-form__submit">Отправить заявку</button>
-                    </div>
+
+                    <button type="submit" class="btn btn-primary request-form__btn">Отправить заявку</button>
 
                 {!! Form::close() !!}
 
             </div>
         </div>
     </section>
-
 
 @endsection
 
