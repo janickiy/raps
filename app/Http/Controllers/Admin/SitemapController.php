@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\Admin\Sitemap\ImportRequest;
+use App\Http\Requests\Admin\Sitemap\EditRequest;
 use Illuminate\View\View;
 
 class SitemapController extends Controller
@@ -40,10 +40,10 @@ class SitemapController extends Controller
     }
 
     /**
-     * @param ImportRequest $request
+     * @param EditRequest $request
      * @return RedirectResponse
      */
-    public function import(ImportRequest $request): RedirectResponse
+    public function import(EditRequest $request): RedirectResponse
     {
         if ($request->isMethod('post')) {
             if ($request->hasFile('file')) {
