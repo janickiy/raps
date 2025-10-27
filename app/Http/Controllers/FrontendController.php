@@ -91,7 +91,7 @@ class FrontendController extends Controller
      * @param Request $request
      * @return View
      */
-    public function catalog(?string $slug = null, Request $request): View
+    public function catalog(Request $request, ?string $slug = null): View
     {
         $seo = Seo::where('type', 'frontend.catalog')->first();
         $title = 'Каталог';
@@ -165,7 +165,7 @@ class FrontendController extends Controller
      * @param Request $request
      * @return View
      */
-    public function detected_gases(string $slug, Request $request): View
+    public function detected_gases(Request $request, string $slug): View
     {
         $product = Products::where('slug', $slug)->published()->first();
 
@@ -226,7 +226,7 @@ class FrontendController extends Controller
      * @param Request $request
      * @return View
      */
-    public function product(string $slug, Request $request): View
+    public function product(Request $request, string $slug): View
     {
         $product = Products::where('slug', $slug)->published()->first();
 
@@ -327,7 +327,7 @@ class FrontendController extends Controller
      * @param Request $request
      * @return View
      */
-    public function service(string $slug, Request $request): View
+    public function service(Request $request, string $slug): View
     {
         $service = Services::where('slug', $slug)->published()->first();
 
