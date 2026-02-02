@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+
+use App\Models\Pages;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Image;
@@ -22,15 +24,15 @@ class PageService
         $fileNameToStore = 'origin_' . $filename;
         $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-        if ($request->file('image')->move('uploads/products', $fileNameToStore) === false) {
+        if ($request->file('image')->move('uploads/' . Pages::getTableName(), $fileNameToStore) === false) {
             throw new Exception('Не удалось сохранить фото!');
         }
 
-        $img = Image::make(Storage::disk('public')->path('products/' . $fileNameToStore));
+        $img = Image::make(Storage::disk('public')->path(Pages::getTableName() . '/' . $fileNameToStore));
         $img->resize(null, 300, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save(Storage::disk('public')->path('products/' . $thumbnailFileNameToStore));
+        $img->save(Storage::disk('public')->path(Pages::getTableName() . '/' . $thumbnailFileNameToStore));
 
         return $filename;
     }

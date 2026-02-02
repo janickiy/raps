@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+
+use App\Http\Traits\StaticTableName;
+use App\Http\Traits\File;
+use App\Helpers\StringHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Helpers\StringHelper;
-use Storage;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Collection;
 
 class Pages extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'pages';
 
     protected $fillable = [
@@ -39,7 +45,7 @@ class Pages extends Model
     /**
      * @return string
      */
-    public function getPublishedAttribute()
+    public function getPublishedAttribute(): string
     {
         return $this->attributes['published'] ? 'публикован' : 'не опубликован';
     }
@@ -53,18 +59,17 @@ class Pages extends Model
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPagePathAttribute()
+    public function getPagePathAttribute(): string
     {
         return $this->attributes['page_path'];
     }
 
     /**
-     * @param string $lang
-     * @return mixed
+     * @return string
      */
-    public function excerpt()
+    public function excerpt(): string
     {
         $content = $this->text;
         $content = preg_replace("/<img(.*?)>/si", "", $content);
@@ -76,21 +81,21 @@ class Pages extends Model
     /**
      * @return string
      */
-    public function getUrlPathAttribute()
+    public function getUrlPathAttribute(): string
     {
         return ($this->attributes['page_path'] ? 'page/' : 'path/') . $this->attributes['slug'];
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function rootPage()
+    public function rootPage(): Collection
     {
         return $this->where('parent_id', 0)->with('catalog')->get();
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parent(): BelongsTo
     {
@@ -107,23 +112,24 @@ class Pages extends Model
 
     /**
      * @param string|null $x
-     * @return mixed
+     * @return string
      */
-    public function getImage(?string $x = null)
+    public function getImage(?string $x = null): string
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return Storage::disk('public')->url('pages/' . $image);
+        return File::getFile($image, $this->table);
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('pages/' . $this->image) === true) Storage::disk('public')->delete('pages/' . $this->image);
-        if (Storage::disk('public')->exists('pages/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('pages/' . '2x_' . $this->image);
+        if ($this->image) {
+            File::deleteFile($this->image, $this->table);
+            File::deleteFile('2x_' . $this->image,$this->table);
+        }
 
         $this->delete();
     }

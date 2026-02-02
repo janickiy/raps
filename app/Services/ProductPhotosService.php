@@ -2,15 +2,14 @@
 
 namespace App\Services;
 
-
 use App\Http\Traits\File;
-use App\Models\Products;
+use App\Models\ProductPhotos;
 use Illuminate\Http\Request;
 use Image;
 use Storage;
 use Exception;
 
-class ProductsService
+class ProductPhotosService
 {
     use File;
 
@@ -26,16 +25,16 @@ class ProductsService
         $fileNameToStore = 'origin_' . $filename;
         $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-        if ($request->file('image')->move('uploads/' . Products::getTableName(), $fileNameToStore) === false) {
+        if ($request->file('image')->move('uploads/products', $fileNameToStore) === false) {
             throw new Exception('Не удалось сохранить фото!');
         }
 
-        $img = Image::make(Storage::disk('public')->path(Products::getTableName() . '/' . $fileNameToStore));
+        $img = Image::make(Storage::disk('public')->path('products/' . $fileNameToStore));
         $img->resize(null, 300, function ($constraint) {
             $constraint->aspectRatio();
         });
 
-        if ($img->save(Storage::disk('public')->path(Products::getTableName() . '/' . $thumbnailFileNameToStore)) === false) {
+        if ( $img->save(Storage::disk('public')->path('products/' . $thumbnailFileNameToStore)) === false) {
             throw new Exception('Не удалось сохранить фото!');
         }
 
@@ -44,17 +43,17 @@ class ProductsService
 
     /**
      * @param Request $request
-     * @param Products $product
+     * @param ProductPhotos $productPhoto
      * @return string
      * @throws Exception
      */
-    public function updateImage(Request $request, Products $product): string
+    public function updateImage(Request $request, ProductPhotos $productPhoto): string
     {
         $image = $request->pic;
 
         if ($image !== null) {
-            File::deleteFile($product->thumbnail, Products::getTableName());
-            File::deleteFile($product->origin, Products::getTableName());
+            File::getFile($productPhoto->thumbnail, ProductPhotos::getTableName());
+            File::deleteFile($productPhoto->origin, ProductPhotos::getTableName());
         }
 
         $extension = $request->file('image')->getClientOriginalExtension();
@@ -62,19 +61,19 @@ class ProductsService
         $fileNameToStore = 'origin_' . $filename;
         $thumbnailFileNameToStore = 'thumbnail_' . $filename;
 
-        if ($request->file('image')->move('uploads/' . Products::getTableName(), $fileNameToStore) === false) {
-            throw new Exception('Не удалось сохранить фото!');
-        } else {
-            File::deleteFile($product->thumbnail, Products::getTableName());
-            File::deleteFile($product->origin, Products::getTableName());
+        if ($request->file('image')->move('uploads/' . ProductPhotos::getTableName(), $fileNameToStore) === true) {
+            File::getFile($productPhoto->thumbnail, ProductPhotos::getTableName());
+            File::deleteFile($productPhoto->origin, ProductPhotos::getTableName());
 
-            $img = Image::make(Storage::disk('public')->path(Products::getTableName() . '/' . $fileNameToStore));
+            $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
             $img->resize(null, 300, function ($constraint) {
                 $constraint->aspectRatio();
             });
-        }
 
-        if ($img->save(Storage::disk('public')->path(Products::getTableName() . '/' . $thumbnailFileNameToStore)) === false) {
+            if ($img->save(Storage::disk('public')->path(ProductPhotos::getTableName() . '/' . $thumbnailFileNameToStore)) === false) {
+                throw new Exception('Не удалось сохранить фото!');
+            }
+        } else {
             throw new Exception('Не удалось сохранить фото!');
         }
 

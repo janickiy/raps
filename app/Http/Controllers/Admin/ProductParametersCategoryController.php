@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\ProductParametersCategory\StoreRequest;
 use App\Http\Requests\Admin\ProductParametersCategory\EditRequest;
 use App\Http\Requests\Admin\ProductParametersCategory\DeleteRequest;
 use App\Repositories\ProductParametersCategoryRepository;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Exception;
@@ -20,7 +19,6 @@ class ProductParametersCategoryController extends Controller
     {
         parent::__construct();
     }
-
 
 
     /**

@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+
+use App\Http\Traits\StaticTableName;
+use App\Http\Traits\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Storage;
-use URL;
+
 
 class Catalog extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'catalog';
 
     protected $fillable = [
@@ -110,7 +114,6 @@ class Catalog extends Model
         }
 
         self::removeCatalog($parent);
-
     }
 
     /**
@@ -126,31 +129,17 @@ class Catalog extends Model
     }
 
     /**
-     * @param object $catalog
-     * @return void
-     */
-    private static function removeCatalog(object $catalog): void
-    {
-        if (Storage::disk('public')->exists('catalog/' . $catalog->image) === true) Storage::disk('public')->delete('catalog/' . $catalog->image);
-        if (Storage::disk('public')->exists('catalog/' . '2x_' . $catalog->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $catalog->image);
-
-        foreach ($catalog->products as $product) {
-            $product->remove();
-        }
-
-        $catalog->delete();
-    }
-
-    /**
      * @return void
      * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('catalog/' . $this->image) === true) Storage::disk('public')->delete('catalog/' . $this->image);
-        if (Storage::disk('public')->exists('catalog/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $this->image);
+        if ($this->image)  {
+            File::deleteFile($this->image, self::getTableName());
+            File::deleteFile('2x_' . $this->image, self::getTableName());
+        }
 
-        foreach ($this->products as $product) {
+        foreach ($this->products ?? [] as $product) {
             $product->remove();
         }
 
@@ -165,7 +154,7 @@ class Catalog extends Model
     {
         $ids = [];
 
-        foreach ($category->children as $row) {
+        foreach ($category->children ?? [] as $row) {
             $ids[] = $row->id;
             $ids = array_merge($ids, self::getChildren($row));
         }
@@ -173,9 +162,8 @@ class Catalog extends Model
         return $ids;
     }
 
-
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function parent(): BelongsTo
     {
@@ -183,7 +171,7 @@ class Catalog extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function children(): HasMany
     {
@@ -217,7 +205,7 @@ class Catalog extends Model
      * @param array $catalogs
      * @param int $parent_id
      * @param bool $only_parent
-     * @return string|null
+     * @return string
      */
     public static function buildTree(array $catalogs, int $parent_id, bool $only_parent = false): string
     {
@@ -227,7 +215,7 @@ class Catalog extends Model
             $cl .= '<ul>';
             if ($only_parent === false) {
                 foreach ($catalogs[$parent_id] as $catalog) {
-                    $cl .= '<li>' . $catalog['name'] . ' <a title="Добавить подкатегорию" href="' . URL::route('cp.catalog.create', ['parent_id' => $catalog['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . URL::route('cp.catalog.edit', ['id' => $catalog['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . URL::route('cp.catalog.destroy', $catalog['id']) . '"> <span class="fa fa-trash-o"></span> </a>';
+                    $cl .= '<li>' . $catalog['name'] . ' <a title="Добавить подкатегорию" href="' . route('cp.catalog.create', ['parent_id' => $catalog['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . route('cp.catalog.edit', ['id' => $catalog['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . route('cp.catalog.destroy', $catalog['id']) . '"> <span class="fa fa-trash-o"></span> </a>';
                     $cl .= self::buildTree($catalogs, $catalog['id']);
                     $cl .= '</li>';
                 }
@@ -256,7 +244,7 @@ class Catalog extends Model
             $cl .= '<ul class="header__product-menu-submenu-item ml-16">';
             foreach ($catalogs[$parent_id] as $catalog) {
                 $cl .= '<li class="header__product-menu-submenu-item">';
-                $cl .= '<a class="header__product-menu-sublink" href="' . URL::route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= '<a class="header__product-menu-sublink" href="' . route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
                 $cl .= self::categoryTree($catalogs, $catalog['id']);
                 $cl .= '</li>';
             }
@@ -279,7 +267,7 @@ class Catalog extends Model
             $cl .= '<ul class="ml-16">';
             foreach ($catalogs[$parent_id] as $catalog) {
                 $cl .= '<li>';
-                $cl .= '<a class="header__mobile-submenu-sublink" href="' . URL::route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
+                $cl .= '<a class="header__mobile-submenu-sublink" href="' . route('frontend.catalog', ['slug' => $catalog['slug']]) . '">' . $catalog['name'] . '<span>' . Products::where('catalog_id', $catalog['id'])->where('published', 1)->count() . '</span></a>';
                 $cl .= self::categoryTree($catalogs, $catalog['id']);
                 $cl .= '</li>';
             }

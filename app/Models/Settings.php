@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Traits\File;
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
-use Storage;
 
 class Settings extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'settings';
 
     protected $fillable = [
@@ -19,14 +22,10 @@ class Settings extends Model
     ];
 
     /**
-     * @param $value
-     */
-
-    /**
-     * @param $value
+     * @param string $value
      * @return void
      */
-    public function setKeyCdAttribute($value): void
+    public function setKeyCdAttribute(string $value): void
     {
         $this->attributes['key_cd'] = str_replace(' ', '_', strtoupper($value));
     }
@@ -34,26 +33,27 @@ class Settings extends Model
     /**
      * @return string
      */
-    public function getTypeAttribute() {
+    public function getTypeAttribute(): string
+    {
         return $this->attributes['type'] = strtoupper($this->attributes['type']);
     }
 
     /**
-     * @return array|string
+     * @return string
      */
-    public function getValueAttribute()
+    public function getValueAttribute(): string
     {
         if ($this->attributes['type'] == 'FILE') {
-            return Storage::disk('public')->url('settings/' . $this->attributes['value']);
+            return File::getFile($this->attributes['value'], $this->table);
         }
 
         return $this->attributes['value'];
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function filePath()
+    public function filePath(): string
     {
         return $this->attributes['value'];
     }
@@ -69,11 +69,10 @@ class Settings extends Model
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('settings/' . $this->filePath()) === true) Storage::disk('public')->delete('settings/' . $this->filePath());
+        File::deleteFile($this->filePath(), $this->table);
 
         $this->delete();
     }

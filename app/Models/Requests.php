@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 
 class Requests extends Model
 {
+    use StaticTableName;
+
     const CALCULATION_TYPE = 1;
     const QUESTIONNAIRE_TYPE = 2;
 

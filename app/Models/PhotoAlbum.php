@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Http\Traits\StaticTableName;
+use App\Http\Traits\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Storage;
 
 class PhotoAlbum extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'photoalbum';
 
     protected $fillable = [
@@ -32,16 +36,15 @@ class PhotoAlbum extends Model
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
         foreach ($this->photos as $photo) {
-            if (Storage::disk('public')->exists('images/' . $photo->thumbnail) === true) Storage::disk('public')->delete('images/' . $photo->thumbnail);
-            if (Storage::disk('public')->exists('images/' . $photo->origin) === true) Storage::disk('public')->delete('images/' . $photo->origin);
+            File::deleteFile($photo->thumbnail, $this->table);
+            File::deleteFile($photo->origin, $this->table);
         }
 
-        $this->photos()->delete();
+        $this?->photos()->delete();
         $this->delete();
     }
 }

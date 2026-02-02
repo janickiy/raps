@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Traits\File;
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Storage;
 
 class ProductDocuments extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'product_documents';
 
     protected $fillable = [
@@ -25,20 +28,19 @@ class ProductDocuments extends Model
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getDocument()
+    public function getDocument(): ?string
     {
-        return Storage::disk('public')->url('documents/' . $this->path);
+        return File::getFile($this->path, $this->table);
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('documents/' . $this->path) === true) Storage::disk('public')->delete('documents/' . $this->path);
+        if ($this->path)  File::deleteFile($this->path, $this->table);
 
         $this->delete();
     }

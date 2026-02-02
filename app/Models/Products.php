@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+
+use App\Http\Traits\File;
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Storage;
+use Illuminate\Support\Collection;
 
 class Products extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'products';
 
     protected $fillable = [
@@ -68,35 +73,35 @@ class Products extends Model
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getThumbnailUrl()
+    public function getThumbnailUrl(): ?string
     {
-        return Storage::disk('public')->url('products/' . $this->thumbnail);
+        return $this->thumbnail ? File::getFile($this->thumbnail, $this->table) : null;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getOriginUrl()
+    public function getOriginUrl(): ?string
     {
-        return Storage::disk('public')->url('products/' . $this->origin);
+        return $this->origin ? File::getFile($this->origin, $this->table) : null;
     }
 
     /**
      * @param int $category_id
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return Collection|null
      */
-    public function parameterByCategoryId(int $category_id)
+    public function parameterByCategoryId(int $category_id): ?Collection
     {
         return ProductParameters::where('product_id', $this->id)->where('category_id', $category_id)->orderBy('name')->get();
     }
 
     /**
      * @param array $productIds
-     * @return mixed
+     * @return Collection|null
      */
-    public static function productsListByIds(array $productIds)
+    public static function productsListByIds(array $productIds): ?Collection
     {
         return self::whereIn('id', $productIds)->orderBy('title')->get();
     }
@@ -147,18 +152,18 @@ class Products extends Model
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('products/' . $this->thumbnail) === true) Storage::disk('public')->delete('products/' . $this->thumbnail);
-        if (Storage::disk('public')->exists('products/' . $this->origin) === true) Storage::disk('public')->delete('products/' . $this->origin);
+        File::deleteFile($this->thumbnail, $this->table);
+        File::deleteFile($this->origin, $this->table);
 
         foreach ($this->photos as $photo) {
-            if (Storage::disk('public')->exists('images/' . $photo->thumbnail) === true) Storage::disk('public')->delete('images/' . $photo->thumbnail);
-            if (Storage::disk('public')->exists('images/' . $photo->origin) === true) Storage::disk('public')->delete('images/' . $photo->origin);
+            File::deleteFile($photo->thumbnail, $this->table);
+            File::deleteFile($photo->origin, $this->table);
         }
 
         $this->photos()->delete();
 
         foreach ($this->documents as $document) {
-            if (Storage::disk('public')->exists('documents/' . $document->path) === true) Storage::disk('public')->delete('documents/' . $document->path);
+            File::deleteFile($document->path, $this->table);
         }
 
         $this->documents()->delete();

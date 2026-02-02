@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+
+use App\Http\Traits\StaticTableName;
+use App\Http\Traits\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Storage;
 
 class Photos extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'photos';
 
     protected $fillable = [
@@ -24,33 +28,32 @@ class Photos extends Model
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(PhotoAlbum::class,'photoalbum_id','id');
+        return $this->belongsTo(PhotoAlbum::class, 'photoalbum_id', 'id');
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getThumbnailUrl()
+    public function getThumbnailUrl(): ?string
     {
-        return Storage::disk('public')->url('images/' . $this->thumbnail);
+        return $this->thumbnail ? File::getFile($this->thumbnail, $this->table) : null;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getOriginUrl()
+    public function getOriginUrl(): ?string
     {
-        return Storage::disk('public')->url('images/' . $this->origin);
+        return $this->origin ? File::getFile($this->origin, $this->table) : null;
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('images/' . $this->thumbnail) === true) Storage::disk('public')->delete('images/' . $this->thumbnail);
-        if (Storage::disk('public')->exists('images/' . $this->origin) === true) Storage::disk('public')->delete('images/' . $this->origin);
+        if ($this->thumbnail) File::deleteFile($this->thumbnail, $this->table);
+        if ($this->origin) File::deleteFile($this->origin, $this->table);
 
         $this->delete();
     }

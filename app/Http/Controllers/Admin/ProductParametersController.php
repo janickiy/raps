@@ -100,11 +100,11 @@ class ProductParametersController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = $this->productParametersRepository->find($request->id);
-
-        if (!$row) abort(404);
-
         try {
+            $row = $this->productParametersRepository->find($request->id);
+
+            if (!$row) abort(404);
+
             $this->productParametersRepository->update($request->id, $request->all());
         } catch (Exception $e) {
             report($e);

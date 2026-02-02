@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Repositories\ProductPhotosRepository;
+use App\Services\ProductPhotosService;
 use App\Models\{
-    ProductPhotos,
-    Products
+    ProductPhotos
 };
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
@@ -12,18 +13,26 @@ use App\Http\Requests\Admin\ProductPhotos\EditRequest;
 use App\Http\Requests\Admin\ProductPhotos\UploadRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Storage;
-use Image;
+use Exception;
 
 class ProductPhotosController extends Controller
 {
+    public function __construct(
+        private ProductPhotosRepository $productPhotosRepository,
+        private ProductPhotosService $productPhotosService
+    )
+    {
+        parent::__construct();
+    }
+
+
     /**
      * @param int $product_id
      * @return View
      */
     public function index(int $product_id): View
     {
-        $row = Products::find($product_id);
+        $row = $this->productPhotosRepository->find($product_id);
 
         if (!$row) abort(404);
 
@@ -38,30 +47,24 @@ class ProductPhotosController extends Controller
      */
     public function upload(UploadRequest $request): RedirectResponse
     {
-        if ($request->hasFile('image')) {
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $fileNameToStore = 'origin_' . $filename;
-            $thumbnailFileNameToStore = 'thumbnail_' . $filename;
-
-            if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
-                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
-                $img->resize(300, 300, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                if ($img->save(Storage::disk('public')->path('images/' . $thumbnailFileNameToStore))) {
-                    ProductPhotos::create(array_merge(array_merge($request->all()), [
-                        'thumbnail' => $thumbnailFileNameToStore ?? null,
-                        'origin' => $fileNameToStore ?? null,
-                    ]));
-
-                    return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('success', 'Данные успешно обновлены');
-                }
+        try {
+            if ($request->hasFile('image')) {
+                $image = $this->productPhotosService->storeImage($request);
+                $fileNameToStore = 'origin_' . $image;
+                $thumbnailFileNameToStore = 'thumbnail_' . $image;
             }
+
+            $this->productPhotosRepository->create(array_merge($request->all(), ['origin' => $fileNameToStore, 'thumbnail' => $thumbnailFileNameToStore]));
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
 
-        return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('error', 'Ошибка добавления фото');
+        return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('success', 'Данные успешно обновлены');
     }
 
     /**
@@ -70,7 +73,7 @@ class ProductPhotosController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = ProductPhotos::find($id);
+        $row = $this->productPhotosRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -85,6 +88,21 @@ class ProductPhotosController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+
+        $row = $this->productPhotosRepository->find($request->id);
+
+        if ($request->hasFile('file')) {
+            $filename = $this->productPhotosService->updateImage($row->id, $row);
+        }
+
+        $this->productDocumentsRepository->update($request->id, array_merge(array_merge($request->all()), [
+            'file' => $filename ?? null,
+        ]));
+
+
+
+
+
         $row = ProductPhotos::find($request->id);
 
         if (!$row) abort(404);

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Traits\File;
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Storage;
 
 class ProductPhotos extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'product_photos';
 
     protected $fillable = [
@@ -27,29 +30,28 @@ class ProductPhotos extends Model
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getThumbnailUrl()
+    public function getThumbnailUrl(): ?string
     {
-        return Storage::disk('public')->url('images/' . $this->thumbnail);
+        return $this->thumbnail ? File::getFile($this->thumbnail, $this->table) : null;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getOriginUrl()
+    public function getOriginUrl(): ?string
     {
-        return Storage::disk('public')->url('images/' . $this->origin);
+        return $this->origin ? File::getFile($this->origin, $this->table) : null;
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('images/' . $this->thumbnail) === true) Storage::disk('public')->delete('images/' . $this->thumbnail);
-        if (Storage::disk('public')->exists('images/' . $this->origin) === true) Storage::disk('public')->delete('images/' . $this->origin);
+        File::deleteFile($this->thumbnail, $this->table);
+        File::deleteFile($this->origin, $this->table);
 
         $this->delete();
     }

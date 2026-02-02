@@ -2,13 +2,16 @@
 
 namespace App\Services;
 
+
+use App\Http\Traits\File;
 use App\Models\ProductDocuments;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class ProductDocumentsService
 {
+    use File;
+
     /**
      * @param Request $request
      * @return string
@@ -34,9 +37,7 @@ class ProductDocumentsService
      */
     public function updateFile(ProductDocuments $productDocument, Request $request): string
     {
-        if (Storage::disk('public')->exists(ProductDocuments::getTableName() . '/' . $productDocument->path) === true) {
-            Storage::disk('public')->delete(ProductDocuments::getTableName() . '/' . $productDocument->path);
-        }
+        File::getFile( $productDocument->path, ProductDocuments::getTableName());
 
         $extension = $request->file('file')->getClientOriginalExtension();
         $filename = time() . '.' . $extension;

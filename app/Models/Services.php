@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Http\Traits\File;
+use App\Http\Traits\StaticTableName;
 use Illuminate\Database\Eloquent\Model;
-use Storage;
+
 
 class Services extends Model
 {
+    use StaticTableName, File;
+
     protected $table = 'services';
 
     protected $fillable = [
@@ -39,7 +43,7 @@ class Services extends Model
     /**
      * @return string
      */
-    public function getPublishedAttribute()
+    public function getPublishedAttribute(): string
     {
         return $this->attributes['published'] ? 'публикован' : 'не опубликован';
     }
@@ -54,23 +58,22 @@ class Services extends Model
 
     /**
      * @param string|null $x
-     * @return mixed
+     * @return string|null
      */
-    public function getImage(?string $x = null)
+    public function getImage(?string $x = null): ?string
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return Storage::disk('public')->url('services/' . $image);
+        return $this->image ? File::getFile($image, $this->table) : null;
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
-        if (Storage::disk('public')->exists('services/' . $this->image) === true) Storage::disk('public')->delete('services/' . $this->image);
-        if (Storage::disk('public')->exists('services/' . '2x_' . $this->image) === true) Storage::disk('public')->delete('services/' . '2x_' . $this->image);
+        File::deleteFile($this->image, $this->table);
+        File::deleteFile('2x_' . $this->image, $this->table);
 
         $this->delete();
     }
