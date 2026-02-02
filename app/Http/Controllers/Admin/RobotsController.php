@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\Robots\UpdateRequest;
-use Illuminate\Support\Facades\File;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\File;
 
 class RobotsController extends Controller
 {
@@ -27,6 +27,6 @@ class RobotsController extends Controller
     {
         File::put(public_path('robots.txt'), $request->input('content'));
 
-        return redirect()->route('cp.robots.edit')->with('success', 'Данные успешно обновлены');
+        return redirect()->route('admin.robots.edit')->with('success', 'Данные успешно обновлены');
     }
 }

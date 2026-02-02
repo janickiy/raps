@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\ProductParametersCategory;
+namespace App\Http\Requests\Admin\Seo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:product_parameters_category,id',
-            'name' => 'required',
+            'id' => 'required|integer|exists:seo,id',
         ];
     }
 }

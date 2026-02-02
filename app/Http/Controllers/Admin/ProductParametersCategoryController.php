@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ProductParametersCategory;
+
 use App\Http\Requests\Admin\ProductParametersCategory\StoreRequest;
 use App\Http\Requests\Admin\ProductParametersCategory\EditRequest;
+use App\Http\Requests\Admin\ProductParametersCategory\DeleteRequest;
+use App\Repositories\ProductParametersCategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Storage;
+use Exception;
+
 
 class ProductParametersCategoryController extends Controller
 {
+    public function __construct(
+        private ProductParametersCategoryRepository $productParametersCategoryRepository)
+    {
+        parent::__construct();
+    }
+
+
+
     /**
      * @return View
      */
@@ -34,7 +45,7 @@ class ProductParametersCategoryController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        ProductParametersCategory::create($request->all());
+        $this->productParametersCategoryRepository->create($request->all());
 
         return redirect()->route('cp.product_parameters_category.index')->with('success', 'Информация успешно добавлена');
     }
@@ -45,7 +56,7 @@ class ProductParametersCategoryController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = ProductParametersCategory::find($id);
+        $row =$this->productParametersCategoryRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -58,22 +69,26 @@ class ProductParametersCategoryController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = ProductParametersCategory::find($request->id);
+        try {
+            $this->productParametersCategoryRepository->update($request->id, array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
+        } catch (Exception $e) {
+            report($e);
 
-        if (!$row) abort(404);
-
-        $row->name = $request->input('name');
-        $row->save();
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
 
         return redirect()->route('cp.product_parameters_category.index')->with('success', 'Данные обновлены');
     }
 
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        ProductParametersCategory::find($request->id)->delete();
+        $this->productParametersCategoryRepository->delete($request->id);
     }
 }

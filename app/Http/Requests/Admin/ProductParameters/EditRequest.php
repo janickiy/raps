@@ -22,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'    => 'required|integer|exists:product_parameters,id',
             'name' => 'required',
             'value' => 'required',
             'category_id' => 'nullable|integer|exists:product_parameters_category,id',

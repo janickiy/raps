@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\ProductParametersCategory;
+namespace App\Http\Requests\Admin\ProductParameters;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:product_parameters_category,id',
-            'name' => 'required',
+            'id' => 'required|integer|exists:product_parameters,id',
         ];
     }
 }

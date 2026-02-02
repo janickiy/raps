@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\Seo;
-use Illuminate\Http\RedirectResponse;
+
+use App\Repositories\SeoRepository;
+use App\Http\Requests\Admin\Seo\EditRequest;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Exception;
 
 class SeoController extends Controller
 {
+    /**
+     * @param SeoRepository $seoRepository
+     */
+    public function __construct(private SeoRepository $seoRepository)
+    {
+        parent::__construct();
+    }
+
     /**
      * @return View
      */
@@ -23,7 +33,7 @@ class SeoController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = Seo::find($id);
+        $row = $this->seoRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -31,22 +41,22 @@ class SeoController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param EditRequest $request
      * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public function update(EditRequest $request): RedirectResponse
     {
-        $row = Seo::find($request->id);
+        try {
+            $this->seoRepository->update($request->id, $request->all());
+        } catch (Exception $e) {
+            report($e);
 
-        if (!$row) abort(404);
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
 
-        $row->h1 = $request->input('h1');
-        $row->title = $request->input('title');
-        $row->keyword = $request->input('keyword');
-        $row->description = $request->input('description');
-        $row->url_canonical = $request->input('url_canonical');
-        $row->save();
-
-        return redirect()->route('cp.seo.index')->with('success', 'Данные успешно обновлены');
+        return redirect()->route('admin.seo.index')->with('success', 'Данные успешно обновлены');
     }
 }

@@ -2,28 +2,42 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\ProductParametersCategory;
-use App\Models\ProductParameters;
-use App\Http\Requests\Admin\ProductParameters\StoreRequest;
+
+use App\Repositories\ProductParametersRepository;
+use App\Repositories\ProductsRepository;
 use App\Http\Requests\Admin\ProductParameters\EditRequest;
-use App\Models\Products;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ProductParameters\StoreRequest;
+use App\Http\Requests\Admin\ProductParameters\DeleteRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Exception;
 
 class ProductParametersController extends Controller
 {
+    /**
+     * @param ProductParametersRepository $productParametersRepository
+     * @param ProductsRepository $productsRepository
+     */
+    public function __construct(
+        private ProductParametersRepository $productParametersRepository,
+        private ProductsRepository $productsRepository)
+    {
+        parent::__construct();
+    }
+
     /**
      * @param int $product_id
      * @return View
      */
     public function index(int $product_id): View
     {
-        $product = Products::find($product_id);
+        $product = $this->productsRepository->find($product_id);
 
         if (!$product) abort(404);
 
-        return view('cp.product_parameters.index', compact( 'product_id'))->with('title', 'Технические характеристики: ' . $product->title);
+        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
+
+        return view('cp.product_parameters.index', compact('product_id', 'breadcrumbs'))->with('title', 'Технические характеристики: ' . $product->title);
     }
 
     /**
@@ -32,9 +46,14 @@ class ProductParametersController extends Controller
      */
     public function create(int $product_id): View
     {
-        $options = ProductParametersCategory::getOption();
+        $row = $this->productsRepository->find($product_id);
 
-        return view('cp.product_parameters.create_edit', compact('product_id', 'options'))->with('title', 'Добавление параметра');
+        if (!$row) abort(404);
+
+        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
+        $breadcrumbs[] = ['url' => route('admin.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->title];
+
+        return view('cp.product_parameters.create_edit', compact('product_id', 'breadcrumbs'))->with('title', 'Добавление параметра');
     }
 
     /**
@@ -43,9 +62,18 @@ class ProductParametersController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        ProductParameters::create(array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
+        try {
+            $this->productParametersRepository->create(array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
+        } catch (Exception $e) {
+            report($e);
 
-        return redirect()->route('cp.product_parameters.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
+
+        return redirect()->route('admin.product_parameters.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -54,14 +82,16 @@ class ProductParametersController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = ProductParameters::find($id);
+        $row = $this->productParametersRepository->find($id);
 
         if (!$row) abort(404);
 
-        $options = ProductParametersCategory::getOption();
         $product_id = $row->product_id;
 
-        return view('cp.product_parameters.create_edit', compact('row', 'product_id', 'options'))->with('title', 'Редактирование параметра');
+        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
+        $breadcrumbs[] = ['url' => route('admin.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->product->title];
+
+        return view('cp.product_parameters.create_edit', compact('row', 'product_id', 'breadcrumbs'))->with('title', 'Редактирование параметра');
     }
 
     /**
@@ -70,24 +100,30 @@ class ProductParametersController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = ProductParameters::find($request->id);
+        $row = $this->productParametersRepository->find($request->id);
 
         if (!$row) abort(404);
 
-        $row->name = $request->input('name');
-        $row->value = $request->input('value');
-        $row->category_id = $request->category_id ?? 0;
-        $row->save();
+        try {
+            $this->productParametersRepository->update($request->id, $request->all());
+        } catch (Exception $e) {
+            report($e);
 
-        return redirect()->route('cp.product_parameters.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
+
+        return redirect()->route('admin.product_parameters.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        ProductParameters::where('id', $request->id)->delete();
+        $this->productParametersRepository->delete($request->id);
     }
 }

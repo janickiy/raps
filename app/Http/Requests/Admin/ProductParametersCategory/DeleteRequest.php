@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\ProductParametersCategory;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,6 @@ class EditRequest extends FormRequest
     {
         return [
             'id' => 'required|integer|exists:product_parameters_category,id',
-            'name' => 'required',
         ];
     }
 }
