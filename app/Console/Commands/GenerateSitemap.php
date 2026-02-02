@@ -7,7 +7,7 @@ use App\Models\Pages;
 use App\Models\Seo;
 use App\Models\Products;
 use App\Models\Services;
-use App\Models\Photoalbum;
+use App\Models\PhotoAlbum;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -52,7 +52,7 @@ class GenerateSitemap extends Command
                 ->setLastModificationDate($page->updated_at));
         }
 
-        $albums = Photoalbum::where('seo_sitemap', true)->get();
+        $albums = PhotoAlbum::where('seo_sitemap', true)->get();
 
         foreach ($albums as  $album) {
             $sitemap->add(Url::create('/album/' . $album->slug)
@@ -81,6 +81,6 @@ class GenerateSitemap extends Command
                 ->setLastModificationDate($product->updated_at));
         }
 
-        $sitemap->writeToFile('/home/rapsuz/public_html/sitemap.xml');
+        $sitemap->writeToFile('/home/rapsuz/public/sitemap.xml');
     }
 }

@@ -174,7 +174,9 @@ class StringHelper
             "!" => "",
             "\(" => "",
             "\)" => "",
-            '&' => "-"
+            "/" => "",
+            "%" => "-",
+            "#" => "-",
         ];
 
         foreach ($tr as $ru => $en) {
@@ -197,10 +199,11 @@ class StringHelper
      */
     public static function shortText(string $str, int $chars = 500): string
     {
-        $pos = strpos(substr($str, $chars), " ");
-        $srttmpend = strlen($str) > $chars ? '...' : '';
+        $string = str_replace(' ', '', $str);
+        $pos = mb_strpos(mb_substr($string, $chars), " ");
+        $strStrlen = mb_strlen($string) > $chars ? '...' : '';
 
-        return substr($str, 0, $chars + $pos) . (isset($srttmpend) ? $srttmpend : '');
+        return mb_substr($str, 0, $chars + $pos) . ($strStrlen ?? '');
     }
 
     /**
@@ -217,18 +220,17 @@ class StringHelper
     }
 
     /**
-     * @return mixed
+     * @return int|float
      */
-    public static function detectMaxUploadFileSize()
+    public static function detectMaxUploadFileSize(): int|float
     {
         /**
          * Converts shorthands like "2M" or "512K" to bytes
          *
-         * @param int $size
-         * @return int|float
-         * @throws Exception
+         * @param string $size
+         * @return int|float|bool
          */
-        $normalize = function ($size) {
+        $normalize = function (string $size): int|float|bool {
             if (preg_match('/^(-?[\d\.]+)(|[KMG])$/i', $size, $match)) {
                 $pos = array_search($match[2], ["", "K", "M", "G"]);
                 $size = $match[1] * pow(1024, $pos);
@@ -241,7 +243,7 @@ class StringHelper
         $limits = [];
         $limits[] = $normalize(ini_get('upload_max_filesize'));
 
-        if (($max_post = $normalize(ini_get('post_max_size'))) != 0) {
+        if (($max_post = $normalize(ini_get('post_max_size'))) !== 0) {
             $limits[] = $max_post;
         }
 
@@ -249,9 +251,7 @@ class StringHelper
             $limits[] = $memory_limit;
         }
 
-        $maxFileSize = min($limits);
-
-        return $maxFileSize;
+        return min($limits);
     }
 
     /**
@@ -270,9 +270,9 @@ class StringHelper
 
     /**
      * @param string $path
-     * @return mixed
+     * @return string
      */
-    public static function getMime(string $path)
+    public static function getMime(string $path): string
     {
         $path_info = getimagesize($path);
 
@@ -281,9 +281,9 @@ class StringHelper
 
     /**
      * @param string $string
-     * @return array|string|string[]
+     * @return string
      */
-    public static function phone(string $string)
+    public static function phone(string $string): string
     {
         return str_replace([' ', '(', ')', '-'], '', $string);
     }
@@ -357,6 +357,5 @@ class StringHelper
         ];
 
         return $mimet[$idx] ?? 'application/octet-stream';
-
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\SettingsHelper;
 use App\Http\Requests\Frontend\SendApplicationRequest;
 use App\Mail\Notification;
-use App\Models\{Catalog, Faq, Pages, Photoalbum, ProductParametersCategory, Products, Requests, Seo, Services};
+use App\Models\{Catalog, Faq, Pages, PhotoAlbum, ProductParametersCategory, Products, Requests, Seo, Services};
 use Harimayco\Menu\Models\Menus;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -505,7 +505,7 @@ class FrontendController extends Controller
      */
     public function album(string $slug): View
     {
-        $album = Photoalbum::where('slug', $slug)->first();
+        $album = PhotoAlbum::where('slug', $slug)->first();
 
         if (!$album) abort(404);
 

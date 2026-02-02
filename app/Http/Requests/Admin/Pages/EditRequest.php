@@ -22,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'    => 'required|integer|exists:pages,id',
             'title' => 'required',
             'text' => 'required',
             'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',

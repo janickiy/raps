@@ -2,33 +2,37 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Requests\Admin\DetectedGases\EditRequest;
 use App\Http\Requests\Admin\DetectedGases\StoreRequest;
-use App\Models\Products;
-use App\Models\DetectedGases;
+use App\Http\Requests\Admin\Pages\DeleteRequest;
+use App\Repositories\DetectedGasesRepository;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Exception;
 
 class DetectedGasesController extends Controller
 {
+    public function __construct(
+        private DetectedGasesRepository $detectedGasesRepository,
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * @param int $product_id
      * @return View
      */
     public function index(int $product_id): View
     {
-        $product = Products::find($product_id);
+        $product = $this->detectedGasesRepository->find($product_id);
 
         if (!$product) abort(404);
 
-        $rows = Products::query()
-            ->where('published', 1)
-            ->where('id', '!=', $product_id)
-            ->orderBy('title')
-            ->get();
+        $rows = $this->detectedGasesRepository->getProducts($product_id);
 
-        return view('cp.detected_gases.index', compact( 'product_id', 'rows', 'product'))->with('title', 'Определяемые газы: ' . $product->title);
+        return view('cp.detected_gases.index', compact('product_id', 'rows', 'product'))->with('title', 'Определяемые газы: ' . $product->title);
     }
 
     /**
@@ -47,7 +51,7 @@ class DetectedGasesController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        DetectedGases::create($request->all());
+        $this->detectedGasesRepository->create($request->all());
 
         return redirect()->route('cp.detected_gases.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
@@ -58,7 +62,7 @@ class DetectedGasesController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = DetectedGases::find($id);
+        $row = $this->detectedGasesRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -73,24 +77,30 @@ class DetectedGasesController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = DetectedGases::find($request->id);
+        try {
+            $row = $this->detectedGasesRepository->find($request->id);
 
-        if (!$row) abort(404);
+            if (!$row) abort(404);
 
-        $row->name = $request->input('name');
-        $row->formula = $request->input('formula');
-        $row->volume_fraction = $request->input('volume_fraction');
-        $row->save();
+            $this->detectedGasesRepository->update($request->id, $request->all());
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
 
         return redirect()->route('cp.detected_gases.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        DetectedGases::where('id', $request->id)->delete();
+        $this->detectedGasesRepository->delete($request->id);
     }
 }

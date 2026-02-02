@@ -25,7 +25,7 @@ class SettingsHelper
      * @param string $key
      * @return string
      */
-    public static function getSettingName(?string $key = ''): ?string
+    public static function getSettingName(string $key): string
     {
         $setting = Settings::whereKeyCd(strtoupper($key))->published()->first();
 
@@ -38,7 +38,7 @@ class SettingsHelper
 
     /**
      * @param string $key
-     * @return int
+     * @return int|null
      */
     public static function getId(string $key): ?int
     {

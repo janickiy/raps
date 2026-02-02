@@ -38,7 +38,7 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => public_path_2('uploads'),
+            'root' => public_path('uploads'),
             'url' => env('APP_URL') . '/uploads',
             'visibility' => 'public',
             'throw' => false,
@@ -74,9 +74,3 @@ return [
     ],
 
 ];
-
-
-function public_path_2($path = null)
-{
-    return rtrim(app()->basePath('public_html/'.$path), '/');
-}

@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\{
     ProductSoftController,
     ProductParametersCategoryController,
     DetectedGasesController,
-    PhotoalbumController,
+    PhotoAlbumController,
     PhotosController,
     SeoController,
     ServicesController,
@@ -82,12 +82,12 @@ Route::group(['prefix' => 'cp'], function () {
 
     Route::middleware(['permission:admin|moderator'])->group(function () {
         Route::group(['prefix' => 'photoalbum'], function () {
-            Route::get('', [PhotoalbumController::class, 'index'])->name('cp.photoalbum.index');
-            Route::get('create', [PhotoalbumController::class, 'create'])->name('cp.photoalbum.create');
-            Route::post('store', [PhotoalbumController::class, 'store'])->name('cp.photoalbum.store');
-            Route::get('edit/{id}', [PhotoalbumController::class, 'edit'])->name('cp.photoalbum.edit')->where('id', '[0-9]+');
-            Route::put('update', [PhotoalbumController::class, 'update'])->name('cp.photoalbum.update');
-            Route::post('destroy', [PhotoalbumController::class, 'destroy'])->name('cp.photoalbum.destroy');
+            Route::get('', [PhotoAlbumController::class, 'index'])->name('cp.photoalbum.index');
+            Route::get('create', [PhotoAlbumController::class, 'create'])->name('cp.photoalbum.create');
+            Route::post('store', [PhotoAlbumController::class, 'store'])->name('cp.photoalbum.store');
+            Route::get('edit/{id}', [PhotoAlbumController::class, 'edit'])->name('cp.photoalbum.edit')->where('id', '[0-9]+');
+            Route::put('update', [PhotoAlbumController::class, 'update'])->name('cp.photoalbum.update');
+            Route::post('destroy', [PhotoAlbumController::class, 'destroy'])->name('cp.photoalbum.destroy');
         });
     });
 

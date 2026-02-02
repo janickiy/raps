@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\{Photoalbum, Photos};
+use App\Models\{PhotoAlbum, Photos};
 use App\Helpers\StringHelper;
 use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Photos\EditRequest;
@@ -21,7 +21,7 @@ class PhotosController extends Controller
      */
     public function index(int $photoalbum_id): View
     {
-        $row = Photoalbum::find($photoalbum_id);
+        $row = PhotoAlbum::find($photoalbum_id);
 
         if (!$row) abort(404);
 

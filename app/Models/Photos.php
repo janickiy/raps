@@ -24,7 +24,7 @@ class Photos extends Model
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Photoalbum::class,'photoalbum_id','id');
+        return $this->belongsTo(PhotoAlbum::class,'photoalbum_id','id');
     }
 
     /**

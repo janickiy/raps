@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\{Catalog,
     DetectedGases,
     Pages,
-    Photoalbum,
+    PhotoAlbum,
     ProductDocuments,
     ProductSoft,
     ProductParameters,
@@ -330,7 +330,7 @@ class DataTableController extends Controller
      */
     public function getPhotoalbum(): JsonResponse
     {
-        $row = Photoalbum::query();
+        $row = PhotoAlbum::query();
 
         return Datatables::of($row)
             ->addColumn('actions', function ($row) {

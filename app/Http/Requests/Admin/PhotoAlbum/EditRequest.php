@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\ProductDocuments;
+namespace App\Http\Requests\Admin\PhotoAlbum;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,9 +22,9 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'   => 'required|integer|exists:product_documents,id',
-            'path' => 'nullable|file',
-            'product_id' => 'required|integer|exists:products,id',
+            'id'    => 'required|integer|exists:photoalbum,id',
+            'name' => 'required',
+            'slug' => 'required|unique:photoalbum,slug,' . $this->id,
         ];
     }
 }

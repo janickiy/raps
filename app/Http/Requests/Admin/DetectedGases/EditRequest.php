@@ -22,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id'   => 'required|integer|exists:detected_gases,id',
             'name' => 'required',
             'formula' => 'required',
         ];
