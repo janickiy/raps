@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\StringHelper;
+use App\Http\Requests\Admin\Pages\DeleteRequest;
+use App\Http\Requests\Admin\Pages\EditRequest;
+use App\Http\Requests\Admin\Pages\StoreRequest;
 use App\Models\Pages;
 use App\Repositories\PagesRepository;
 use App\Services\PageService;
-use App\Http\Requests\Admin\Pages\StoreRequest;
-use App\Http\Requests\Admin\Pages\EditRequest;
-use App\Http\Requests\Admin\Pages\DeleteRequest;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class PagesController extends Controller
 {

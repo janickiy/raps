@@ -24,7 +24,7 @@ class SitemapController extends Controller
      */
     public function export(Request $request)
     {
-        $file = public_path(). "/sitemap.xml";
+        $file = public_path() . "/sitemap.xml";
 
         $headers = ['Content-Type: text/xml'];
 
@@ -45,11 +45,9 @@ class SitemapController extends Controller
      */
     public function import(EditRequest $request): RedirectResponse
     {
-        if ($request->isMethod('post')) {
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $file->move(public_path(), 'sitemap.xml');
-            }
+        if ($request->isMethod('post') && $request->hasFile('file')) {
+            $file = $request->file('file');
+            $file->move(public_path(), 'sitemap.xml');
         }
 
         return redirect()->route('cp.sitemap.index')->with('success', 'Данные обновлены');

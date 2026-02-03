@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\ProductPhotos;
-use Illuminate\Support\Collection;
 
 class ProductPhotosRepository extends BaseRepository
 {
@@ -11,6 +10,7 @@ class ProductPhotosRepository extends BaseRepository
     {
         parent::__construct($model);
     }
+
     /**
      * @param int $id
      * @param array $data
@@ -32,14 +32,11 @@ class ProductPhotosRepository extends BaseRepository
                 $model->origin = $data['origin'];
             }
 
-            $model->product_id = (int) $data['product_id'];
+            $model->product_id = (int)$data['product_id'];
             $model->save();
 
             return $model;
         }
         return null;
     }
-
-
-
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Repositories\ProductParametersRepository;
-use App\Repositories\ProductsRepository;
+use App\Repositories\WerRepository;
 use App\Http\Requests\Admin\ProductParameters\EditRequest;
 use App\Http\Requests\Admin\ProductParameters\StoreRequest;
 use App\Http\Requests\Admin\ProductParameters\DeleteRequest;
@@ -16,11 +16,11 @@ class ProductParametersController extends Controller
 {
     /**
      * @param ProductParametersRepository $productParametersRepository
-     * @param ProductsRepository $productsRepository
+     * @param WerRepository $productsRepository
      */
     public function __construct(
         private ProductParametersRepository $productParametersRepository,
-        private ProductsRepository $productsRepository)
+        private WerRepository               $productsRepository)
     {
         parent::__construct();
     }

@@ -94,7 +94,7 @@ class Catalog extends Model
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return Storage::disk('public')->url('catalog/' . $image);
+        return $this->image ? File::getFile($image, $this->table ) : null;
     }
 
     /**
@@ -121,16 +121,14 @@ class Catalog extends Model
      */
     public function getTotalProductCount(): int
     {
-        $allChildren = [$this->id];
-
-        self::getAllChildren(Catalog::query()->orderBy('name')->get(), $allChildren, $this->id);
+        $allChildren = self::getAllChildren($this->id);
+        $allChildren[] = $this->id;
 
         return Products::query()->whereIn('catalog_id', $allChildren)->count();
     }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function scopeRemove(): void
     {
@@ -278,20 +276,35 @@ class Catalog extends Model
     }
 
     /**
-     * @param object $categories
-     * @param array $allChildren
-     * @param int $parent_id
-     * @return void
+     * @param int $id
+     * @return array
      */
-    public static function getAllChildren(object $categories, array &$allChildren, int $parent_id = 0): void
+    public static function getAllChildren(int $id): array
     {
-        $cats = $categories->filter(function ($item) use ($parent_id) {
-            return $item->parent_id == $parent_id;
-        });
+        $children = self::where('parent_id', $id)->with('children')->get();
+        $ids = [];
+        foreach ($children as $child) {
+            $ids[] = $child->id;
 
-        foreach ($cats as $cat) {
-            array_push($allChildren, $cat->id);
-            self::getAllChildren($categories, $allChildren, $cat->id);
+            if ($child->children->count()) {
+                $ids = array_merge($ids, self::getAllChildren($child->id));
+            }
         }
+        return $ids;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCatalogList(): array
+    {
+        $catalogs = Catalog::query()->orderBy('name')->get();
+        $catalogsList = [];
+
+        foreach ($catalogs?->toArray() ?? [] as $catalog) {
+            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+        }
+
+        return $catalogsList;
     }
 }

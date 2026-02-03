@@ -179,4 +179,41 @@ class Products extends Model
     {
         return self::orderBy('title')->get()->pluck('title', 'id')->toArray();
     }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return array
+     */
+    public function setViewed(Request $request, int $id): array
+    {
+        $product = $this->model->find($id);
+        $productIds = null;
+
+        if ($product) {
+            if ($request->session()->has('productIds')) {
+                $productIds = $request->session()->get('productIds');
+                array_push($productIds, $product->id);
+                $productIds = array_unique($productIds);
+                $request->session()->put(['productIds' => $productIds]);
+            } else {
+                $productIds = [$product->id];
+                $request->session()->put(['productIds' => $productIds]);
+            }
+        }
+
+        return $productIds;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function viewedProducts(): ?array
+    {
+        if (request()->session()->has('productIds')) {
+            return request()->session()->get('productIds');
+        } else {
+            return null;
+        }
+    }
 }

@@ -4,21 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductsRepository extends BaseRepository
 {
     public function __construct(Products $model)
     {
         parent::__construct($model);
-    }
-
-    /**
-     * @param array $data
-     * @return Products
-     */
-    public function create(array $data): Products
-    {
-        return $this->model->create($data);
     }
 
     /**
@@ -34,30 +26,30 @@ class ProductsRepository extends BaseRepository
             $model->title = $data['title'];
             $model->description = $data['description'];
 
-            if (isset($data['thumbnail'])) {
+            if ($data['thumbnail']) {
                 $model->thumbnail = $data['thumbnail'];
             }
 
-            if (isset($data['origin'])) {
+            if ($data['origin']) {
                 $model->origin = $data['origin'];
             }
 
-            $model->catalog_id = (int)$data['catalog_id'];
+            $model->category_id = (int)$data['category_id'];
             $model->price = (int)$data['price'];
-            $model->meta_title = $data['meta_title'];
-            $model->meta_description = $data['meta_description'];
-            $model->meta_keywords = $data['meta_keywords'];
-            $model->slug = $data['slug'];
-            $model->seo_h1 = $data['seo_h1'];
-            $model->seo_url_canonical = $data['seo_url_canonical'];
+            $model->meta_title = $data['meta_title'] ?? null;
+            $model->meta_description = $data['meta_description'] ?? null;
+            $model->meta_keywords = $data['meta_keywords'] ?? null;
+            $model->seo_h1 = $data['seo_h1'] ?? null;
+            $model->seo_url_canonical = $data['seo_url_canonical'] ?? null;
             $model->seo_sitemap = (int)$data['seo_sitemap'];
-            $model->full_description = $data['full_description'] ?? null;
+            $model->slug = $data['slug'];
+            $model->full_description = $data['full_description'];
             $model->image_title = $data['image_title'] ?? null;
-            $model->image_alt = $data['image_alt'] ?? null;
-            $model->published = (int)$data['published'];
+            $model->image_alt  = $data['image_alt'] ?? null;
             $model->explosion_protection = $data['explosion_protection'] ?? null;
             $model->gases = $data['gases'] ?? null;
             $model->dust_protection = $data['dust_protection'] ?? null;
+
             $model->save();
 
             return $model;
@@ -81,9 +73,9 @@ class ProductsRepository extends BaseRepository
     /**
      * @param Request $request
      * @param int $id
-     * @return array
+     * @return array|null
      */
-    public function setViewed(Request $request, int $id): array
+    public function setViewed(Request $request, int $id): ?array
     {
         $product = $this->model->find($id);
         $productIds = null;
@@ -113,5 +105,15 @@ class ProductsRepository extends BaseRepository
         } else {
             return null;
         }
+    }
+
+    /**
+     * @param array $catalogIds
+     * @param int $limit
+     * @return LengthAwarePaginator
+     */
+    public function getProducts(array $catalogIds, int $limit = 10): LengthAwarePaginator
+    {
+        return Products::query()->whereIn('catalog_id', $catalogIds)->paginate($limit);
     }
 }

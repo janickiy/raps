@@ -23,11 +23,11 @@ class PhotoAlbumRepository extends BaseRepository
         if ($model) {
             $model->title = $data['title'];
             $model->description = $data['description'] ?? null;
-            $model->meta_title = $data['meta_title'];
-            $model->meta_description = $data['meta_description'];
-            $model->meta_keywords = $data['meta_keywords'];
-            $model->seo_h1 = $data['seo_h1'];
-            $model->seo_url_canonical = $data['seo_url_canonical'];
+            $model->meta_title = $data['meta_title'] ?? null;
+            $model->meta_description = $data['meta_description'] ?? null;
+            $model->meta_keywords = $data['meta_keywords'] ?? null;
+            $model->seo_h1 = $data['seo_h1'] ?? null;
+            $model->seo_url_canonical = $data['seo_url_canonical'] ?? null;
             $model->seo_sitemap = (int) $data['seo_sitemap'];
             $model->slug = $data['slug'];
             $model->save();

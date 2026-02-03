@@ -196,7 +196,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
         Yajra\DataTables\ButtonsServiceProvider::class,
         Yajra\DataTables\HtmlServiceProvider::class,
 
@@ -255,8 +254,6 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
         'Menu' => Harimayco\Menu\Models\Menus::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'PermissionsHelper' => App\Helpers\PermissionsHelper::class,

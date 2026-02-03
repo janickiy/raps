@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Repositories\ProductPhotosRepository;
-use App\Services\ProductPhotosService;
-use App\Models\{
-    ProductPhotos
-};
 use App\Helpers\StringHelper;
-use Illuminate\Http\Request;
 use App\Http\Requests\Admin\ProductPhotos\EditRequest;
 use App\Http\Requests\Admin\ProductPhotos\UploadRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Models\{ProductPhotos};
+use App\Repositories\ProductPhotosRepository;
+use App\Services\ProductPhotosService;
 use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductPhotosController extends Controller
 {

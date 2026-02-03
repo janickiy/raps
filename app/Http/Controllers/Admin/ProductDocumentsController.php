@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\ProductDocuments\EditRequest;
 use App\Http\Requests\Admin\ProductDocuments\StoreRequest;
 use App\Http\Requests\Admin\ProductDocuments\DeleteRequest;
 use App\Repositories\ProductDocumentsRepository;
-use App\Repositories\ProductsRepository;
+use App\Repositories\WerRepository;
 use App\Services\ProductDocumentsService;
 use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
@@ -19,13 +19,13 @@ class ProductDocumentsController extends Controller
 {
     /**
      * @param ProductDocumentsRepository $productDocumentsRepository
-     * @param ProductsRepository $productsRepository
+     * @param WerRepository $productsRepository
      * @param ProductDocumentsService $productDocumentsService
      */
     public function __construct(
         private ProductDocumentsRepository $productDocumentsRepository,
-        private ProductsRepository $productsRepository,
-        private ProductDocumentsService $productDocumentsService)
+        private WerRepository              $productsRepository,
+        private ProductDocumentsService    $productDocumentsService)
     {
         parent::__construct();
     }

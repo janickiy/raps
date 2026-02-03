@@ -37,20 +37,7 @@ class CatalogRepository extends BaseRepository
         return null;
     }
 
-    /**
-     * @return array
-     */
-    public function getCatalogsList(): array
-    {
-        $catalogs = Catalog::query()->orderBy('name')->get();
-        $catalogsList = [];
 
-        foreach ($catalogs?->toArray() ?? [] as $catalog) {
-            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
-        }
-
-        return $catalogsList;
-    }
 
     /**
      * @param int $parent_id
@@ -106,6 +93,26 @@ class CatalogRepository extends BaseRepository
         }
 
         return $ids;
+    }
+
+    /**
+     * @param int $catalog_id
+     * @return string
+     */
+    public function topbarMenu(int $catalog_id): string
+    {
+        $pathway = '';
+        $topbar = [];
+
+        Catalog::topbarMenu($topbar, $catalog_id);
+
+        for ($i = 0; $i < count($topbar); $i++) {
+            if ($topbar[$i][0] != $product->catalog_id) {
+                $pathway .= '<li><a href="' . route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
+            }
+        }
+
+        return $pathway;
     }
 
 }

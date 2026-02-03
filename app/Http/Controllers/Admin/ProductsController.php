@@ -3,27 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 
-use App\Repositories\ProductsRepository;
-use App\Repositories\CatalogRepository;
-use App\Services\ProductsService;
 use App\Helpers\StringHelper;
-use App\Http\Requests\Admin\Products\StoreRequest;
-use App\Http\Requests\Admin\Products\EditRequest;
 use App\Http\Requests\Admin\Products\DeleteRequest;
+use App\Http\Requests\Admin\Products\EditRequest;
+use App\Http\Requests\Admin\Products\StoreRequest;
+use App\Repositories\PagesRepository;
+use App\Repositories\WerRepository;
+use App\Services\PageService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class ProductsController extends Controller
 {
     public function __construct(
-        private ProductsRepository     $productRepository,
-        private ProductsService        $productService,
-        private CatalogRepository      $categoryRepository)
+        private PagesRepository $pageRepository,
+        private PageService $pageService
+    )
     {
         parent::__construct();
     }
-
     /**
      * @return View
      */
@@ -62,7 +61,7 @@ class ProductsController extends Controller
                 $seo_sitemap = 1;
             }
 
-            $this->productRepository->create(array_merge(array_merge($request->all()), [
+            $this->productsRepository->create(array_merge(array_merge($request->all()), [
                 'thumbnail' => $thumbnailFileNameToStore ?? null,
                 'origin' => $fileNameToStore ?? null,
                 'seo_sitemap' => $seo_sitemap,
@@ -85,7 +84,7 @@ class ProductsController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->productRepository->find($id);
+        $row = $this->productsRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -103,7 +102,7 @@ class ProductsController extends Controller
     {
         try {
             if ($request->hasFile('image')) {
-                $product = $this->productRepository->find($request->id);
+                $product = $this->productsRepository->find($request->id);
                 $this->productService->updateImage($request, $product);
             }
 
@@ -119,7 +118,7 @@ class ProductsController extends Controller
                 $seo_sitemap = 1;
             }
 
-            $this->productRepository->update($request->id, array_merge($request->all(), [
+            $this->productsRepository->update($request->id, array_merge($request->all(), [
                 'published' => $published,
                 'seo_sitemap' => $seo_sitemap,
             ]));
@@ -141,6 +140,6 @@ class ProductsController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productRepository->remove($request->id);
+        $this->productsRepository->remove($request->id);
     }
 }

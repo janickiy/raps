@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Catalog;
+use App\Helpers\MenuHelper;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer('layouts.frontend', function ($view){
+            $view->with('menu', MenuHelper::getMenuList());
+            $view->with('catalogsList', Catalog::getCatalogList());
+            $view->with('catalogs', Catalog::orderBy('name')->where('parent_id', 0)->get());
+        });
     }
 }
