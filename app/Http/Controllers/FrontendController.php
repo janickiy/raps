@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Repositories\CatalogRepository;
 use App\Repositories\ProductsRepository;
 use App\Repositories\SeoRepository;
@@ -25,7 +26,6 @@ class FrontendController extends Controller
     )
     {
     }
-
 
     /**
      * @return View
@@ -103,7 +103,6 @@ class FrontendController extends Controller
         $products = null;
 
         if ($slug) {
-
             $catalog = Catalog::where('slug', $slug)->first();
 
             if (!$catalog) abort(404);
