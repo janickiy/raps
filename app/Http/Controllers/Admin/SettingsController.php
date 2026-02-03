@@ -2,16 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Models\Settings;
+use App\Services\SettingsService;
+use App\Repositories\SettingsRepository;
 use App\Http\Requests\Admin\Settings\StoreRequest;
 use App\Http\Requests\Admin\Settings\EditRequest;
+use App\Http\Requests\Admin\Settings\DeleteRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Storage;
+use Exception;
 
 class SettingsController extends Controller
 {
+
+    /**
+     * @param SettingsService $settingsService
+     * @param SettingsRepository $settingsRepository
+     */
+    public function __construct(
+        private SettingsService $settingsService,
+        private SettingsRepository $settingsRepository
+    )
+    {
+        parent::__construct();
+    }
 
     /**
      * @return View
@@ -36,25 +49,29 @@ class SettingsController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        if ($request->hasFile('value')) {
-            $extension = $request->file('value')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            if ($request->file('value')->move('uploads/settings', $filename) === false) {
-                return redirect()->route('cp.settings.index')->with('error', 'Не удалось сохранить файл!');
+        try {
+            if ($request->hasFile('value')) {
+                $this->settingsService->storeFile($request);
             }
+
+            $published = 0;
+
+            if ($request->input('published')) {
+                $published = 1;
+            }
+
+            $this->settingsRepository->create(array_merge(array_merge($request->all()), [
+                'value' => $res ?? $request->input('value'),
+                'published' => $published,
+            ]));
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
-
-        $published = 0;
-
-        if ($request->input('published')) {
-            $published = 1;
-        }
-
-        Settings::create(array_merge(array_merge($request->all()), [
-            'value' => $filename ?? $request->input('value'),
-            'published'  => $published,
-        ]));
 
         return redirect()->route('cp.settings.index')->with('success', 'Информация успешно добавлена');
     }
@@ -65,7 +82,7 @@ class SettingsController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = Settings::find($id);
+        $row = $this->settingsRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -80,13 +97,7 @@ class SettingsController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $settings = Settings::find($request->id);
-
-        if (!$settings) abort(404);
-
-        $settings->key_cd = $request->input('key_cd');
-        $settings->name = $request->input('name');
-        $settings->display_value = $request->input('display_value');
+        $settings = $this->settingsRepository->find($request->id);
 
         $published = 0;
 
@@ -94,39 +105,28 @@ class SettingsController extends Controller
             $published = 1;
         }
 
-        $settings->published = $published;
-
         if ($request->hasFile('value')) {
-            if (Storage::disk('public')->exists('settings/' . $settings->filePath()) === true) Storage::disk('public')->delete('settings/' . $settings->filePath());
+            $res = $this->settingsService->updateFile($settings, $request);
 
-            $extension = $request->file('value')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-
-            if ($request->file('value')->move('uploads/settings', $filename) === false) {
+            if ($res === false) {
                 return redirect()->route('cp.settings.index')->with('error', 'Не удалось сохранить файл!');
-            } else {
-                $settings->value = $filename;
             }
-        } else {
-            if (!empty($request->value)) $settings->value = $request->input('value');
         }
 
-        $settings->save();
+        $this->settingsRepository->update($settings->id, array_merge(array_merge($request->all()), [
+            'value' => $res ?? $request->input('value'),
+            'published' => $published,
+        ]));
 
         return redirect()->route('cp.settings.index')->with('success', 'Данные обновлены');
     }
 
-    public function scopePublished($query)
-    {
-        return $query->where('published', 1);
-    }
-
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        Settings::find($request->id)->remove();
+        $this->settingsRepository->remove($request->id);
     }
 }

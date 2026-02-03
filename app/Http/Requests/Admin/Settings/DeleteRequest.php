@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Settings;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'     => 'required|integer|exists:settings,id',
-            'value' => $this->type == 'FILE' ? 'nullable' : 'required',
-            'key_cd' => 'required|max:255|unique:settings,key_cd,' . $this->id,
+            'id' => 'required|integer|exists:settings,id',
         ];
     }
 }
