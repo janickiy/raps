@@ -57,6 +57,6 @@ class SeoController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('admin.seo.index')->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.seo.index')->with('success', 'Данные успешно обновлены');
     }
 }

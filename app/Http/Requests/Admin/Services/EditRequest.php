@@ -22,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'required|integer|exists:services,id',
             'title' => 'required',
             'description' => 'required',
             'full_description' => 'required',

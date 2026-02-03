@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\ProductDocuments\EditRequest;
 use App\Http\Requests\Admin\ProductDocuments\StoreRequest;
 use App\Http\Requests\Admin\ProductDocuments\DeleteRequest;
 use App\Repositories\ProductDocumentsRepository;
-use App\Repositories\WerRepository;
+use App\Repositories\ProductsRepository;
 use App\Services\ProductDocumentsService;
 use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
@@ -19,12 +19,12 @@ class ProductDocumentsController extends Controller
 {
     /**
      * @param ProductDocumentsRepository $productDocumentsRepository
-     * @param WerRepository $productsRepository
+     * @param ProductsRepository $productsRepository
      * @param ProductDocumentsService $productDocumentsService
      */
     public function __construct(
         private ProductDocumentsRepository $productDocumentsRepository,
-        private WerRepository              $productsRepository,
+        private ProductsRepository         $productsRepository,
         private ProductDocumentsService    $productDocumentsService)
     {
         parent::__construct();
@@ -40,7 +40,7 @@ class ProductDocumentsController extends Controller
 
         if (!$row) abort(404);
 
-        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
+        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
 
         return view('cp.product_documents.index', compact('product_id', 'breadcrumbs'))->with('title', 'Список документации: ' . $row->title);
     }
@@ -55,8 +55,8 @@ class ProductDocumentsController extends Controller
 
         if (!$row) abort(404);
 
-        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('admin.product_documents.index', ['product_id' => $product_id]), 'title' => $row->title];
+        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
+        $breadcrumbs[] = ['url' => route('cp.product_documents.index', ['product_id' => $product_id]), 'title' => $row->title];
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
@@ -81,7 +81,7 @@ class ProductDocumentsController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('admin.product_documents.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
+        return redirect()->route('cp.product_documents.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -97,8 +97,8 @@ class ProductDocumentsController extends Controller
         $product_id = $row->product_id;
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        $breadcrumbs[] = ['url' => route('admin.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('admin.product_documents.index', ['product_id' => $row->product_id]), 'title' => $row->product->title];
+        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
+        $breadcrumbs[] = ['url' => route('cp.product_documents.index', ['product_id' => $row->product_id]), 'title' => $row->product->title];
 
         return view('cp.product_documents.create_edit', compact('row', 'product_id', 'maxUploadFileSize', 'breadcrumbs'))->with('title', 'Редактирование списка документации');
     }
@@ -128,7 +128,7 @@ class ProductDocumentsController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('admin.product_documents.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
+        return redirect()->route('cp.product_documents.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**

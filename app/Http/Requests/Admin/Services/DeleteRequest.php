@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\ProductPhotos;
+namespace App\Http\Requests\Admin\Services;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class UploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
+            'id' => 'required|integer|exists:services,id',
         ];
     }
 }

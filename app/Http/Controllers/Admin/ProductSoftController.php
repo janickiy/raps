@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\{
-    ProductSoft,
-    Products,
-};
-use Illuminate\Http\Request;
+use App\Repositories\ProductSoftRepository;
+use App\Repositories\ProductsRepository;
 use App\Http\Requests\Admin\ProductSoft\StoreRequest;
 use App\Http\Requests\Admin\ProductSoft\EditRequest;
+use App\Http\Requests\Admin\ProductSoft\DeleteRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Exception;
 
 class ProductSoftController extends Controller
 {
+    public function __construct(
+        private ProductSoftRepository $productSoftRepository,
+        private ProductsRepository $productsRepository,
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * @param int $product_id
      * @return View
      */
     public function index(int $product_id): View
     {
-        $row = Products::find($product_id);
+        $row = $this->productsRepository->find($product_id);
 
         if (!$row) abort(404);
 
@@ -42,7 +49,16 @@ class ProductSoftController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        ProductSoft::create($request->all());
+        try {
+            $this->productSoftRepository->create($request->all());
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
 
         return redirect()->route('cp.product_soft.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
     }
@@ -53,7 +69,7 @@ class ProductSoftController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = ProductSoft::find($id);
+        $row = $this->productSoftRepository->find($id);
 
         if (!$row) abort(404);
 
@@ -68,23 +84,27 @@ class ProductSoftController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = ProductSoft::find($request->id);
+        try {
+            $row = $this->productSoftRepository->find($request->id);
+            $this->productSoftRepository->update($request->id, $request->all());
+        } catch (Exception $e) {
+            report($e);
 
-        if (!$row) abort(404);
-
-        $row->url =  $request->input('url');
-        $row->description = $request->input('description');
-        $row->save();
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
 
         return redirect()->route('cp.product_soft.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
     }
 
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        ProductSoft::find($request->id)->remove();
+        $this->productSoftRepository->delete($request->id);
     }
 }

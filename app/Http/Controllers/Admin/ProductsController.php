@@ -7,18 +7,19 @@ use App\Helpers\StringHelper;
 use App\Http\Requests\Admin\Products\DeleteRequest;
 use App\Http\Requests\Admin\Products\EditRequest;
 use App\Http\Requests\Admin\Products\StoreRequest;
-use App\Repositories\PagesRepository;
-use App\Repositories\WerRepository;
-use App\Services\PageService;
-use Exception;
+use App\Repositories\CatalogRepository;
+use App\Repositories\ProductsRepository;
+use App\Services\ProductsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Exception;
 
 class ProductsController extends Controller
 {
     public function __construct(
-        private PagesRepository $pageRepository,
-        private PageService $pageService
+        private ProductsRepository $productsRepository,
+        private ProductsService $productsService,
+        private CatalogRepository $catalogRepository
     )
     {
         parent::__construct();
@@ -36,7 +37,7 @@ class ProductsController extends Controller
      */
     public function create(): View
     {
-        $options = $this->categoryRepository->getOptions();
+        $options = $this->catalogRepository->getOptions();
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.products.create_edit', compact('options', 'maxUploadFileSize'))->with('title', 'Добавление продукции');
@@ -50,7 +51,7 @@ class ProductsController extends Controller
     {
         try {
             if ($request->hasFile('image')) {
-                $filename = $this->productService->storeImage($request);
+                $filename = $this->productsService->storeImage($request);
                 $fileNameToStore = 'origin_' . $filename;
                 $thumbnailFileNameToStore = 'thumbnail_' . $filename;
             }
@@ -88,7 +89,7 @@ class ProductsController extends Controller
 
         if (!$row) abort(404);
 
-        $options = $this->categoryRepository->getOptions();
+        $options = $this->catalogRepository->getOptions();
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.products.create_edit', compact('row', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
@@ -103,7 +104,7 @@ class ProductsController extends Controller
         try {
             if ($request->hasFile('image')) {
                 $product = $this->productsRepository->find($request->id);
-                $this->productService->updateImage($request, $product);
+                $this->productsService->updateImage($request, $product);
             }
 
             $published = 0;

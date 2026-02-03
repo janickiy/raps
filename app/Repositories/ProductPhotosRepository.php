@@ -39,4 +39,17 @@ class ProductPhotosRepository extends BaseRepository
         }
         return null;
     }
+
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function remove(int $id): void
+    {
+        $model = $this->model->find($id);
+
+        if ($model) {
+            $model->remove();
+        }
+    }
 }

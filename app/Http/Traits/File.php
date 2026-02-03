@@ -14,7 +14,7 @@ trait File
     public static function deleteFile(string $file, string $path): bool
     {
         if (Storage::disk('public')->exists($path . '/' . $file) === true) {
-            return Storage::disk('public')->delete('images/' . $file);
+            return Storage::disk('public')->delete($path . '/' . $file);
         }
 
         return false;

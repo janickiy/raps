@@ -107,12 +107,11 @@ class CatalogRepository extends BaseRepository
         Catalog::topbarMenu($topbar, $catalog_id);
 
         for ($i = 0; $i < count($topbar); $i++) {
-            if ($topbar[$i][0] != $product->catalog_id) {
+            if ($topbar[$i][0] != $catalog_id) {
                 $pathway .= '<li><a href="' . route('frontend.catalog', ['slug' => $topbar[$i][2]]) . '">' . $topbar[$i][1] . '</a></li>';
             }
         }
 
         return $pathway;
     }
-
 }

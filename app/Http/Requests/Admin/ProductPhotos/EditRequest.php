@@ -14,7 +14,6 @@ class EditRequest extends FormRequest
         return true;
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -23,6 +22,7 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'required|integer|exists:product_photos,id',
         ];
     }
 }

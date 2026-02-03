@@ -11,6 +11,7 @@ class RobotsController extends Controller
 {
     /**
      * @return View
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function edit(): View
     {
@@ -27,6 +28,6 @@ class RobotsController extends Controller
     {
         File::put(public_path('robots.txt'), $request->input('content'));
 
-        return redirect()->route('admin.robots.edit')->with('success', 'Данные успешно обновлены');
+        return redirect()->route('cp.robots.edit')->with('success', 'Данные успешно обновлены');
     }
 }
