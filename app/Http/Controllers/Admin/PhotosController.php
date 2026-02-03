@@ -2,18 +2,37 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\{PhotoAlbum, Photos};
+
+use App\Http\Traits\File;
+use App\Models\Photos;
+use App\Repositories\PhotoAlbumRepository;
+use App\Repositories\PhotosRepository;
+use App\Services\PhotosService;
 use App\Helpers\StringHelper;
-use Illuminate\Http\Request;
 use App\Http\Requests\Admin\Photos\EditRequest;
 use App\Http\Requests\Admin\Photos\UploadRequest;
+use App\Http\Requests\Admin\Photos\DeleteRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Storage;
-use Image;
+use Exception;
 
 class PhotosController extends Controller
 {
+    use File;
+
+    /**
+     * @param PhotosRepository $photosRepository
+     * @param PhotoAlbumRepository $photoAlbumRepository
+     * @param PhotosService $photosService
+     */
+    public function __construct(
+        private PhotosRepository     $photosRepository,
+        private PhotoAlbumRepository $photoAlbumRepository,
+        private PhotosService        $photosService
+    )
+    {
+        parent::__construct();
+    }
 
     /**
      * @param int $photoalbum_id
@@ -21,7 +40,7 @@ class PhotosController extends Controller
      */
     public function index(int $photoalbum_id): View
     {
-        $row = PhotoAlbum::find($photoalbum_id);
+        $row = $this->photoAlbumRepository->find($photoalbum_id);
 
         if (!$row) abort(404);
 
@@ -36,30 +55,24 @@ class PhotosController extends Controller
      */
     public function upload(UploadRequest $request): RedirectResponse
     {
-        if ($request->hasFile('image')) {
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $fileNameToStore = 'origin_' . $filename;
-            $thumbnailFileNameToStore = 'thumbnail_' . $filename;
+        try {
+            $image = $this->photosService->storeImage($request);
+            $fileNameToStore = 'origin_' . $image;
+            $thumbnailFileNameToStore = 'thumbnail_' . $image;
+            $this->photosRepository->create(array_merge($request->all(), [
+                'thumbnail' => $thumbnailFileNameToStore ?? null,
+                'origin' => $fileNameToStore ?? null,
+            ]));
+        } catch (Exception $e) {
+            report($e);
 
-            if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
-                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
-                $img->resize(300, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                if ($img->save(Storage::disk('public')->path('images/' . $thumbnailFileNameToStore))) {
-                    Photos::create(array_merge(array_merge($request->all()), [
-                        'thumbnail' => $thumbnailFileNameToStore ?? null,
-                        'origin' => $fileNameToStore ?? null,
-                    ]));
-
-                    return redirect()->route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id])->with('success', 'Данные успешно обновлены');
-                }
-            }
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
 
-        return redirect()->route('cp.photos.index', ['photoalbum_id' => $request->photoalbum_id])->with('error', 'Ошибка добавления фото');
+        return redirect()->route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id])->with('success', 'Данные успешно добавлены');
     }
 
     /**
@@ -68,13 +81,13 @@ class PhotosController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = Photos::find($id);
+        $row = $this->photosRepository->find($id);
 
         if (!$row) abort(404);
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title);
+        return view('cp.photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row?->product->title);
     }
 
     /**
@@ -83,54 +96,45 @@ class PhotosController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = Photos::find($request->id);
+        try {
+            $row = $this->photosRepository->find($request->id);
+            if (!$row) abort(404);
 
-        if (!$row) abort(404);
+            $pic = $request->input('pic');
 
-        if ($request->hasFile('image')) {
-
-            $image = $request->pic;
-
-            if ($image != null) {
-                if (Storage::disk('public')->exists('images/' . $row->thumbnail) === true) Storage::disk('public')->delete('images/' . $row->thumbnail);
-                if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);
+            if ($pic !== null) {
+                File::deleteFile($row->thumbnail, Photos::getTableName());
+                File::deleteFile($row->origin, Photos::getTableName());
             }
 
-            if (Storage::disk('public')->exists('images/' . $row->thumbnail) === true) Storage::disk('public')->delete('images/' . $row->thumbnail);
-            if (Storage::disk('public')->exists('images/' . $row->origin) === true) Storage::disk('public')->delete('images/' . $row->origin);;
-
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = time() . '.' . $extension;
-            $fileNameToStore = 'origin_' . $filename;
-            $thumbnailFileNameToStore = 'thumbnail_' . $filename;
-
-            if ($request->file('image')->move('uploads/images', $fileNameToStore)) {
-                $img = Image::make(Storage::disk('public')->path('images/' . $fileNameToStore));
-                $img->resize(null, 600, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                if ($img->save(Storage::disk('public')->path('images/' . $thumbnailFileNameToStore))) {
-                    $row->thumbnail = $thumbnailFileNameToStore;
-                    $row->origin = $fileNameToStore;
-                }
+            if ($request->hasFile('image')) {
+                $image = $this->photosService->updateImage($request, $row);
+                $fileNameToStore = 'origin_' . $image;
+                $thumbnailFileNameToStore = 'thumbnail_' . $image;
             }
+
+            $this->photosRepository->update($request->id, array_merge($request->all(), [
+                'thumbnail' => $thumbnailFileNameToStore ?? null,
+                'origin' => $fileNameToStore ?? null,
+            ]));
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
-
-        $row->title = $request->input('title');
-        $row->description = $request->input('description');
-        $row->alt = $request->input('alt');
-        $row->save();
 
         return redirect()->route('cp.photos.index', ['photoalbum_id' => $row->photoalbum_id])->with('success', 'Данные успешно обновлены');
     }
 
     /**
-     * @param Request $request
+     * @param DeleteRequest $request
      * @return void
      */
-    public function destroy(Request $request): void
+    public function destroy(DeleteRequest $request): void
     {
-        Photos::find($request->id)->remove();
+        $this->photosRepository->remove($request->id);
     }
 }

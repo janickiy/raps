@@ -22,7 +22,9 @@ class EditRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'id'    => 'required|integer|exists:photos,id',
+            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
+            'photoalbum_id' => 'required|integer|exists:photoalbum,id',
         ];
     }
 }

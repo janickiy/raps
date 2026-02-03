@@ -23,21 +23,24 @@ class CatalogRepository extends BaseRepository
         if ($model) {
             $model->name = $data['name'];
             $model->slug = $data['slug'];
-            $model->meta_title = $data['meta_title'];
-            $model->meta_description = $data['meta_description'];
-            $model->meta_keywords = $data['meta_keywords'];
-            $model->seo_h1 = $data['seo_h1'];
-            $model->seo_url_canonical = $data['seo_url_canonical'];
-            $model->parent_id = (int)$data['parent_id'];
-            $model->seo_sitemap = $data['seo_sitemap'];
+
+            if ($data['image']) {
+                $model->image = $data['image'];
+            }
+
+            $model->meta_title = $data['meta_title'] ?? null;
+            $model->meta_description = $data['meta_description'] ?? null;
+            $model->meta_keywords = $data['meta_keywords'] ?? null;
+            $model->seo_h1 = $data['seo_h1'] ?? null;
+            $model->seo_url_canonical = $data['seo_url_canonical'] ?? null;
+            $model->parent_id = (int)$data['parent_id'] ?? null;
+            $model->seo_sitemap = $data['seo_sitemap'] ?? null;
             $model->save();
 
             return $model;
         }
         return null;
     }
-
-
 
     /**
      * @param int $parent_id
@@ -113,5 +116,20 @@ class CatalogRepository extends BaseRepository
         }
 
         return $pathway;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCatalogsList(): array
+    {
+        $catalogs = Catalog::query()->orderBy('name')->get();
+        $catalogsList = [];
+
+        foreach ($catalogs?->toArray() ?? [] as $catalog) {
+            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
+        }
+
+        return $catalogsList;
     }
 }

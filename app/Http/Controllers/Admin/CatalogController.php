@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+
+use App\Http\Traits\File;
+use App\Repositories\CatalogRepository;
+use App\Services\CategoryService;
 use App\Helpers\StringHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -11,22 +15,24 @@ use App\Http\Requests\Admin\Catalog\{
     EditRequest,
     DeleteRequest,
 };
-use Storage;
-use Image;
+use Exception;
 
 class CatalogController extends Controller
 {
+    public function __construct(
+        private CatalogRepository $categoryRepository,
+        private CategoryService  $categoryService
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * @return View
      */
     public function index(): View
     {
-        $catalogs = Catalog::query()->orderBy('name')->get();
-        $catalogsList = [];
-
-        foreach ($catalogs?->toArray() ?? [] as $catalog) {
-            $catalogsList[$catalog['parent_id']][$catalog['id']] = $catalog;
-        }
+        $catalogsList = $this->categoryRepository->getCatalogsList();
 
         return view('cp.catalog.index', compact('catalogsList'))->with('title', 'Категории');
     }
@@ -37,12 +43,15 @@ class CatalogController extends Controller
      */
     public function create(int $parent_id = 0): View
     {
-        $options[0] = 'Выберите';
-        $options = Catalog::ShowTree($options, 0);
+        $row = $this->categoryRepository->find($parent_id);
 
+        if (!$row) abort(404);
+
+        $options = $this->categoryRepository->getOptions();
+        $title = $parent_id > 0 ? 'Добавление подкатегории в категорию ' . $row->name:'Добавление категории';
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        return view('cp.catalog.create_edit', compact('maxUploadFileSize', 'parent_id', 'options'))->with('title', 'Добавление категории');
+        return view('cp.catalog.create_edit', compact('maxUploadFileSize', 'parent_id', 'options'))->with('title', $title);
     }
 
     /**
@@ -51,37 +60,32 @@ class CatalogController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        if ($request->hasFile('image')) {
-            $extension = $request->file('image')->getClientOriginalExtension();
-            $filename = time();
-            $originName = $filename . '.' . $extension;
+        try {
+            $seo_sitemap = 0;
 
-            if ($request->file('image')->move('uploads/catalog', $originName)) {
-                $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
-                $img->resize(null, 700, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
-
-                $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
-
-                $small_img->resize(null, 350, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-                $small_img->save(Storage::disk('public')->path('catalog/' . $originName));
+            if ($request->input('seo_sitemap')) {
+                $seo_sitemap = 1;
             }
+
+            if ($request->hasFile('image')) {
+                $image = $this->categoryService->storeImage($request);
+            }
+            if ($request->hasFile('image')) {
+                $image = $this->categoryService->storeImage($request);
+            }
+
+            $this->categoryRepository->create(array_merge($request->all(), [
+                'seo_sitemap' => $seo_sitemap,
+                'image' => $image ?? null,
+            ]));
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
-
-        $seo_sitemap = 0;
-
-        if ($request->input('seo_sitemap')) {
-            $seo_sitemap = 1;
-        }
-
-        Catalog::create(array_merge(array_merge($request->all()), [
-            'image' => $originName ?? null,
-            'seo_sitemap' => $seo_sitemap,
-        ]));
 
         return redirect()->route('cp.catalog.index')->with('success', 'Информация успешно добавлена');
     }
@@ -92,18 +96,14 @@ class CatalogController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = Catalog::find($id);
+        $row = $this->categoryRepository->find($id);
 
         if (!$row) abort(404);
 
-        $options[0] = 'Выберите';
-
-        Catalog::ShowTree($options, 0);
-
+        $options = $this->categoryRepository->getOptions();
+        unset($options[$id]);
         $parent_id = $row->parent_id;
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        unset($options[$id]);
 
         return view('cp.catalog.create_edit', compact('row', 'parent_id', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
     }
@@ -114,66 +114,40 @@ class CatalogController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
-        $row = Catalog::find($request->id);
+        try {
+            $seo_sitemap = 0;
 
-        if (!$row) abort(404);
+            if ($request->input('seo_sitemap')) {
+                $seo_sitemap = 1;
+            }
 
-        $row->name = $request->input('name');
-        $row->description = $request->input('description');
-        $row->slug = $request->input('slug');
-        $row->meta_title = $request->input('meta_title');
-        $row->meta_description = $request->input('meta_description');
-        $row->meta_keywords = $request->input('meta_keywords');
-        $row->seo_h1 = $request->input('seo_h1');
-        $row->seo_url_canonical = $request->input('seo_url_canonical');
-        $row->parent_id = $request->input('parent_id');
+            $row = $this->categoryRepository->find($request->id);
 
-        if ($request->hasFile('image')) {
+            if (!$row) abort(404);
 
-            $image = $request->pic;
+            $image = $request->input('pic');
 
-            if ($image != null) {
-                if (Storage::disk('public')->exists('catalog/' . $row->image) === true) Storage::disk('public')->delete('catalog/' . $row->image);
-                if (Storage::disk('public')->exists('catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $row->image);
+            if ($image !== null) {
+                File::deleteFile($catalog->image, Catalog::getTableName());
+                File::deleteFile('2x_' . $catalog->image, Catalog::getTableName());
             }
 
             if ($request->hasFile('image')) {
-
-                if (Storage::disk('public')->exists('catalog/' . $row->image) === true) Storage::disk('public')->delete('catalog/' . $row->image);
-                if (Storage::disk('public')->exists('catalog/' . '2x_' . $row->image) === true) Storage::disk('public')->delete('catalog/' . '2x_' . $row->image);
-
-                $extension = $request->file('image')->getClientOriginalExtension();
-                $filename = time();
-                $originName = $filename . '.' . $extension;
-
-                if ($request->file('image')->move('uploads/catalog', $originName)) {
-                    $img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
-                    $img->resize(null, 700, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-                    $img->save(Storage::disk('public')->path('catalog/' . '2x_' . $filename . '.' . $extension));
-
-                    $small_img = Image::make(Storage::disk('public')->path('catalog/' . $originName));
-
-                    $small_img->resize(null, 350, function ($constraint) {
-                        $constraint->aspectRatio();
-                    });
-
-                    if ($small_img->save(Storage::disk('public')->path('catalog/' . $originName))) $row->image = $originName;
-                }
+                $image = $this->categoryService->updateImage($request, $row);
             }
+
+            $this->categoryRepository->update($request->id, array_merge($request->all(), [
+                'seo_sitemap' => $seo_sitemap,
+                'image' => $image ?? null,
+            ]));
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
         }
-
-        $seo_sitemap = 0;
-
-        if ($request->input('seo_sitemap')) {
-            $seo_sitemap = 1;
-        }
-
-        $row->seo_sitemap = $seo_sitemap;
-        $row->image_title = $request->input('image_title');
-        $row->image_alt = $request->input('image_alt');
-        $row->save();
 
         return redirect()->route('cp.catalog.index')->with('success', 'Данные обновлены');
     }
