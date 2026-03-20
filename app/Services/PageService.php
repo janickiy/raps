@@ -2,51 +2,58 @@
 
 namespace App\Services;
 
-
+use App\Http\Traits\File;
 use App\Models\Pages;
-use App\Models\Products;
+use Exception;
 use Illuminate\Http\Request;
 use Image;
 use Storage;
-use Exception;
 
 class PageService
 {
+    use File;
+
     /**
-     * @param Request $request
-     * @return string
      * @throws Exception
      */
     public function storeImage(Request $request): string
     {
         $extension = $request->file('image')->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
-        $fileNameToStore = 'origin_' . $filename;
-        $thumbnailFileNameToStore = 'thumbnail_' . $filename;
+        $filename = time();
+        $originName = $filename . '.' . $extension;
 
-        if ($request->file('image')->move('uploads/' . Pages::getTableName(), $fileNameToStore) === false) {
+        if ($request->file('image')->move('uploads/' . Pages::getTableName(), $originName) === false) {
             throw new Exception('Не удалось сохранить фото!');
         }
 
-        $img = Image::make(Storage::disk('public')->path(Pages::getTableName() . '/' . $fileNameToStore));
-        $img->resize(null, 300, function ($constraint) {
+        $img = Image::make(Storage::disk('public')->path(Pages::getTableName() . '/' . $originName));
+        $img->resize(null, 700, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save(Storage::disk('public')->path(Pages::getTableName() . '/' . $thumbnailFileNameToStore));
+        $img->save(Storage::disk('public')->path(Pages::getTableName() . '/' . '2x_' . $filename . '.' . $extension));
 
-        return $filename;
+        $smallImg = Image::make(Storage::disk('public')->path(Pages::getTableName() . '/' . $originName));
+        $smallImg->resize(null, 350, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+
+        if ($smallImg->save(Storage::disk('public')->path(Pages::getTableName() . '/' . $originName)) === false) {
+            throw new Exception('Не удалось сохранить фото!');
+        }
+
+        return $originName;
     }
 
     /**
-     * @param Request $request
-     * @param Products $product
-     * @return string
      * @throws Exception
      */
-    public function updateImage(Request $request, Products $product): string
+    public function updateImage(Request $request, Pages $page): string
     {
+        if ($page->image !== null) {
+            File::deleteFile($page->image, Pages::getTableName());
+            File::deleteFile('2x_' . $page->image, Pages::getTableName());
+        }
 
-
-        return $filename;
+        return $this->storeImage($request);
     }
 }

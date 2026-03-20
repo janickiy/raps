@@ -3,29 +3,24 @@
 namespace App\Http\Requests\Admin\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class EditRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
-            'login' => 'required|max:255|unique:users,login,' . $this->id,
-            'name' => 'required',
-            'password' => 'min:6|nullable',
-            'password_again' => 'min:6|same:password|nullable',
+            'id' => 'required|integer|exists:users,id',
+            'login' => 'required|string|max:255|unique:users,login,' . $this->id,
+            'name' => 'required|string|max:255',
+            'role' => ['required', 'string', Rule::in(['admin', 'moderator', 'editor'])],
+            'password' => 'nullable|string|min:6|max:255',
+            'password_again' => 'nullable|string|min:6|same:password',
         ];
     }
 }

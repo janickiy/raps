@@ -2,21 +2,18 @@
 
 namespace App\Services;
 
-
 use App\Http\Traits\File;
 use App\Models\Products;
+use Exception;
 use Illuminate\Http\Request;
 use Image;
 use Storage;
-use Exception;
 
 class ProductsService
 {
     use File;
 
     /**
-     * @param Request $request
-     * @return string
      * @throws Exception
      */
     public function storeImage(Request $request): string
@@ -43,41 +40,18 @@ class ProductsService
     }
 
     /**
-     * @param Request $request
-     * @param Products $product
-     * @return string
      * @throws Exception
      */
     public function updateImage(Request $request, Products $product): string
     {
-        $image = $request->pic;
-
-        if ($image !== null) {
+        if ($product->thumbnail !== null) {
             File::deleteFile($product->thumbnail, Products::getTableName());
+        }
+
+        if ($product->origin !== null) {
             File::deleteFile($product->origin, Products::getTableName());
         }
 
-        $extension = $request->file('image')->getClientOriginalExtension();
-        $filename = time() . '.' . $extension;
-        $fileNameToStore = 'origin_' . $filename;
-        $thumbnailFileNameToStore = 'thumbnail_' . $filename;
-
-        if ($request->file('image')->move('uploads/' . Products::getTableName(), $fileNameToStore) === false) {
-            throw new Exception('Не удалось сохранить фото!');
-        } else {
-            File::deleteFile($product->thumbnail, Products::getTableName());
-            File::deleteFile($product->origin, Products::getTableName());
-
-            $img = Image::make(Storage::disk('public')->path(Products::getTableName() . '/' . $fileNameToStore));
-            $img->resize(null, 300, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-        }
-
-        if ($img->save(Storage::disk('public')->path(Products::getTableName() . '/' . $thumbnailFileNameToStore)) === false) {
-            throw new Exception('Не удалось сохранить фото!');
-        }
-
-        return $filename;
+        return $this->storeImage($request);
     }
 }

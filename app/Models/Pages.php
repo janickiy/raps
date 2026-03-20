@@ -31,6 +31,8 @@ class Pages extends Model
         'seo_h1',
         'seo_url_canonical',
         'seo_sitemap',
+        'image_title',
+        'image_alt',
     ];
 
     /**

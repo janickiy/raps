@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Faq;
+namespace App\Http\Requests\Admin\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class DeleteRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,8 +14,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => 'required|string|max:255',
-            'answer' => 'required|string',
+            'id' => 'required|integer|exists:users,id',
         ];
     }
 }

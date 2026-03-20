@@ -6,27 +6,29 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
-            'title' => 'required',
-            'text' => 'required',
-            'image' => 'image|mimes:jpeg,jpg,png,gif|max:2048|nullable',
-            'slug' => 'required|unique:pages',
-            'main' => 'integer|nullable'
+            'title' => 'required|string|max:255',
+            'text' => 'required|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
+            'meta_keywords' => 'nullable|string|max:255',
+            'seo_h1' => 'nullable|string|max:255',
+            'seo_url_canonical' => 'nullable|string|max:255',
+            'slug' => 'required|string|max:255|unique:pages,slug',
+            'main' => 'nullable|boolean',
+            'published' => 'nullable|boolean',
+            'parent_id' => 'nullable|integer',
+            'image_title' => 'nullable|string|max:255',
+            'image_alt' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'seo_sitemap' => 'nullable|boolean',
         ];
     }
 }

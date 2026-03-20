@@ -2,9 +2,10 @@
 
 namespace App\Repositories;
 
+use App\DTO\Admin\ProductData;
 use App\Models\Products;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 
 class ProductsRepository extends BaseRepository
 {
@@ -13,54 +14,56 @@ class ProductsRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    /**
-     * @param int $id
-     * @param array $data
-     * @return Products|null
-     */
-    public function update(int $id, array $data): ?Products
+    public function createFromDto(ProductData $data): Products
+    {
+        /** @var Products $product */
+        $product = $this->model->create($data->toArray());
+
+        return $product;
+    }
+
+    public function updateFromDto(int $id, ProductData $data): ?Products
     {
         $model = $this->model->find($id);
 
-        if ($model) {
-            $model->title = $data['title'];
-            $model->description = $data['description'];
-
-            if ($data['thumbnail']) {
-                $model->thumbnail = $data['thumbnail'];
-            }
-
-            if ($data['origin']) {
-                $model->origin = $data['origin'];
-            }
-
-            $model->category_id = (int)$data['category_id'];
-            $model->price = (int)$data['price'];
-            $model->meta_title = $data['meta_title'] ?? null;
-            $model->meta_description = $data['meta_description'] ?? null;
-            $model->meta_keywords = $data['meta_keywords'] ?? null;
-            $model->seo_h1 = $data['seo_h1'] ?? null;
-            $model->seo_url_canonical = $data['seo_url_canonical'] ?? null;
-            $model->seo_sitemap = (int)$data['seo_sitemap'];
-            $model->slug = $data['slug'];
-            $model->full_description = $data['full_description'];
-            $model->image_title = $data['image_title'] ?? null;
-            $model->image_alt  = $data['image_alt'] ?? null;
-            $model->explosion_protection = $data['explosion_protection'] ?? null;
-            $model->gases = $data['gases'] ?? null;
-            $model->dust_protection = $data['dust_protection'] ?? null;
-
-            $model->save();
-
-            return $model;
+        if (!$model) {
+            return null;
         }
-        return null;
+
+        $payload = $data->toArray();
+
+        $model->title = $payload['title'];
+        $model->description = $payload['description'];
+        $model->full_description = $payload['full_description'];
+        $model->catalog_id = $payload['catalog_id'];
+        $model->price = $payload['price'];
+        $model->meta_title = $payload['meta_title'];
+        $model->meta_description = $payload['meta_description'];
+        $model->meta_keywords = $payload['meta_keywords'];
+        $model->seo_h1 = $payload['seo_h1'];
+        $model->seo_url_canonical = $payload['seo_url_canonical'];
+        $model->seo_sitemap = $payload['seo_sitemap'];
+        $model->slug = $payload['slug'];
+        $model->image_title = $payload['image_title'];
+        $model->image_alt = $payload['image_alt'];
+        $model->published = $payload['published'];
+        $model->explosion_protection = $payload['explosion_protection'];
+        $model->gases = $payload['gases'];
+        $model->dust_protection = $payload['dust_protection'];
+
+        if ($payload['thumbnail'] !== null) {
+            $model->thumbnail = $payload['thumbnail'];
+        }
+
+        if ($payload['origin'] !== null) {
+            $model->origin = $payload['origin'];
+        }
+
+        $model->save();
+
+        return $model;
     }
 
-    /**
-     * @param int $id
-     * @return void
-     */
     public function remove(int $id): void
     {
         $model = $this->model->find($id);
@@ -70,11 +73,6 @@ class ProductsRepository extends BaseRepository
         }
     }
 
-    /**
-     * @param Request $request
-     * @param int $id
-     * @return array|null
-     */
     public function setViewed(Request $request, int $id): ?array
     {
         $product = $this->model->find($id);
@@ -95,23 +93,15 @@ class ProductsRepository extends BaseRepository
         return $productIds;
     }
 
-    /**
-     * @return array|null
-     */
     public function viewedProducts(): ?array
     {
         if (request()->session()->has('productIds')) {
             return request()->session()->get('productIds');
-        } else {
-            return null;
         }
+
+        return null;
     }
 
-    /**
-     * @param array $catalogIds
-     * @param int $limit
-     * @return LengthAwarePaginator
-     */
     public function getProducts(array $catalogIds, int $limit = 10): LengthAwarePaginator
     {
         return Products::query()->whereIn('catalog_id', $catalogIds)->paginate($limit);

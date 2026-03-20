@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Admin\PageData;
 use App\Models\Pages;
 
 class PagesRepository extends BaseRepository
@@ -11,33 +12,56 @@ class PagesRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function update(int $id, array $data): ?Pages
+    public function createFromDto(PageData $data): Pages
+    {
+        $payload = $data->toArray();
+
+        if ($payload['main'] === 1) {
+            Pages::where('main', 1)->update(['main' => 0]);
+        }
+
+        /** @var Pages $page */
+        $page = $this->model->create($payload);
+
+        return $page;
+    }
+
+    public function updateFromDto(int $id, PageData $data): ?Pages
     {
         $model = $this->model->find($id);
 
-        if ($model) {
-            $model->title = $data['title'];
-            $model->text = $data['text'];
-            $model->meta_title = $data['meta_title'] ?? null;
-            $model->meta_description = $data['meta_description'] ?? null;
-            $model->meta_keywords = $data['meta_keywords'] ?? null;
-            $model->image = $data['image'] ?? null;
-            $model->slug = $data['slug'];
-            $model->seo_h1 = $data['seo_h1'];
-            $model->seo_url_canonical = $data['seo_url_canonical'];
-            $model->published = (int)$data['published'];
-
-            if ($data['main'] === 1) {
-                Pages::where('main', 1)->update(['main' => 0]);
-            }
-
-            $model->main = (int)$data['main'];
-            $model->seo_sitemap = (int)$data['seo_sitemap'];
-            $model->save();
-
-            return $model;
+        if (!$model) {
+            return null;
         }
-        return null;
+
+        $payload = $data->toArray();
+
+        if ($payload['main'] === 1) {
+            Pages::where('main', 1)->where('id', '!=', $id)->update(['main' => 0]);
+        }
+
+        $model->title = $payload['title'];
+        $model->text = $payload['text'];
+        $model->meta_title = $payload['meta_title'];
+        $model->meta_description = $payload['meta_description'];
+        $model->meta_keywords = $payload['meta_keywords'];
+        $model->slug = $payload['slug'];
+        $model->seo_h1 = $payload['seo_h1'];
+        $model->seo_url_canonical = $payload['seo_url_canonical'];
+        $model->published = $payload['published'];
+        $model->main = $payload['main'];
+        $model->seo_sitemap = $payload['seo_sitemap'];
+        $model->parent_id = $payload['parent_id'];
+        $model->image_title = $payload['image_title'];
+        $model->image_alt = $payload['image_alt'];
+
+        if ($payload['image'] !== null) {
+            $model->image = $payload['image'];
+        }
+
+        $model->save();
+
+        return $model;
     }
 
     /**
@@ -54,10 +78,6 @@ class PagesRepository extends BaseRepository
         return $options;
     }
 
-    /**
-     * @param int $id
-     * @return void
-     */
     public function remove(int $id): void
     {
         $model = $this->model->find($id);
