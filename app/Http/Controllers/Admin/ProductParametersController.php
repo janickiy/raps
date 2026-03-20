@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-
-use App\Repositories\ProductParametersRepository;
-use App\Repositories\ProductsRepository;
+use App\Http\Requests\Admin\ProductParameters\DeleteRequest;
 use App\Http\Requests\Admin\ProductParameters\EditRequest;
 use App\Http\Requests\Admin\ProductParameters\StoreRequest;
-use App\Http\Requests\Admin\ProductParameters\DeleteRequest;
+use App\Repositories\ProductParametersRepository;
+use App\Repositories\ProductsRepository;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class ProductParametersController extends Controller
 {
-
+    /**
+     * @param ProductParametersRepository $productParametersRepository
+     * @param ProductsRepository $productsRepository
+     */
     public function __construct(
-        private ProductParametersRepository $productParametersRepository,
-        private ProductsRepository $productsRepository)
-    {
+        private readonly ProductParametersRepository $productParametersRepository,
+        private readonly ProductsRepository $productsRepository
+    ) {
         parent::__construct();
     }
 
@@ -28,13 +30,17 @@ class ProductParametersController extends Controller
      */
     public function index(int $product_id): View
     {
-        $product = $this->productsRepository->find($product_id);
+        $product = $this->findProductOrFail($product_id);
 
-        if (!$product) abort(404);
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+        ];
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-
-        return view('cp.product_parameters.index', compact('product_id', 'breadcrumbs'))->with('title', 'Технические характеристики: ' . $product->title);
+        return view('cp.product_parameters.index', [
+            'product_id' => $product_id,
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Технические характеристики: ' . $product->title,
+        ]);
     }
 
     /**
@@ -43,14 +49,18 @@ class ProductParametersController extends Controller
      */
     public function create(int $product_id): View
     {
-        $row = $this->productsRepository->find($product_id);
+        $row = $this->findProductOrFail($product_id);
 
-        if (!$row) abort(404);
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+            ['url' => route('cp.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->title],
+        ];
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('cp.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->title];
-
-        return view('cp.product_parameters.create_edit', compact('product_id', 'breadcrumbs'))->with('title', 'Добавление параметра');
+        return view('cp.product_parameters.create_edit', [
+            'product_id' => $product_id,
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Добавление параметра',
+        ]);
     }
 
     /**
@@ -59,8 +69,14 @@ class ProductParametersController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+        $productId = $request->integer('product_id');
+
         try {
-            $this->productParametersRepository->create(array_merge($request->all(), ['category_id' => $request->category_id ?? 0]));
+            $this->findProductOrFail($productId);
+
+            $this->productParametersRepository->create(
+                $this->prepareData($request->all())
+            );
         } catch (Exception $e) {
             report($e);
 
@@ -70,7 +86,9 @@ class ProductParametersController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_parameters.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
+        return redirect()
+            ->route('cp.product_parameters.index', ['product_id' => $productId])
+            ->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -79,16 +97,20 @@ class ProductParametersController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->productParametersRepository->find($id);
-
-        if (!$row) abort(404);
-
+        $row = $this->findParameterOrFail($id);
         $product_id = $row->product_id;
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('cp.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->product->title];
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+            ['url' => route('cp.product_parameters.index', ['product_id' => $product_id]), 'title' => $row->product->title],
+        ];
 
-        return view('cp.product_parameters.create_edit', compact('row', 'product_id', 'breadcrumbs'))->with('title', 'Редактирование параметра');
+        return view('cp.product_parameters.create_edit', [
+            'row' => $row,
+            'product_id' => $product_id,
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Редактирование параметра',
+        ]);
     }
 
     /**
@@ -97,12 +119,19 @@ class ProductParametersController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+        $id = $request->integer('id');
+
         try {
-            $row = $this->productParametersRepository->find($request->id);
+            $row = $this->findParameterOrFail($id);
 
-            if (!$row) abort(404);
+            $updated = $this->productParametersRepository->update(
+                $id,
+                $this->prepareData($request->all())
+            );
 
-            $this->productParametersRepository->update($request->id, $request->all());
+            if (!$updated) {
+                abort(404);
+            }
         } catch (Exception $e) {
             report($e);
 
@@ -112,7 +141,9 @@ class ProductParametersController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_parameters.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
+        return redirect()
+            ->route('cp.product_parameters.index', ['product_id' => $row->product_id])
+            ->with('success', 'Данные обновлены');
     }
 
     /**
@@ -121,6 +152,51 @@ class ProductParametersController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productParametersRepository->delete($request->id);
+        $id = $request->integer('id');
+
+        $this->findParameterOrFail($id);
+
+        $this->productParametersRepository->delete($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findProductOrFail(int $id): mixed
+    {
+        $row = $this->productsRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findParameterOrFail(int $id): mixed
+    {
+        $row = $this->productParametersRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        $data['category_id'] = !empty($data['category_id']) ? (int) $data['category_id'] : 0;
+
+        return $data;
     }
 }

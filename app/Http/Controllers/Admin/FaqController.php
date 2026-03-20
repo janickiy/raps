@@ -12,29 +12,99 @@ use Illuminate\View\View;
 
 class FaqController extends Controller
 {
-    public function __construct(private FaqRepository $faqRepository)
-    {
+    public function __construct(
+        private readonly FaqRepository $faqRepository
+    ) {
         parent::__construct();
     }
 
+    /**
+     * @return View
+     */
     public function index(): View
     {
-        return view('cp.faq.index')->with('title', 'Вопрос-ответ');
+        return view('cp.faq.index', [
+            'title' => 'Вопрос-ответ',
+        ]);
     }
 
+    /**
+     * @return View
+     */
     public function create(): View
     {
-        return view('cp.faq.create_edit')->with('title', 'Добавление вопрос-ответ');
+        return view('cp.faq.create_edit', [
+            'title' => 'Добавление вопрос-ответ',
+        ]);
     }
 
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $this->faqRepository->createFromDto(FaqData::fromRequest($request));
+        $this->faqRepository->createFromDto(
+            FaqData::fromRequest($request)
+        );
 
-        return redirect()->route('cp.faq.index')->with('success', 'Информация успешно добавлена');
+        return redirect()
+            ->route('cp.faq.index')
+            ->with('success', 'Информация успешно добавлена');
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
     public function edit(int $id): View
+    {
+        return view('cp.faq.create_edit', [
+            'row' => $this->findOrFail($id),
+            'title' => 'Редактирование вопрос-ответ',
+        ]);
+    }
+
+    /**
+     * @param EditRequest $request
+     * @return RedirectResponse
+     */
+    public function update(EditRequest $request): RedirectResponse
+    {
+        $id = $request->integer('id');
+
+        $updated = $this->faqRepository->updateFromDto(
+            $id,
+            FaqData::fromRequest($request)
+        );
+
+        if (!$updated) {
+            abort(404);
+        }
+
+        return redirect()
+            ->route('cp.faq.index')
+            ->with('success', 'Данные обновлены');
+    }
+
+    /**
+     * @param DeleteRequest $request
+     * @return void
+     */
+    public function destroy(DeleteRequest $request): void
+    {
+        $id = $request->integer('id');
+
+        $this->findOrFail($id);
+
+        $this->faqRepository->remove($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findOrFail(int $id): mixed
     {
         $row = $this->faqRepository->find($id);
 
@@ -42,22 +112,6 @@ class FaqController extends Controller
             abort(404);
         }
 
-        return view('cp.faq.create_edit', compact('row'))->with('title', 'Редактирование вопрос-ответ');
-    }
-
-    public function update(EditRequest $request): RedirectResponse
-    {
-        $row = $this->faqRepository->updateFromDto($request->integer('id'), FaqData::fromRequest($request));
-
-        if (!$row) {
-            abort(404);
-        }
-
-        return redirect()->route('cp.faq.index')->with('success', 'Данные обновлены');
-    }
-
-    public function destroy(DeleteRequest $request): void
-    {
-        $this->faqRepository->remove($request->integer('id'));
+        return $row;
     }
 }

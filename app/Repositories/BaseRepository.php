@@ -40,7 +40,10 @@ abstract class BaseRepository implements RepositoryInterface
             }
 
             $model->save();
+
+            return $model;
         }
+
         return null;
     }
 

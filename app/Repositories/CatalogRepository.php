@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Admin\CatalogData;
 use App\Models\Catalog;
 use Illuminate\Support\Collection;
 
@@ -11,41 +12,34 @@ class CatalogRepository extends BaseRepository
     {
         parent::__construct($model);
     }
-    /**
-     * @param int $id
-     * @param array $data
-     * @return Catalog|null
-     */
-    public function update(int $id, array $data): ?Catalog
+
+    public function createFromDto(CatalogData $data): Catalog
+    {
+        /** @var Catalog $catalog */
+        $catalog = $this->model->create($data->toArray());
+
+        return $catalog;
+    }
+
+    public function updateFromDto(int $id, CatalogData $data): ?Catalog
     {
         $model = $this->model->find($id);
 
-        if ($model) {
-            $model->name = $data['name'];
-            $model->slug = $data['slug'];
-
-            if ($data['image']) {
-                $model->image = $data['image'];
-            }
-
-            $model->meta_title = $data['meta_title'] ?? null;
-            $model->meta_description = $data['meta_description'] ?? null;
-            $model->meta_keywords = $data['meta_keywords'] ?? null;
-            $model->seo_h1 = $data['seo_h1'] ?? null;
-            $model->seo_url_canonical = $data['seo_url_canonical'] ?? null;
-            $model->parent_id = (int)$data['parent_id'] ?? null;
-            $model->seo_sitemap = $data['seo_sitemap'] ?? null;
-            $model->save();
-
-            return $model;
+        if (!$model) {
+            return null;
         }
-        return null;
+
+        $payload = $data->toArray();
+        $model->fill(array_filter(
+            $payload,
+            static fn (mixed $value, string $key): bool => $key !== 'image' || $value !== null,
+            ARRAY_FILTER_USE_BOTH,
+        ));
+        $model->save();
+
+        return $model;
     }
 
-    /**
-     * @param int $parent_id
-     * @return Collection|null
-     */
     public function getCatalogsByParentId(int $parent_id): ?Collection
     {
         return Catalog::query()
@@ -54,19 +48,13 @@ class CatalogRepository extends BaseRepository
             ->get();
     }
 
-    /**
-     * @return array
-     */
     public function getOptions(): array
     {
         $options[0] = 'Выберите';
 
         return Catalog::ShowTree($options, 0);
     }
-    /**
-     * @param int $parent_id
-     * @return void
-     */
+
     public function remove(int $parent_id): void
     {
         $parent = Catalog::findOrFail($parent_id);
@@ -82,10 +70,6 @@ class CatalogRepository extends BaseRepository
         $this->delete($parent_id);
     }
 
-    /**
-     * @param $category
-     * @return array
-     */
     public function getChildren($category): array
     {
         $ids = [];
@@ -98,10 +82,6 @@ class CatalogRepository extends BaseRepository
         return $ids;
     }
 
-    /**
-     * @param int $catalog_id
-     * @return string
-     */
     public function topbarMenu(int $catalog_id): string
     {
         $pathway = '';
@@ -118,9 +98,6 @@ class CatalogRepository extends BaseRepository
         return $pathway;
     }
 
-    /**
-     * @return array
-     */
     public function getCatalogsList(): array
     {
         $catalogs = Catalog::query()->orderBy('name')->get();

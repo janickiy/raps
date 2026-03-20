@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\Admin\ServiceData;
 use App\Helpers\StringHelper;
+use App\Http\Requests\Admin\Services\DeleteRequest;
+use App\Http\Requests\Admin\Services\EditRequest;
+use App\Http\Requests\Admin\Services\StoreRequest;
 use App\Repositories\ServicesRepository;
 use App\Services\ServicesService;
-use App\Http\Requests\Admin\Services\StoreRequest;
-use App\Http\Requests\Admin\Services\EditRequest;
-use App\Http\Requests\Admin\Services\DeleteRequest;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class ServicesController extends Controller
 {
@@ -20,9 +21,8 @@ class ServicesController extends Controller
      */
     public function __construct(
         private ServicesRepository $servicesRepository,
-        private ServicesService    $servicesService,
-    )
-    {
+        private ServicesService $servicesService,
+    ) {
         parent::__construct();
     }
 
@@ -51,27 +51,11 @@ class ServicesController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         try {
-            if ($request->hasFile('image')) {
-                $image = $this->servicesService->storeImage($request);
-            }
+            $image = $request->hasFile('image')
+                ? $this->servicesService->storeImage($request)
+                : null;
 
-            $published = 0;
-
-            if ($request->input('published')) {
-                $published = 1;
-            }
-
-            $seo_sitemap = 0;
-
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
-            }
-
-            $this->servicesRepository->create(array_merge(array_merge($request->all()), [
-                'image' => $image ?? null,
-                'published' => $published,
-                'seo_sitemap' => $seo_sitemap,
-            ]));
+            $this->servicesRepository->createFromDto(ServiceData::fromRequest($request, $image));
         } catch (Exception $e) {
             report($e);
 
@@ -92,7 +76,9 @@ class ServicesController extends Controller
     {
         $row = $this->servicesRepository->find($id);
 
-        if (!$row) abort(404);
+        if (!$row) {
+            abort(404);
+        }
 
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
@@ -106,30 +92,20 @@ class ServicesController extends Controller
     public function update(EditRequest $request): RedirectResponse
     {
         try {
-            $published = 0;
+            $row = $this->servicesRepository->find($request->integer('id'));
 
-            if ($request->input('published')) {
-                $published = 1;
+            if (!$row) {
+                abort(404);
             }
 
-            $seo_sitemap = 0;
+            $image = $request->hasFile('image')
+                ? $this->servicesService->updateImage($request, $row)
+                : null;
 
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
-            }
-
-            $row = $this->servicesRepository->find($request->id);
-
-            if (!$row) abort(404);
-
-            $image = $this->servicesService->updateImage($request, $row);
-
-            $this->servicesRepository->update($request->id, array_merge(array_merge($request->all()), [
-                'published' => $published,
-                'seo_sitemap' => $seo_sitemap,
-                'image' => $image ?? null,
-            ]));
-
+            $this->servicesRepository->updateFromDto(
+                $request->integer('id'),
+                ServiceData::fromRequest($request, $image),
+            );
         } catch (Exception $e) {
             report($e);
 
@@ -148,6 +124,6 @@ class ServicesController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->servicesRepository->remove($request->id);
+        $this->servicesRepository->remove($request->integer('id'));
     }
 }

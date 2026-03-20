@@ -2,31 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Helpers\StringHelper;
+use App\Http\Requests\Admin\ProductPhotos\DeleteRequest;
 use App\Http\Requests\Admin\ProductPhotos\EditRequest;
 use App\Http\Requests\Admin\ProductPhotos\UploadRequest;
-use App\Http\Requests\Admin\ProductPhotos\DeleteRequest;
 use App\Repositories\ProductPhotosRepository;
 use App\Services\ProductPhotosService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class ProductPhotosController extends Controller
 {
-    /**
-     * @param ProductPhotosRepository $productPhotosRepository
-     * @param ProductPhotosService $productPhotosService
-     */
     public function __construct(
-        private ProductPhotosRepository $productPhotosRepository,
-        private ProductPhotosService    $productPhotosService,
-    )
-    {
+        private readonly ProductPhotosRepository $productPhotosRepository,
+        private readonly ProductPhotosService $productPhotosService,
+    ) {
         parent::__construct();
     }
-
 
     /**
      * @param int $product_id
@@ -34,13 +27,13 @@ class ProductPhotosController extends Controller
      */
     public function index(int $product_id): View
     {
-        $row = $this->productPhotosRepository->find($product_id);
+        $row = $this->findOrFail($product_id);
 
-        if (!$row) abort(404);
-
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.product_photos.index', compact('row', 'maxUploadFileSize'))->with('title', 'Фото оборудования: ' . $row->title);
+        return view('cp.product_photos.index', [
+            'row' => $row,
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'title' => 'Фото оборудования: ' . $row->title,
+        ]);
     }
 
     /**
@@ -49,12 +42,18 @@ class ProductPhotosController extends Controller
      */
     public function upload(UploadRequest $request): RedirectResponse
     {
+        $productId = $request->integer('product_id');
+
         try {
             $image = $this->productPhotosService->storeImage($request);
-            $fileNameToStore = 'origin_' . $image;
-            $thumbnailFileNameToStore = 'thumbnail_' . $image;
 
-            $this->productPhotosRepository->create(array_merge($request->all(), ['origin' => $fileNameToStore, 'thumbnail' => $thumbnailFileNameToStore]));
+            $this->productPhotosRepository->create(array_merge(
+                $request->all(),
+                [
+                    'origin' => 'origin_' . $image,
+                    'thumbnail' => 'thumbnail_' . $image,
+                ]
+            ));
         } catch (Exception $e) {
             report($e);
 
@@ -64,7 +63,9 @@ class ProductPhotosController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_photos.index', ['product_id' => $request->product_id])->with('success', 'Данные успешно обновлены');
+        return redirect()
+            ->route('cp.product_photos.index', ['product_id' => $productId])
+            ->with('success', 'Данные успешно обновлены');
     }
 
     /**
@@ -73,13 +74,13 @@ class ProductPhotosController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->productPhotosRepository->find($id);
+        $row = $this->findOrFail($id);
 
-        if (!$row) abort(404);
-
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.product_photos.create_edit', compact('row', 'maxUploadFileSize'))->with('title', 'Редактирование фото: ' . $row->product->title);
+        return view('cp.product_photos.create_edit', [
+            'row' => $row,
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'title' => 'Редактирование фото: ' . $row->product->title,
+        ]);
     }
 
     /**
@@ -88,19 +89,25 @@ class ProductPhotosController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+        $id = $request->integer('id');
+
         try {
-            $productPhoto = $this->productPhotosRepository->find($request->id);
+            $productPhoto = $this->findOrFail($id);
+
+            $data = $request->all();
 
             if ($request->hasFile('image')) {
                 $image = $this->productPhotosService->updateImage($request, $productPhoto);
-                $fileNameToStore = 'origin_' . $image;
-                $thumbnailFileNameToStore = 'thumbnail_' . $image;
+
+                $data['origin'] = 'origin_' . $image;
+                $data['thumbnail'] = 'thumbnail_' . $image;
             }
 
-            $this->productPhotosRepository->update($request->id, array_merge(array_merge($request->all()), [
-                'origin' => $fileNameToStore ?? null,
-                'thumbnail' => $thumbnailFileNameToStore ?? null
-            ]));
+            $updated = $this->productPhotosRepository->update($id, $data);
+
+            if (!$updated) {
+                abort(404);
+            }
         } catch (Exception $e) {
             report($e);
 
@@ -110,7 +117,9 @@ class ProductPhotosController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_photos.index', ['product_id' => $productPhoto->product_id])->with('success', 'Данные успешно обновлены');
+        return redirect()
+            ->route('cp.product_photos.index', ['product_id' => $productPhoto->product_id])
+            ->with('success', 'Данные успешно обновлены');
     }
 
     /**
@@ -119,6 +128,25 @@ class ProductPhotosController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productPhotosRepository->remove($request->id);
+        $id = $request->integer('id');
+
+        $this->findOrFail($id);
+
+        $this->productPhotosRepository->remove($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findOrFail(int $id): mixed
+    {
+        $row = $this->productPhotosRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
     }
 }

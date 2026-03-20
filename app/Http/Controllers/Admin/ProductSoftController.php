@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\ProductSoft\DeleteRequest;
+use App\Http\Requests\Admin\ProductSoft\EditRequest;
+use App\Http\Requests\Admin\ProductSoft\StoreRequest;
 use App\Repositories\ProductSoftRepository;
 use App\Repositories\ProductsRepository;
-use App\Http\Requests\Admin\ProductSoft\StoreRequest;
-use App\Http\Requests\Admin\ProductSoft\EditRequest;
-use App\Http\Requests\Admin\ProductSoft\DeleteRequest;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class ProductSoftController extends Controller
 {
+    /**
+     * @param ProductSoftRepository $productSoftRepository
+     * @param ProductsRepository $productsRepository
+     */
     public function __construct(
-        private ProductSoftRepository $productSoftRepository,
-        private ProductsRepository $productsRepository,
-    )
-    {
+        private readonly ProductSoftRepository $productSoftRepository,
+        private readonly ProductsRepository $productsRepository,
+    ) {
         parent::__construct();
     }
 
@@ -27,11 +30,12 @@ class ProductSoftController extends Controller
      */
     public function index(int $product_id): View
     {
-        $row = $this->productsRepository->find($product_id);
+        $row = $this->findProductOrFail($product_id);
 
-        if (!$row) abort(404);
-
-        return view('cp.product_soft.index', compact('product_id'))->with('title', 'Список программного обеспечения: ' . $row->title);
+        return view('cp.product_soft.index', [
+            'product_id' => $product_id,
+            'title' => 'Список программного обеспечения: ' . $row->title,
+        ]);
     }
 
     /**
@@ -40,7 +44,12 @@ class ProductSoftController extends Controller
      */
     public function create(int $product_id): View
     {
-        return view('cp.product_soft.create_edit', compact('product_id'))->with('title', 'Добавление программного обеспечения');
+        $this->findProductOrFail($product_id);
+
+        return view('cp.product_soft.create_edit', [
+            'product_id' => $product_id,
+            'title' => 'Добавление программного обеспечения',
+        ]);
     }
 
     /**
@@ -49,7 +58,11 @@ class ProductSoftController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+        $productId = $request->integer('product_id');
+
         try {
+            $this->findProductOrFail($productId);
+
             $this->productSoftRepository->create($request->all());
         } catch (Exception $e) {
             report($e);
@@ -60,7 +73,9 @@ class ProductSoftController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_soft.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
+        return redirect()
+            ->route('cp.product_soft.index', ['product_id' => $productId])
+            ->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -69,13 +84,13 @@ class ProductSoftController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->productSoftRepository->find($id);
+        $row = $this->findSoftOrFail($id);
 
-        if (!$row) abort(404);
-
-        $product_id = $row->product_id;
-
-        return view('cp.product_soft.create_edit', compact('row', 'product_id'))->with('title', 'Редактирование списка программного обеспечения');
+        return view('cp.product_soft.create_edit', [
+            'row' => $row,
+            'product_id' => $row->product_id,
+            'title' => 'Редактирование списка программного обеспечения',
+        ]);
     }
 
     /**
@@ -84,9 +99,16 @@ class ProductSoftController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+        $id = $request->integer('id');
+
         try {
-            $row = $this->productSoftRepository->find($request->id);
-            $this->productSoftRepository->update($request->id, $request->all());
+            $row = $this->findSoftOrFail($id);
+
+            $updated = $this->productSoftRepository->update($id, $request->all());
+
+            if (!$updated) {
+                abort(404);
+            }
         } catch (Exception $e) {
             report($e);
 
@@ -96,7 +118,9 @@ class ProductSoftController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_soft.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
+        return redirect()
+            ->route('cp.product_soft.index', ['product_id' => $row->product_id])
+            ->with('success', 'Данные обновлены');
     }
 
     /**
@@ -105,6 +129,40 @@ class ProductSoftController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productSoftRepository->delete($request->id);
+        $id = $request->integer('id');
+
+        $this->findSoftOrFail($id);
+
+        $this->productSoftRepository->delete($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findProductOrFail(int $id): mixed
+    {
+        $row = $this->productsRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findSoftOrFail(int $id): mixed
+    {
+        $row = $this->productSoftRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
     }
 }

@@ -34,6 +34,10 @@ class UsersController extends Controller
         return view('cp.users.create_edit', compact('options'))->with('title', 'Добавление пользователя');
     }
 
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
     public function store(StoreRequest $request): RedirectResponse
     {
         $this->usersRepository->createFromDto(UserData::fromRequest($request));
@@ -41,6 +45,10 @@ class UsersController extends Controller
         return redirect()->route('cp.users.index')->with('success', 'Информация успешно добавлена');
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
     public function edit(int $id): View
     {
         $row = $this->usersRepository->find($id);
@@ -58,6 +66,10 @@ class UsersController extends Controller
         return view('cp.users.create_edit', compact('row', 'options'))->with('title', 'Редактирование пользователя');
     }
 
+    /**
+     * @param EditRequest $request
+     * @return RedirectResponse
+     */
     public function update(EditRequest $request): RedirectResponse
     {
         $row = $this->usersRepository->updateFromDto($request->integer('id'), UserData::fromRequest($request));
@@ -69,6 +81,10 @@ class UsersController extends Controller
         return redirect()->route('cp.users.index')->with('success', 'Информация успешно обновлена');
     }
 
+    /**
+     * @param DeleteRequest $request
+     * @return void
+     */
     public function destroy(DeleteRequest $request): void
     {
         $this->usersRepository->deleteIfNotCurrentUser($request->integer('id'), (int) Auth::id());

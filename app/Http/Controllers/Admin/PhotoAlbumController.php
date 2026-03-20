@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-
+use App\Http\Requests\Admin\PhotoAlbum\DeleteRequest;
 use App\Http\Requests\Admin\PhotoAlbum\EditRequest;
 use App\Http\Requests\Admin\PhotoAlbum\StoreRequest;
-use App\Http\Requests\Admin\PhotoAlbum\DeleteRequest;
 use App\Repositories\PhotoAlbumRepository;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
 
 class PhotoAlbumController extends Controller
 {
-    /**
-     * @param PhotoAlbumRepository $photoAlbumRepository
-     */
     public function __construct(
-        private PhotoAlbumRepository $photoAlbumRepository,
-    )
-    {
+        private readonly PhotoAlbumRepository $photoAlbumRepository,
+    ) {
         parent::__construct();
     }
 
@@ -28,7 +23,9 @@ class PhotoAlbumController extends Controller
      */
     public function index(): View
     {
-        return view('cp.photoalbum.index')->with('title', 'Фотоальбом');
+        return view('cp.photoalbum.index', [
+            'title' => 'Фотоальбом',
+        ]);
     }
 
     /**
@@ -36,7 +33,9 @@ class PhotoAlbumController extends Controller
      */
     public function create(): View
     {
-        return view('cp.photoalbum.create_edit')->with('title', 'Добавление');
+        return view('cp.photoalbum.create_edit', [
+            'title' => 'Добавление',
+        ]);
     }
 
     /**
@@ -46,13 +45,9 @@ class PhotoAlbumController extends Controller
     public function store(StoreRequest $request): RedirectResponse
     {
         try {
-            $seo_sitemap = 0;
-
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
-            }
-
-            $this->photoAlbumRepository->create(array_merge($request->all(), ['seo_sitemap' => $seo_sitemap]));
+            $this->photoAlbumRepository->create(
+                $this->prepareData($request->all())
+            );
         } catch (Exception $e) {
             report($e);
 
@@ -62,7 +57,9 @@ class PhotoAlbumController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.photoalbum.index')->with('success', 'Информация успешно добавлена');
+        return redirect()
+            ->route('cp.photoalbum.index')
+            ->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -71,11 +68,10 @@ class PhotoAlbumController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->photoAlbumRepository->find($id);
-
-        if (!$row) abort(404);
-
-        return view('cp.photoalbum.create_edit', compact('row'))->with('title', 'Редактирование фотоальбома');
+        return view('cp.photoalbum.create_edit', [
+            'row' => $this->findOrFail($id),
+            'title' => 'Редактирование фотоальбома',
+        ]);
     }
 
     /**
@@ -84,14 +80,19 @@ class PhotoAlbumController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+        $id = $request->integer('id');
+
         try {
-            $seo_sitemap = 0;
+            $this->findOrFail($id);
 
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
+            $updated = $this->photoAlbumRepository->update(
+                $id,
+                $this->prepareData($request->all())
+            );
+
+            if (!$updated) {
+                abort(404);
             }
-
-            $this->photoAlbumRepository->update($request->id, array_merge($request->all(), ['seo_sitemap' => $seo_sitemap]));
         } catch (Exception $e) {
             report($e);
 
@@ -101,7 +102,9 @@ class PhotoAlbumController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.photoalbum.index')->with('success', 'Данные обновлены');
+        return redirect()
+            ->route('cp.photoalbum.index')
+            ->with('success', 'Данные обновлены');
     }
 
     /**
@@ -110,6 +113,36 @@ class PhotoAlbumController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->photoAlbumRepository->remove($request->id);;
+        $id = $request->integer('id');
+
+        $this->findOrFail($id);
+
+        $this->photoAlbumRepository->remove($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findOrFail(int $id): mixed
+    {
+        $row = $this->photoAlbumRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function prepareData(array $data): array
+    {
+        $data['seo_sitemap'] = !empty($data['seo_sitemap']) ? 1 : 0;
+
+        return $data;
     }
 }

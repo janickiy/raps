@@ -2,34 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-
-use App\Http\Traits\File;
+use App\DTO\Admin\CatalogData;
+use App\Helpers\StringHelper;
+use App\Http\Requests\Admin\Catalog\DeleteRequest;
+use App\Http\Requests\Admin\Catalog\EditRequest;
+use App\Http\Requests\Admin\Catalog\StoreRequest;
+use App\Models\Catalog;
 use App\Repositories\CatalogRepository;
 use App\Services\CategoryService;
-use App\Helpers\StringHelper;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use App\Models\Catalog;
-use App\Http\Requests\Admin\Catalog\{
-    StoreRequest,
-    EditRequest,
-    DeleteRequest,
-};
-use Exception;
 
 class CatalogController extends Controller
 {
     public function __construct(
         private CatalogRepository $categoryRepository,
-        private CategoryService  $categoryService
-    )
-    {
+        private CategoryService $categoryService,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * @return View
-     */
     public function index(): View
     {
         $catalogsList = $this->categoryRepository->getCatalogsList();
@@ -37,47 +30,35 @@ class CatalogController extends Controller
         return view('cp.catalog.index', compact('catalogsList'))->with('title', 'Категории');
     }
 
-    /**
-     * @param int $parent_id
-     * @return View
-     */
     public function create(int $parent_id = 0): View
     {
-        $row = $this->categoryRepository->find($parent_id);
+        $row = null;
 
-        if (!$row) abort(404);
+        if ($parent_id > 0) {
+            $row = $this->categoryRepository->find($parent_id);
+
+            if (!$row) {
+                abort(404);
+            }
+        }
 
         $options = $this->categoryRepository->getOptions();
-        $title = $parent_id > 0 ? 'Добавление подкатегории в категорию ' . $row->name:'Добавление категории';
+        $title = $parent_id > 0
+            ? 'Добавление подкатегории в категорию ' . $row->name
+            : 'Добавление категории';
         $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
         return view('cp.catalog.create_edit', compact('maxUploadFileSize', 'parent_id', 'options'))->with('title', $title);
     }
 
-    /**
-     * @param StoreRequest $request
-     * @return RedirectResponse
-     */
     public function store(StoreRequest $request): RedirectResponse
     {
         try {
-            $seo_sitemap = 0;
+            $image = $request->hasFile('image')
+                ? $this->categoryService->storeImage($request)
+                : null;
 
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
-            }
-
-            if ($request->hasFile('image')) {
-                $image = $this->categoryService->storeImage($request);
-            }
-            if ($request->hasFile('image')) {
-                $image = $this->categoryService->storeImage($request);
-            }
-
-            $this->categoryRepository->create(array_merge($request->all(), [
-                'seo_sitemap' => $seo_sitemap,
-                'image' => $image ?? null,
-            ]));
+            $this->categoryRepository->createFromDto(CatalogData::fromRequest($request, $image));
         } catch (Exception $e) {
             report($e);
 
@@ -90,15 +71,13 @@ class CatalogController extends Controller
         return redirect()->route('cp.catalog.index')->with('success', 'Информация успешно добавлена');
     }
 
-    /**
-     * @param int $id
-     * @return View
-     */
     public function edit(int $id): View
     {
         $row = $this->categoryRepository->find($id);
 
-        if (!$row) abort(404);
+        if (!$row) {
+            abort(404);
+        }
 
         $options = $this->categoryRepository->getOptions();
         unset($options[$id]);
@@ -108,38 +87,23 @@ class CatalogController extends Controller
         return view('cp.catalog.create_edit', compact('row', 'parent_id', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование категории');
     }
 
-    /**
-     * @param EditRequest $request
-     * @return RedirectResponse
-     */
     public function update(EditRequest $request): RedirectResponse
     {
         try {
-            $seo_sitemap = 0;
+            $row = $this->categoryRepository->find($request->integer('id'));
 
-            if ($request->input('seo_sitemap')) {
-                $seo_sitemap = 1;
+            if (!$row) {
+                abort(404);
             }
 
-            $row = $this->categoryRepository->find($request->id);
+            $image = $request->hasFile('image')
+                ? $this->categoryService->updateImage($request, $row)
+                : null;
 
-            if (!$row) abort(404);
-
-            $image = $request->input('pic');
-
-            if ($image !== null) {
-                File::deleteFile($catalog->image, Catalog::getTableName());
-                File::deleteFile('2x_' . $catalog->image, Catalog::getTableName());
-            }
-
-            if ($request->hasFile('image')) {
-                $image = $this->categoryService->updateImage($request, $row);
-            }
-
-            $this->categoryRepository->update($request->id, array_merge($request->all(), [
-                'seo_sitemap' => $seo_sitemap,
-                'image' => $image ?? null,
-            ]));
+            $this->categoryRepository->updateFromDto(
+                $request->integer('id'),
+                CatalogData::fromRequest($request, $image),
+            );
         } catch (Exception $e) {
             report($e);
 
@@ -152,13 +116,9 @@ class CatalogController extends Controller
         return redirect()->route('cp.catalog.index')->with('success', 'Данные обновлены');
     }
 
-    /**
-     * @param DeleteRequest $request
-     * @return RedirectResponse
-     */
     public function destroy(DeleteRequest $request): RedirectResponse
     {
-        Catalog::removeCatalogs($request->id);
+        Catalog::removeCatalogs($request->integer('id'));
 
         return redirect()->route('cp.catalog.index')->with('success', 'Данные удалены');
     }

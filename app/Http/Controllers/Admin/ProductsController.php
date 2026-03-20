@@ -16,86 +16,51 @@ use Illuminate\View\View;
 
 class ProductsController extends Controller
 {
+    /**
+     * @param ProductsRepository $productsRepository
+     * @param ProductsService $productsService
+     * @param CatalogRepository $catalogRepository
+     */
     public function __construct(
-        private ProductsRepository $productsRepository,
-        private ProductsService $productsService,
-        private CatalogRepository $catalogRepository
+        private readonly ProductsRepository $productsRepository,
+        private readonly ProductsService $productsService,
+        private readonly CatalogRepository $catalogRepository
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return View
+     */
     public function index(): View
     {
-        return view('cp.products.index')->with('title', 'Продукция');
+        return view('cp.products.index', [
+            'title' => 'Продукция',
+        ]);
     }
 
+    /**
+     * @return View
+     */
     public function create(): View
     {
-        $options = $this->catalogRepository->getOptions();
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.products.create_edit', compact('options', 'maxUploadFileSize'))->with('title', 'Добавление продукции');
+        return view('cp.products.create_edit', [
+            'options' => $this->catalogRepository->getOptions(),
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'title' => 'Добавление продукции',
+        ]);
     }
 
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
     public function store(StoreRequest $request): RedirectResponse
     {
         try {
-            $thumbnail = null;
-            $origin = null;
+            [$thumbnail, $origin] = $this->prepareImageData($request);
 
-            if ($request->hasFile('image')) {
-                $filename = $this->productsService->storeImage($request);
-                $origin = 'origin_' . $filename;
-                $thumbnail = 'thumbnail_' . $filename;
-            }
-
-            $this->productsRepository->createFromDto(ProductData::fromRequest($request, $thumbnail, $origin));
-        } catch (Exception $e) {
-            report($e);
-
-            return redirect()
-                ->back()
-                ->with('error', $e->getMessage())
-                ->withInput();
-        }
-
-        return redirect()->route('cp.products.index')->with('success', 'Информация успешно добавлена');
-    }
-
-    public function edit(int $id): View
-    {
-        $row = $this->productsRepository->find($id);
-
-        if (!$row) {
-            abort(404);
-        }
-
-        $options = $this->catalogRepository->getOptions();
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.products.create_edit', compact('row', 'options', 'maxUploadFileSize'))->with('title', 'Редактирование продукции');
-    }
-
-    public function update(EditRequest $request): RedirectResponse
-    {
-        try {
-            $thumbnail = null;
-            $origin = null;
-
-            if ($request->hasFile('image')) {
-                $product = $this->productsRepository->find($request->integer('id'));
-
-                if (!$product) {
-                    abort(404);
-                }
-
-                $filename = $this->productsService->updateImage($request, $product);
-                $origin = 'origin_' . $filename;
-                $thumbnail = 'thumbnail_' . $filename;
-            }
-
-            $this->productsRepository->updateFromDto(
-                $request->integer('id'),
+            $this->productsRepository->createFromDto(
                 ProductData::fromRequest($request, $thumbnail, $origin)
             );
         } catch (Exception $e) {
@@ -107,11 +72,106 @@ class ProductsController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.products.index')->with('success', 'Данные обновлены');
+        return redirect()
+            ->route('cp.products.index')
+            ->with('success', 'Информация успешно добавлена');
     }
 
+    /**
+     * @param int $id
+     * @return View
+     */
+    public function edit(int $id): View
+    {
+        return view('cp.products.create_edit', [
+            'row' => $this->findOrFail($id),
+            'options' => $this->catalogRepository->getOptions(),
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'title' => 'Редактирование продукции',
+        ]);
+    }
+
+    /**
+     * @param EditRequest $request
+     * @return RedirectResponse
+     */
+    public function update(EditRequest $request): RedirectResponse
+    {
+        $id = $request->integer('id');
+
+        try {
+            $product = $this->findOrFail($id);
+            [$thumbnail, $origin] = $this->prepareImageData($request, $product);
+
+            $updated = $this->productsRepository->updateFromDto(
+                $id,
+                ProductData::fromRequest($request, $thumbnail, $origin)
+            );
+
+            if (!$updated) {
+                abort(404);
+            }
+        } catch (Exception $e) {
+            report($e);
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
+
+        return redirect()
+            ->route('cp.products.index')
+            ->with('success', 'Данные обновлены');
+    }
+
+    /**
+     * @param DeleteRequest $request
+     * @return void
+     */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productsRepository->remove($request->integer('id'));
+        $id = $request->integer('id');
+
+        $this->findOrFail($id);
+
+        $this->productsRepository->remove($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findOrFail(int $id): mixed
+    {
+        $row = $this->productsRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param StoreRequest|EditRequest $request
+     * @param mixed|null $product
+     * @return null[]|string[]
+     * @throws Exception
+     */
+    private function prepareImageData(StoreRequest|EditRequest $request, mixed $product = null): array
+    {
+        if (!$request->hasFile('image')) {
+            return [null, null];
+        }
+
+        $filename = $product
+            ? $this->productsService->updateImage($request, $product)
+            : $this->productsService->storeImage($request);
+
+        return [
+            'thumbnail_' . $filename,
+            'origin_' . $filename,
+        ];
     }
 }

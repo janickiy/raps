@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Admin\SettingData;
 use App\Models\Settings;
 
 class SettingsRepository extends BaseRepository
@@ -11,32 +12,28 @@ class SettingsRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    /**
-     * @param int $id
-     * @param array $data
-     * @return Settings|null
-     */
-    public function update(int $id, array $data): ?Settings
+    public function createFromDto(SettingData $data): Settings
+    {
+        /** @var Settings $settings */
+        $settings = $this->model->create($data->toArray());
+
+        return $settings;
+    }
+
+    public function updateFromDto(int $id, SettingData $data): ?Settings
     {
         $model = $this->model->find($id);
 
-        if ($model) {
-            $model->key_cd = $data['key_cd'] ?? null;
-            $model->name = $data['name'] ;
-            $model->display_value = $data['display_value'] ?? null;
-            $model->value = $data['value'] ?? null;
-            $model->published = (int) $data['published'];
-            $model->save();
-
-            return $model;
+        if (!$model) {
+            return null;
         }
-        return null;
+
+        $model->fill($data->toArray());
+        $model->save();
+
+        return $model;
     }
 
-    /**
-     * @param int $id
-     * @return void
-     */
     public function remove(int $id): void
     {
         $settings = $this->model->find($id);

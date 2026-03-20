@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\DTO\Admin\ServiceData;
 use App\Models\Services;
 
 class ServicesRepository extends BaseRepository
@@ -11,45 +12,33 @@ class ServicesRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    /**
-     * @param int $id
-     * @param array $data
-     * @return Services|null
-     */
-    public function update(int $id, array $data): ?Services
+    public function createFromDto(ServiceData $data): Services
+    {
+        /** @var Services $service */
+        $service = $this->model->create($data->toArray());
+
+        return $service;
+    }
+
+    public function updateFromDto(int $id, ServiceData $data): ?Services
     {
         $model = $this->model->find($id);
 
-        if ($model) {
-            $model->title = $data['title'];
-            $model->description = $data['description'];
-
-            if ($data['image']) {
-                $model->image = $data['image'];
-            }
-
-            $model->full_description = $data['full_description'];
-            $model->image_title = $data['image_title'];
-            $model->image_alt = $data['image_alt'];
-            $model->meta_title = $data['meta_title'] ?? null;
-            $model->meta_description = $data['meta_description'] ?? null;
-            $model->meta_keywords = $data['meta_keywords'] ?? null;
-            $model->slug = $data['slug'];
-            $model->seo_h1 = $data['seo_h1'];
-            $model->seo_url_canonical = $data['seo_url_canonical'];
-            $model->published = (int)$data['published'];
-            $model->seo_sitemap = (int)$data['seo_sitemap'];
-            $model->save();
-
-            return $model;
+        if (!$model) {
+            return null;
         }
-        return null;
+
+        $payload = $data->toArray();
+        $model->fill(array_filter(
+            $payload,
+            static fn (mixed $value, string $key): bool => $key !== 'image' || $value !== null,
+            ARRAY_FILTER_USE_BOTH,
+        ));
+        $model->save();
+
+        return $model;
     }
 
-    /**
-     * @param int $id
-     * @return void
-     */
     public function remove(int $id): void
     {
         $model = $this->model->find($id);

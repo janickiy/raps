@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-
+use App\Helpers\StringHelper;
+use App\Http\Requests\Admin\ProductDocuments\DeleteRequest;
 use App\Http\Requests\Admin\ProductDocuments\EditRequest;
 use App\Http\Requests\Admin\ProductDocuments\StoreRequest;
-use App\Http\Requests\Admin\ProductDocuments\DeleteRequest;
 use App\Repositories\ProductDocumentsRepository;
 use App\Repositories\ProductsRepository;
 use App\Services\ProductDocumentsService;
-use App\Helpers\StringHelper;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Exception;
-
 
 class ProductDocumentsController extends Controller
 {
@@ -23,10 +21,10 @@ class ProductDocumentsController extends Controller
      * @param ProductDocumentsService $productDocumentsService
      */
     public function __construct(
-        private ProductDocumentsRepository $productDocumentsRepository,
-        private ProductsRepository         $productsRepository,
-        private ProductDocumentsService    $productDocumentsService)
-    {
+        private readonly ProductDocumentsRepository $productDocumentsRepository,
+        private readonly ProductsRepository $productsRepository,
+        private readonly ProductDocumentsService $productDocumentsService
+    ) {
         parent::__construct();
     }
 
@@ -36,13 +34,17 @@ class ProductDocumentsController extends Controller
      */
     public function index(int $product_id): View
     {
-        $row = $this->productsRepository->find($product_id);
+        $row = $this->findProductOrFail($product_id);
 
-        if (!$row) abort(404);
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+        ];
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-
-        return view('cp.product_documents.index', compact('product_id', 'breadcrumbs'))->with('title', 'Список документации: ' . $row->title);
+        return view('cp.product_documents.index', [
+            'product_id' => $product_id,
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Список документации: ' . $row->title,
+        ]);
     }
 
     /**
@@ -51,16 +53,19 @@ class ProductDocumentsController extends Controller
      */
     public function create(int $product_id): View
     {
-        $row = $this->productsRepository->find($product_id);
+        $row = $this->findProductOrFail($product_id);
 
-        if (!$row) abort(404);
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+            ['url' => route('cp.product_documents.index', ['product_id' => $product_id]), 'title' => $row->title],
+        ];
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('cp.product_documents.index', ['product_id' => $product_id]), 'title' => $row->title];
-
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
-
-        return view('cp.product_documents.create_edit', compact('product_id', 'maxUploadFileSize', 'breadcrumbs'))->with('title', 'Добавление документации');
+        return view('cp.product_documents.create_edit', [
+            'product_id' => $product_id,
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Добавление документации',
+        ]);
     }
 
     /**
@@ -69,9 +74,17 @@ class ProductDocumentsController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
+        $productId = $request->integer('product_id');
+
         try {
+            $this->findProductOrFail($productId);
+
             $filename = $this->productDocumentsService->storeFile($request);
-            $this->productDocumentsRepository->create(array_merge($request->all(), ['file' => $filename]));
+
+            $this->productDocumentsRepository->create(array_merge(
+                $request->all(),
+                ['file' => $filename]
+            ));
         } catch (Exception $e) {
             report($e);
 
@@ -81,7 +94,9 @@ class ProductDocumentsController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_documents.index', ['product_id' => $request->product_id])->with('success', 'Информация успешно добавлена');
+        return redirect()
+            ->route('cp.product_documents.index', ['product_id' => $productId])
+            ->with('success', 'Информация успешно добавлена');
     }
 
     /**
@@ -90,17 +105,21 @@ class ProductDocumentsController extends Controller
      */
     public function edit(int $id): View
     {
-        $row = $this->productDocumentsRepository->find($id);
-
-        if (!$row) abort(404);
-
+        $row = $this->findDocumentOrFail($id);
         $product_id = $row->product_id;
-        $maxUploadFileSize = StringHelper::maxUploadFileSize();
 
-        $breadcrumbs[] = ['url' => route('cp.products.index'), 'title' => 'Продукция'];
-        $breadcrumbs[] = ['url' => route('cp.product_documents.index', ['product_id' => $row->product_id]), 'title' => $row->product->title];
+        $breadcrumbs = [
+            ['url' => route('cp.products.index'), 'title' => 'Продукция'],
+            ['url' => route('cp.product_documents.index', ['product_id' => $row->product_id]), 'title' => $row->product->title],
+        ];
 
-        return view('cp.product_documents.create_edit', compact('row', 'product_id', 'maxUploadFileSize', 'breadcrumbs'))->with('title', 'Редактирование списка документации');
+        return view('cp.product_documents.create_edit', [
+            'row' => $row,
+            'product_id' => $product_id,
+            'maxUploadFileSize' => StringHelper::maxUploadFileSize(),
+            'breadcrumbs' => $breadcrumbs,
+            'title' => 'Редактирование списка документации',
+        ]);
     }
 
     /**
@@ -109,16 +128,22 @@ class ProductDocumentsController extends Controller
      */
     public function update(EditRequest $request): RedirectResponse
     {
+        $id = $request->integer('id');
+
         try {
-            $row = $this->productDocumentsRepository->find($request->id);
+            $row = $this->findDocumentOrFail($id);
+
+            $data = $request->all();
 
             if ($request->hasFile('file')) {
-                $filename = $this->productDocumentsService->updateFile($row->id, $request);
+                $data['file'] = $this->productDocumentsService->updateFile($row->id, $request);
             }
 
-            $this->productDocumentsRepository->update($request->id, array_merge(array_merge($request->all()), [
-                'file' => $filename ?? null,
-            ]));
+            $updated = $this->productDocumentsRepository->update($id, $data);
+
+            if (!$updated) {
+                abort(404);
+            }
         } catch (Exception $e) {
             report($e);
 
@@ -128,7 +153,9 @@ class ProductDocumentsController extends Controller
                 ->withInput();
         }
 
-        return redirect()->route('cp.product_documents.index', ['product_id' => $row->product_id])->with('success', 'Данные обновлены');
+        return redirect()
+            ->route('cp.product_documents.index', ['product_id' => $row->product_id])
+            ->with('success', 'Данные обновлены');
     }
 
     /**
@@ -137,6 +164,40 @@ class ProductDocumentsController extends Controller
      */
     public function destroy(DeleteRequest $request): void
     {
-        $this->productDocumentsRepository->remove($request->id);
+        $id = $request->integer('id');
+
+        $this->findDocumentOrFail($id);
+
+        $this->productDocumentsRepository->remove($id);
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findProductOrFail(int $id): mixed
+    {
+        $row = $this->productsRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    private function findDocumentOrFail(int $id): mixed
+    {
+        $row = $this->productDocumentsRepository->find($id);
+
+        if (!$row) {
+            abort(404);
+        }
+
+        return $row;
     }
 }
