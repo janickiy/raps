@@ -7,12 +7,16 @@ use Storage;
 trait File
 {
     /**
-     * @param string $file
+     * @param string|null $file
      * @param string $path
      * @return bool
      */
-    public static function deleteFile(string $file, string $path): bool
+    public static function deleteFile(?string $file = null, string $path): bool
     {
+        if (!$file) {
+            return false;
+        }
+
         if (Storage::disk('public')->exists($path . '/' . $file) === true) {
             return Storage::disk('public')->delete($path . '/' . $file);
         }
