@@ -30,6 +30,18 @@ class DataTableController extends Controller
     /**
      * @return JsonResponse
      */
+    protected function renderImageTag(?string $src): string
+    {
+        if (empty($src)) {
+            return '';
+        }
+
+        return '<img  height="150" src="' . $src . '" alt="" loading="lazy">';
+    }
+
+    /**
+     * @return JsonResponse
+     */
     public function getUsers(): JsonResponse
     {
         $row = User::query();
@@ -63,7 +75,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('image', function ($row) {
-                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
+                return $this->renderImageTag($row->getImage());
             })
             ->rawColumns(['actions', 'image'])->make(true);
     }
@@ -154,7 +166,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('image', function ($row) {
-                return '<img  height="150" src="' . url($row->getImage()) . '" alt="" loading="lazy">';
+                return $this->renderImageTag($row->getImage());
             })
             ->rawColumns(['actions', 'image'])->make(true);
     }
@@ -197,7 +209,7 @@ class DataTableController extends Controller
             ->editColumn('thumbnail', function ($row) {
                 $product = Products::find($row->id);
 
-                return '<img  height="150" src="' . url($product->getThumbnailUrl()) . '" alt="" loading="lazy">';
+                return $this->renderImageTag($product?->getThumbnailUrl());
             })
             ->editColumn('published', function ($row) {
                 return $row->published == 1 ? 'опубликован' : 'не опубликован';
@@ -221,7 +233,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('thumbnail', function ($row) {
-                return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="" loading="lazy">';
+                return $this->renderImageTag($row->getThumbnailUrl());
             })
             ->rawColumns(['actions', 'thumbnail'])->make(true);
     }
@@ -365,7 +377,7 @@ class DataTableController extends Controller
                 return '<div class="nobr"> ' . $editBtn . $deleteBtn . '</div>';
             })
             ->editColumn('thumbnail', function ($row) {
-                return '<img  height="150" src="' . url($row->getThumbnailUrl()) . '" alt="" loading="lazy">';
+                return $this->renderImageTag($row->getThumbnailUrl());
             })
             ->rawColumns(['actions', 'thumbnail'])->make(true);
     }
