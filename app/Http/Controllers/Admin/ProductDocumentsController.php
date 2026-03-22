@@ -83,7 +83,7 @@ class ProductDocumentsController extends Controller
 
             $this->productDocumentsRepository->create(array_merge(
                 $request->all(),
-                ['file' => $filename]
+                ['path' => $filename]
             ));
         } catch (Exception $e) {
             report($e);
@@ -136,7 +136,7 @@ class ProductDocumentsController extends Controller
             $data = $request->all();
 
             if ($request->hasFile('file')) {
-                $data['file'] = $this->productDocumentsService->updateFile($row->id, $request);
+                $data['path'] = $this->productDocumentsService->updateFile($row, $request);
             }
 
             $updated = $this->productDocumentsRepository->update($id, $data);
