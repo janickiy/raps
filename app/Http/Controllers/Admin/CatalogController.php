@@ -118,7 +118,7 @@ class CatalogController extends Controller
 
     public function destroy(DeleteRequest $request): RedirectResponse
     {
-        Catalog::removeCatalogs($request->integer('id'));
+        Catalog::removeCatalogs((int) $request->route('id'));
 
         return redirect()->route('cp.catalog.index')->with('success', 'Данные удалены');
     }
