@@ -142,8 +142,8 @@ class ProductParametersCategoryController extends Controller
      */
     private function prepareData(array $data): array
     {
-        $data['category_id'] = !empty($data['category_id']) ? (int) $data['category_id'] : 0;
-
-        return $data;
+        return [
+            'name' => $data['name'],
+        ];
     }
 }

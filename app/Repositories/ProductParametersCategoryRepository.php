@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\ProductParameters;
+use App\Models\ProductParametersCategory;
 
 class ProductParametersCategoryRepository extends BaseRepository
 {
-    public function __construct(ProductParameters $model)
+    public function __construct(ProductParametersCategory $model)
     {
         parent::__construct($model);
     }
@@ -14,21 +14,19 @@ class ProductParametersCategoryRepository extends BaseRepository
     /**
      * @param int $id
      * @param array $data
-     * @return ProductParameters|null
+     * @return ProductParametersCategory|null
      */
-    public function update(int $id, array $data): ?ProductParameters
+    public function update(int $id, array $data): ?ProductParametersCategory
     {
         $model = $this->model->find($id);
 
         if ($model) {
             $model->name = $data['name'];
-            $model->value = $data['value'];
-            $model->product_id = (int) $data['product_id'];
-            $model->category_id = (int) $data['category_id'];
             $model->save();
 
             return $model;
         }
+
         return null;
     }
 }
