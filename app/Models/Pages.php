@@ -120,7 +120,7 @@ class Pages extends Model
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return File::getFile($image, $this->table);
+        return self::getFile($image, $this->table);
     }
 
     /**
@@ -129,8 +129,8 @@ class Pages extends Model
     public function scopeRemove(): void
     {
         if ($this->image) {
-            File::deleteFile($this->image, $this->table);
-            File::deleteFile('2x_' . $this->image,$this->table);
+            self::deleteFile($this->image, $this->table);
+            self::deleteFile('2x_' . $this->image,$this->table);
         }
 
         $this->delete();

@@ -32,7 +32,7 @@ class ProductDocuments extends Model
      */
     public function getDocument(): ?string
     {
-        return File::getFile($this->path, $this->table);
+        return self::getFile($this->path, $this->table);
     }
 
     /**
@@ -40,7 +40,7 @@ class ProductDocuments extends Model
      */
     public function scopeRemove(): void
     {
-        if ($this->path)  File::deleteFile($this->path, $this->table);
+        if ($this->path) self::deleteFile($this->path, $this->table);
 
         $this->delete();
     }

@@ -44,7 +44,7 @@ class Settings extends Model
     public function getValueAttribute(): string
     {
         if ($this->attributes['type'] == 'FILE') {
-            return File::getFile($this->attributes['value'], $this->table);
+            return self::getFile($this->attributes['value'], $this->table);
         }
 
         return $this->attributes['value'];
@@ -72,7 +72,7 @@ class Settings extends Model
      */
     public function scopeRemove(): void
     {
-        File::deleteFile($this->filePath(), $this->table);
+        self::deleteFile($this->filePath(), $this->table);
 
         $this->delete();
     }

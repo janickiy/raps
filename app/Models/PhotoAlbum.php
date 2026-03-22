@@ -40,8 +40,8 @@ class PhotoAlbum extends Model
     public function scopeRemove(): void
     {
         foreach ($this->photos as $photo) {
-            File::deleteFile($photo->thumbnail, $this->table);
-            File::deleteFile($photo->origin, $this->table);
+            self::deleteFile($photo->thumbnail, $this->table);
+            self::deleteFile($photo->origin, $this->table);
         }
 
         $this?->photos()->delete();

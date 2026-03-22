@@ -94,7 +94,7 @@ class Catalog extends Model
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return $this->image ? File::getFile($image, $this->table ) : null;
+        return $this->image ? self::getFile($image, $this->table ) : null;
     }
 
     /**
@@ -110,10 +110,8 @@ class Catalog extends Model
         $catalogs = self::whereIn('id', $array_of_ids)->get();
 
         foreach ($catalogs as $catalog) {
-            self::removeCatalog($catalog);
+            $catalog->remove();
         }
-
-        self::removeCatalog($parent);
     }
 
     /**
@@ -130,11 +128,11 @@ class Catalog extends Model
     /**
      * @return void
      */
-    public function scopeRemove(): void
+    public function remove(): void
     {
         if ($this->image)  {
-            File::deleteFile($this->image, self::getTableName());
-            File::deleteFile('2x_' . $this->image, self::getTableName());
+            self::deleteFile($this->image, self::getTableName());
+            self::deleteFile('2x_' . $this->image, self::getTableName());
         }
 
         foreach ($this->products ?? [] as $product) {
@@ -213,7 +211,7 @@ class Catalog extends Model
             $cl .= '<ul>';
             if ($only_parent === false) {
                 foreach ($catalogs[$parent_id] as $catalog) {
-                    $cl .= '<li>' . $catalog['name'] . ' <a title="Добавить подкатегорию" href="' . route('cp.catalog.create', ['parent_id' => $catalog['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . route('cp.catalog.edit', ['id' => $catalog['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . route('cp.catalog.destroy', $catalog['id']) . '"> <span class="fa fa-trash-o"></span> </a>';
+                    $cl .= '<li>' . $catalog['name'] . ' <a title="Добавить подкатегорию" href="' . route('cp.catalog.create', ['parent_id' => $catalog['id']]) . '"> <span class="fa fa-plus"></span> </a> <a title="Редактировать" href="' . route('cp.catalog.edit', ['id' => $catalog['id']]) . '"> <span class="fa fa-pencil"></span> </a> <a title="Удалить" href="' . route('cp.catalog.destroy', ['id' => $catalog['id']]) . '"> <span class="fa fa-trash-o"></span> </a>';
                     $cl .= self::buildTree($catalogs, $catalog['id']);
                     $cl .= '</li>';
                 }

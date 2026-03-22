@@ -77,7 +77,7 @@ class Products extends Model
      */
     public function getThumbnailUrl(): ?string
     {
-        return $this->thumbnail ? File::getFile($this->thumbnail, $this->table) : null;
+        return $this->thumbnail ? self::getFile($this->thumbnail, $this->table) : null;
     }
 
     /**
@@ -85,7 +85,7 @@ class Products extends Model
      */
     public function getOriginUrl(): ?string
     {
-        return $this->origin ? File::getFile($this->origin, $this->table) : null;
+        return $this->origin ? self::getFile($this->origin, $this->table) : null;
     }
 
     /**
@@ -152,18 +152,18 @@ class Products extends Model
      */
     public function scopeRemove(): void
     {
-        File::deleteFile($this->thumbnail, $this->table);
-        File::deleteFile($this->origin, $this->table);
+        self::deleteFile($this->thumbnail, $this->table);
+        self::deleteFile($this->origin, $this->table);
 
         foreach ($this->photos as $photo) {
-            File::deleteFile($photo->thumbnail, $this->table);
-            File::deleteFile($photo->origin, $this->table);
+            self::deleteFile($photo->thumbnail, $this->table);
+            self::deleteFile($photo->origin, $this->table);
         }
 
         $this->photos()->delete();
 
         foreach ($this->documents as $document) {
-            File::deleteFile($document->path, $this->table);
+            self::deleteFile($document->path, $this->table);
         }
 
         $this->documents()->delete();
@@ -181,24 +181,23 @@ class Products extends Model
     }
 
     /**
-     * @param Request $request
      * @param int $id
      * @return array
      */
-    public function setViewed(Request $request, int $id): array
+    public function setViewed(int $id): array
     {
         $product = $this->model->find($id);
         $productIds = null;
 
         if ($product) {
-            if ($request->session()->has('productIds')) {
-                $productIds = $request->session()->get('productIds');
+            if (request()->session()->has('productIds')) {
+                $productIds = request()->session()->get('productIds');
                 array_push($productIds, $product->id);
                 $productIds = array_unique($productIds);
-                $request->session()->put(['productIds' => $productIds]);
+                request()->session()->put(['productIds' => $productIds]);
             } else {
                 $productIds = [$product->id];
-                $request->session()->put(['productIds' => $productIds]);
+                request()->session()->put(['productIds' => $productIds]);
             }
         }
 

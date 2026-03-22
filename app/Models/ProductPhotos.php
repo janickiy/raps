@@ -34,7 +34,7 @@ class ProductPhotos extends Model
      */
     public function getThumbnailUrl(): ?string
     {
-        return $this->thumbnail ? File::getFile($this->thumbnail, $this->table) : null;
+        return $this->thumbnail ? self::getFile($this->thumbnail, $this->table) : null;
     }
 
     /**
@@ -42,7 +42,7 @@ class ProductPhotos extends Model
      */
     public function getOriginUrl(): ?string
     {
-        return $this->origin ? File::getFile($this->origin, $this->table) : null;
+        return $this->origin ? self::getFile($this->origin, $this->table) : null;
     }
 
     /**
@@ -50,8 +50,8 @@ class ProductPhotos extends Model
      */
     public function scopeRemove(): void
     {
-        File::deleteFile($this->thumbnail, $this->table);
-        File::deleteFile($this->origin, $this->table);
+        self::deleteFile($this->thumbnail, $this->table);
+        self::deleteFile($this->origin, $this->table);
 
         $this->delete();
     }

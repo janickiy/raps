@@ -64,7 +64,7 @@ class Services extends Model
     {
         $image = $x ? $x . $this->image : $this->image;
 
-        return $this->image ? File::getFile($image, $this->table) : null;
+        return $this->image ? self::getFile($image, $this->table) : null;
     }
 
     /**
@@ -72,8 +72,8 @@ class Services extends Model
      */
     public function scopeRemove(): void
     {
-        File::deleteFile($this->image, $this->table);
-        File::deleteFile('2x_' . $this->image, $this->table);
+        self::deleteFile($this->image, $this->table);
+        self::deleteFile('2x_' . $this->image, $this->table);
 
         $this->delete();
     }
